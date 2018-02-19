@@ -40,7 +40,7 @@ class ZatiqAWSRDSClient(object):
             return("Please type in your Business's Name")
         
         db_query = self.connect_to_rds.cursor()
-        db_query.execute("""SELECT * FROM ZatiqBusinesses WHERE businessEmail = %s""", (businessEmail))
+        db_query.execute("""SELECT * FROM ZatiqBusinesses WHERE businessEmail = %s""", [businessEmail])
 
         res = db_query.fetchall()
 
@@ -48,5 +48,8 @@ class ZatiqAWSRDSClient(object):
             return("Business is already registered with this email")
         else:
             register_query = self.connect_to_rds.cursor()
-            register_query.execute(""")
+            #businessInfo = {"businessName": businessName, "businessEmail": businessEmail, "businessPassword": businessPassword}
+            register_query.execute("""INSERT INTO ZatiqBusinesses (businessName, businessEmail, businessPassword) VALUES (%s, %s, %s)""", (businessName, businessEmail, businessPassword))
+            print(register_query.fetchall())
+
         
