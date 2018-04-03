@@ -43,6 +43,7 @@ class ZatiqUsersMySQLClient(object):
             if len(res) > 0:
                 update_user_auth_token = self.connect_to_db.cursor()
                 update_user_auth_token.execute("""UPDATE zatiq_users SET auth_token = %s WHERE google_id = %s""", (authToken, id))
+                self.connect_to_db.commit()
                 return(True)
             else:
                 return(False)
@@ -53,6 +54,7 @@ class ZatiqUsersMySQLClient(object):
             if len(res) > 0:
                 update_user_auth_token = self.connect_to_db.cursor()
                 update_user_auth_token.execute("""UPDATE zatiq_users SET auth_token = %s WHERE facebook_id = %s""", (authToken, id))
+                self.connect_to_db.commit()
                 return(True)
             else:
                 return(False)
