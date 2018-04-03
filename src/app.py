@@ -11,13 +11,13 @@ def hello_world():
 def test_get_first_business():
     zatiq_businesess = ZatiqBusinessesMySQLClient()
     response = zatiq_businesess.get_all_businesses()
-    return(response[0])
+    return(response)
 
 @app.route('/users/list/')
 def test_get_first_user():
     zatiq_users = ZatiqUsersMySQLClient()
     response = zatiq_users.get_all_users()
-    return(response[0])
+    return(response)
 
 # @app.route('/business/login/')
 # def business_login():
