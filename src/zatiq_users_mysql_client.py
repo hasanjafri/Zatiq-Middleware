@@ -89,10 +89,14 @@ class ZatiqUsersMySQLClient(object):
             api_token = self.generate_zatiq_api_token()
 
             if method == 'google':
-                register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, google_id) VALUES (%s, %s, %s, %s, %s)""", (
-                    user_email, user_name, authToken, api_token, user_id))
+                if register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, google_id) VALUES (%s, %s, %s, %s, %s)""", (
+                    user_email, user_name, authToken, api_token, user_id)) == 1:
+                    self.connect_to_db.commit()
+                    self.user_login(authToken, user_email, method)
 
             if method == 'facebook':
-                register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, facebook_id) VALUES (%s, %s, %s, %s, %s)""", (
-                    user_email, user_name, authToken, api_token, user_id))
+                if register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, facebook_id) VALUES (%s, %s, %s, %s, %s)""", (
+                    user_email, user_name, authToken, api_token, user_id)) == 1:
+                    self.connect_to_db.commit()
+                    self.user_login(authToken, user_email, method)
             

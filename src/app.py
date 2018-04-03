@@ -1,6 +1,7 @@
 from flask import Flask
 from zatiq_businesses_mysql_client import ZatiqBusinessesMySQLClient
 from zatiq_users_mysql_client import ZatiqUsersMySQLClient
+import requests
 app = Flask(__name__)
 
 @app.route('/')
@@ -19,18 +20,11 @@ def test_get_first_user():
     response = zatiq_users.get_all_users()
     return(response)
 
-# @app.route('/business/login/')
-# def business_login():
-#     zatiq_rds = ZatiqAWSRDSClient()
-#     response = zatiq_rds.business_login("test", "testing")
-#     if isinstance(response, str):
-#         return(response)
-#     else:
-#         return('' + response[0] + '\n' + response[1])
+@app.route('/user/login/', methods=['POST'])
+def login_as_user():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMySQLClient()
+        user_auth_token = request.form.get('accessToken')
+        login_method = request.form.get('method')
+        response = zatiq_users.user_register(user_auth_token, login_method)
 
-# @app.route('/business/register/')
-# def business_register():
-#     zatiq_rds = ZatiqAWSRDSClient()
-#     response = zatiq_rds.business_register("flask", "flask@flask.com", "hasan")
-#     #response = zatiq_rds.business_register("test", "test", "test")
-#     return("hey")
