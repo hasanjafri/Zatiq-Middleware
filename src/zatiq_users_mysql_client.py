@@ -1,6 +1,7 @@
 import MySQLdb
 import secrets
 import requests
+import json
 
 class ZatiqUsersMySQLClient(object):
     def __init__(self):
@@ -15,7 +16,7 @@ class ZatiqUsersMySQLClient(object):
         db_query = self.connect_to_db.cursor()
         db_query.execute("""SELECT * from zatiq_users""")
         response = db_query.fetchall()
-        return(response[0])
+        return(json.dumps(response[0]))
     
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)
