@@ -15,7 +15,7 @@ class ZatiqBusinessesMySQLClient(object):
         db_query = self.connect_to_db.cursor()
         db_query.execute("""SELECT * from zatiq_businesses""")
         response = db_query.fetchall()
-        return(response)
+        return(response[0])
 
     def encrypt_passwd(self, password):
         encryption = Fernet(secret_key)
