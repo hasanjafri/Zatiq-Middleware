@@ -38,9 +38,7 @@ class ZatiqUsersMySQLClient(object):
         check_user_exists = self.connect_to_db.cursor()
         
         if method == "google":
-            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE (user_email, google_id) VALUES (%s, %s)""", (
-                user_email, id
-            ))
+            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE user_email=%s, google_id=%s""", (user_email, id))
             res = check_user_exists.fetchall()
             if len(res) > 0:
                 update_user_auth_token = self.connect_to_db.cursor()
@@ -50,9 +48,7 @@ class ZatiqUsersMySQLClient(object):
                 return(False)
 
         if method == 'facebook':
-            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE (user_email, facebook_id) VALUES (%s, %s)""", (
-                user_email, id
-            ))
+            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE user_email=%s, facebook_id=%s""", (user_email, id))
             res = check_user_exists.fetchall()
             if len(res) > 0:
                 update_user_auth_token = self.connect_to_db.cursor()
