@@ -5,6 +5,10 @@ from config import secret_key
 class ZatiqBusinessesMySQLClient(object):
     def __init__(self):
         self.connect_to_db = MySQLdb.connect(
+            host="127.0.0.1",
+            user="root",
+            passwd="zatiqserver",
+            db="zatiq_database"
         )
 
     def get_all_businesses(self):

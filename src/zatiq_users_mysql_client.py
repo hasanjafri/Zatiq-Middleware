@@ -5,15 +5,17 @@ import requests
 class ZatiqUsersMySQLClient(object):
     def __init__(self):
         self.connect_to_db = MySQLdb.connect(
-            
+            host="127.0.0.1",
+            user="root",
+            passwd="zatiqserver",
+            db="zatiq_database"
         )
     
     def get_all_users(self):
         db_query = self.connect_to_db.cursor()
         db_query.execute("""SELECT * from zatiq_users""")
         response = db_query.fetchall()
-        print(response)
-        return("Done!")
+        return(response)
     
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)
