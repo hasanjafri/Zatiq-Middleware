@@ -19,7 +19,7 @@ def all_entries():
     response = zatiq_rds.get_all_businesses()
     return(response)
 
-@app.route('/business/login')
+@app.route('/business/login/')
 def business_login():
     zatiq_rds = ZatiqAWSRDSClient()
     response = zatiq_rds.business_login("test", "testing")
@@ -27,3 +27,10 @@ def business_login():
         return(response)
     else:
         return('' + response[0] + '\n' + response[1])
+
+@app.route('/business/register/')
+def business_register():
+    zatiq_rds = ZatiqAWSRDSClient()
+    response = zatiq_rds.business_register("flask", "flask@flask.com", "hasan")
+    #response = zatiq_rds.business_register("test", "test", "test")
+    return("hey")
