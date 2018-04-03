@@ -23,6 +23,7 @@ def test_get_first_user():
 def login_as_user():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMySQLClient()
+        print(request.form)
         user_auth_token = request.form.get('accessToken')
         login_method = request.form.get('method')
         response = zatiq_users.user_register(user_auth_token, login_method)
