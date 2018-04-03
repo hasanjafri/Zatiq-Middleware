@@ -79,7 +79,7 @@ class ZatiqUsersMySQLClient(object):
 
         response = db_query.fetchall()
         if len(response) > 0:
-            self.user_login(authToken, response[0][1], method)
+            return self.user_login(authToken, response[0][1], method)
         else:
             register_user = self.connect_to_db.cursor()
             user_info = self.get_user_info(authToken, method)
