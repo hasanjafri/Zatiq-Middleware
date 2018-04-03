@@ -1,7 +1,6 @@
-from flask import Flask
+from flask import Flask, request
 from zatiq_businesses_mysql_client import ZatiqBusinessesMySQLClient
 from zatiq_users_mysql_client import ZatiqUsersMySQLClient
-import requests
 app = Flask(__name__)
 
 @app.route('/')
