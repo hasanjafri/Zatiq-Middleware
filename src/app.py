@@ -26,4 +26,5 @@ def login_as_user():
         user_auth_token = request.form.get('accessToken')
         login_method = request.form.get('method')
         response = zatiq_users.user_register(user_auth_token, login_method)
+        return(response)
 
