@@ -95,7 +95,6 @@ class ZatiqUsersMySQLClient(object):
             user_name = user_info['name']
             user_email = user_info['email']
             api_token = response[0][5]
-            print(json.dumps([has_set_preferences, user_name, user_email, api_token]))
             return(json.dumps([has_set_preferences, user_name, user_email, api_token]))
         else:
             return("Could not authenticate")
