@@ -1,5 +1,5 @@
 from mongoengine import *
-import zatiq_food_items import Zatiq_Food_Items
+from zatiq_food_items import Zatiq_Food_Items
 import datetime
 
 class Zatiq_Users(Document):
