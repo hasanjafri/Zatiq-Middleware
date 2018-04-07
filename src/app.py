@@ -1,5 +1,4 @@
 from flask import Flask, request
-from zatiq_businesses_mysql_client import ZatiqBusinessesMySQLClient
 from zatiq_users_mongodb_client import ZatiqUsersMongoDBClient
 from mongoengine import *
 
