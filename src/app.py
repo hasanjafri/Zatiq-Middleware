@@ -33,3 +33,7 @@ def hello_world():
 #         response = zatiq_users.user_register(user_auth_token, login_method)
 #         return(response)
 
+@app.route('/users/list/')
+def test_get_all_users():
+    all_users = ZatiqUsersMongoDBClient().get_all_users()
+    return(all_users)
