@@ -2,7 +2,7 @@ from mongoengine import *
 import secrets
 import requests
 import json
-from models.zatiq_users import Zatiq_Users
+from zatiq_users import Zatiq_Users
 
 class ZatiqUsersMongoDBClient(object):
     def get_all_users(self):

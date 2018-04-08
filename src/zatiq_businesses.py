@@ -8,3 +8,4 @@ class Zatiq_Businesses(Document):
     zatiq_token = StringField(required=True)
     date_created = StringField(default=datetime.datetime.utcnow)
     date_modified = StringField(default=datetime.datetime.utcnow)
+    price_range = StringField(required=True)
