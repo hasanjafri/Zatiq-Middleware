@@ -36,3 +36,8 @@ def hello_world():
 def test_get_all_users():
     all_users = ZatiqUsersMongoDBClient().get_all_users()
     return(all_users)
+
+@app.route('/user/')
+def test_get_specific_user():
+    user = ZatiqUsersMongoDBClient().get_specific_user()
+    return(user)
