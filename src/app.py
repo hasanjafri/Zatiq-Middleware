@@ -42,7 +42,13 @@ def login_as_business():
         response = zatiq_businesses.business_register(business_email, business_password)
         return(response)
 
+@app.route('/reviews/all/user/', methods=['POST'])
+def get_all_reviews_by_reviewer_id():
+    if request.method == 'POST':
+        api_token = request.get_json()['api_token']
+
+
 @app.route('/user/review/add/', methods=['POST'])
 def add_review_as_user():
     if request.method == 'POST':
-        
+        pass

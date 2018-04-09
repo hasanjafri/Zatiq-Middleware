@@ -33,5 +33,8 @@ class ZatiqReviewsMongoDBClient(object):
             return("Please enter a review")
         if not rating:
             return("You must select a rating out of 5 stars")
-            
+
+        if self.check_valid_api_token(api_token) == True:
+            add_review = Zatiq_Reviews.objects()
+
         
