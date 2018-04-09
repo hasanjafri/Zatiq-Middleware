@@ -14,7 +14,7 @@ class ZatiqUsersMongoDBClient(object):
     
     def get_specific_user(self, api_token):
         user = Zatiq_Users.objects(zatiq_token=api_token)
-        return(json.dumps(user[0].user_name))
+        return(json.dumps(user[0].auth_token))
 
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)

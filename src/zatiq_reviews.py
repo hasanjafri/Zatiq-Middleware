@@ -5,11 +5,11 @@ from zatiq_users import Zatiq_Users
 import datetime
 
 class Zatiq_Reviews(Document):
-   restaurant_id = ReferenceField(Zatiq_Businesses, reverse_delete_rule=2, dbref=True)
-   food_item_id = ReferenceField(Zatiq_Food_Items, dbref=True)
-   reviewer_id = ReferenceField(Zatiq_Users, reverse_delete_rule=2, dbref=True)
+   restaurant_id = ReferenceField(Zatiq_Businesses, reverse_delete_rule=CASCADE)
+   food_item_id = ReferenceField(Zatiq_Food_Items)
+   reviewer_id = ReferenceField(Zatiq_Users)
    text = StringField(required=True)
-   image = BinaryField(required=False)
-   image_aspect_ratio = StringField(required=False)
+   image = StringField(required=True)
+   image_aspect_ratio = StringField(required=True)
    rating = StringField(required=True, default='0.00')
    date_created = DateTimeField(default=datetime.datetime.utcnow)
