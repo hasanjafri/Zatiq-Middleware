@@ -7,17 +7,14 @@ from zatiq_users import Zatiq_Users
 class ZatiqUsersMongoDBClient(object):
     def get_all_users(self):
         all_users = []
-        user1 = Zatiq_Users.objects(user_name='scottie').update_one(upsert=True, set__user_email='scott.com', set__auth_token='scott', set__user_name="Yungun", set__zatiq_token='iamscottie')
-        print(user1)
         for user in Zatiq_Users.objects:
             all_users.append(user.user_name)
         print(all_users)
         return(json.dumps(all_users))
     
-    def get_specific_user(self):
-        user = Zatiq_Users.objects(user_name='Scott')
-        print(user)
-        return(json.dumps(user[0].auth_token))
+    def get_specific_user(self, api_token):
+        user = Zatiq_Users.objects(zatiq_token=api_token)
+        return(json.dumps(user[0].user_name))
 
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)

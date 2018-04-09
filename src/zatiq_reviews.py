@@ -10,5 +10,6 @@ class Zatiq_Reviews(Document):
    reviewer_id = ReferenceField(Zatiq_Users, reverse_delete_rule=2, dbref=True)
    text = StringField(required=True)
    image = BinaryField(required=False)
+   image_aspect_ratio = StringField(required=False)
    rating = StringField(required=True, default='0.00')
    date_created = DateTimeField(default=datetime.datetime.utcnow)
