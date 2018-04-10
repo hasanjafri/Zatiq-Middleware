@@ -58,7 +58,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 business_email = check_business_login[0].business_email
                 has_set_information = check_business_login[0].has_set_information
                 api_token = check_business_login[0].zatiq_token
-                return(jsonify([business_name, business_email, has_set_information, api_token]))
+                return(json.dumps(jsonify([business_name, business_email, has_set_information, api_token])))
             else:
                 return('Incorrect Password!')
         else:
