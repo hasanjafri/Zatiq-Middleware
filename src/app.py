@@ -43,7 +43,7 @@ def register_as_business():
         response = zatiq_businesses.business_register(business_email, business_password)
         json_resp = make_response(response, 200)
         json_resp.mimetype = 'application/json'
-        return(json_response)
+        return(json_resp)
 
 @app.route('/business/login/', methods=['POST'])
 def login_as_business():
