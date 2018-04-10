@@ -53,7 +53,11 @@ class ZatiqBusinessesMongoDBClient(object):
         if len(check_business_login) > 0:
             encrypted_password = check_business_login[0].business_password
             if self.verify_password(business_password, encrypted_password) == True:
-                return(json.dumps(check_business_login[0]))
+                business_name = check_business_login[0].business_name
+                business_email = check_business_login[0].business_email
+                has_set_information = check_business_login[0].has_set_information
+                api_token = check_business_login[0].zatiq_token
+                return([business_name, business_email, has_set_information, api_token])
             else:
                 return('Incorrect Password!')
         else:
