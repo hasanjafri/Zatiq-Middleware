@@ -59,12 +59,12 @@ class ZatiqBusinessesMongoDBClient(object):
             'saturday': business.saturday_start,
             'sunday': business.sunday_start
         }, 'end': {
-            'monday': business.monday_end
-            'tuesday': business.tuesday_end
-            'wednesday': business.wednesday_end
-            'thursday': business.thursday_end
-            'friday': business.friday_end
-            'saturday': business.saturday_end
+            'monday': business.monday_end,
+            'tuesday': business.tuesday_end,
+            'wednesday': business.wednesday_end,
+            'thursday': business.thursday_end,
+            'friday': business.friday_end,
+            'saturday': business.saturday_end,
             'sunday': business.sunday_end
         }}
         return(hours_dict)
