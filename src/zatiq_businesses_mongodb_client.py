@@ -115,6 +115,8 @@ class ZatiqBusinessesMongoDBClient(object):
             api_token = get_business_info[0].zatiq_token
             hours = self.generate_business_hours(get_business_info.hours)
             return([email, name, website, address, number, image, image_aspect_ratio, api_token, hours])
+        else:
+            return('Could not authenticate')
 
     def business_login(self, business_email, business_password):
         if not business_email:
