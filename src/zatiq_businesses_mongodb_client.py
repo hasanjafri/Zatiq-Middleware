@@ -153,11 +153,11 @@ class ZatiqBusinessesMongoDBClient(object):
             api_token = self.generate_zatiq_api_token()
             register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
              set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number,
-             set__hours__monday_start=hours['start']['monday'], set__hours_monday_end=hours['end']['monday'],
-             set__hours__tuesday_start=hours['start']['tuesday'], set__hours_tuesday_end=hours['end']['tuesday'],
-             set__hours__wednesday_start=hours['start']['wednesday'], set__hours_wednesday_end=hours['end']['wednesday'],
-             set__hours__thursday_start=hours['start']['thursday'], set__hours_thursday_end=hours['end']['thursday'],
-             set__hours__friday_start=hours['start']['friday'], set__hours_friday_end=hours['end']['friday'],
-             set__hours__saturday_start=hours['start']['saturday'], set__hours_saturday_end=hours['end']['saturday'],
-             set__hours__sunday_start=hours['start']['sunday'], set__hours_sunday_end=hours['end']['sunday'])
+             set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
+             set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
+             set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
+             set__hours__thursday_start=hours['start']['thursday'], set__hours__thursday_end=hours['end']['thursday'],
+             set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
+             set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
+             set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'])
             return(self.business_login(business_email, business_password))
