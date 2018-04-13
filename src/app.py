@@ -57,7 +57,9 @@ def login_as_business():
         jsonData = request.get_json()
         business_email = jsonData['email']
         business_password = jsonData['password']
+        print(jsonData)
         response = zatiq_businesses.business_login(business_email, business_password)
+        print(response)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
 
 @app.route('/business/profile/', methods=['POST'])
