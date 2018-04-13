@@ -4,6 +4,8 @@ import json
 from simplecrypt import encrypt, decrypt
 from config import secret
 from zatiq_businesses import Zatiq_Businesses
+from zatiq_menus import Zatiq_Menus
+from zatiq_interiors import Zatiq_Interiors
 
 class ZatiqBusinessesMongoDBClient(object):
     def get_all_businesses(self):
@@ -43,11 +45,38 @@ class ZatiqBusinessesMongoDBClient(object):
             return(False)
 
     def check_valid_api_token(self, api_token):
-        valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
         if len(valid_token) > 0:
             return(True)
         else:
             return(False)
+    
+    def upload_menu_photo(self, image, image_aspect_ratio, api_token):
+        if self.check_valid_api_token(api_token) == True:
+            restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
+            new_menu = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+            return('Upload successful')
+        else:
+            return('An error occurred')
+
+    def generate_menu_photos_dict(self, photos):
+        menu_photos = {}
+        for photo in photos:
+            pass
+
+    def get_menu_by_restaurant(self, api_token):
+        if self.check_api_token_exists(api_token) == True:
+            restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
+            menu_photos = Zatiq_Menus.objects(restaurant_id=restaurant)
+            pass
+
+    def upload_interior_photo(self, image, image_aspect_ratio, api_token):
+        if self.check_valid_api_token(api_token) == True:
+            restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
+            new_interior = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+            return('Upload successful')
+        else:
+            return('An error occurred')
     
     def generate_business_hours(self, business):
         hours_dict = {'start': {
@@ -106,7 +135,7 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return("No such email address!")
 
-    def business_register(self, business_email, business_password, hours, business_name, address, website):
+    def business_register(self, business_email, business_password, hours, business_name, address, website, number, image, image_aspect_ratio):
         if not business_email:
             return("Please specify your email")
         if not business_password:
@@ -123,7 +152,7 @@ class ZatiqBusinessesMongoDBClient(object):
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
             register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
-             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website,
+             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number,
              set__hours__monday_start=hours['start']['monday'], set__hours_monday_end=hours['end']['monday'],
              set__hours__tuesday_start=hours['start']['tuesday'], set__hours_tuesday_end=hours['end']['tuesday'],
              set__hours__wednesday_start=hours['start']['wednesday'], set__hours_wednesday_end=hours['end']['wednesday'],

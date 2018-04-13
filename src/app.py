@@ -40,8 +40,15 @@ def register_as_business():
         jsonData = request.get_json()
         business_email = jsonData['email']
         business_password = jsonData['password']
-        response = zatiq_businesses.business_register(business_email, business_password)
-        return(jsonify(name=response[0], email=response[1], has_set_information=response[2], api_token=response[3]))
+        hours = jsonData['date']
+        name = jsonData['name']
+        address = jsonData['address']
+        website = jsonData['website']
+        number = jsonData['number']
+        image = jsonData['image']['base64']
+        image_aspect_ratio = jsonData['image']['ratio']
+        response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio)
+        return(jsonify(name=response[0], api_token=response[1], image=response[2]))
 
 @app.route('/business/login/', methods=['POST'])
 def login_as_business():

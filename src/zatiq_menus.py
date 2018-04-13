@@ -4,6 +4,6 @@ import datetime
 
 class Zatiq_Menus(Document):
     restaurant_id = ReferenceField(Zatiq_Businesses, reverse_delete_rule=CASCADE)
-    image = StringField(required=True)
-    image_aspect_ratio = StringField(required=True)
+    image = ListField(StringField())
+    image_aspect_ratio = ListField(StringField())
     date_created = DateTimeField(default=datetime.datetime.utcnow)
