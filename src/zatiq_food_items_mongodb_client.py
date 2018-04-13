@@ -11,4 +11,5 @@ class ZatiqFoodItemsMongoDBClient(object):
     def get_food_by_tags(self, tags):
         pass
 
-    def get_food_by_id(self,)
+    def get_food_by_id(self):
+        pass
