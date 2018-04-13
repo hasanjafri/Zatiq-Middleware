@@ -51,7 +51,16 @@ def login_as_business():
         business_email = jsonData['email']
         business_password = jsonData['password']
         response = zatiq_businesses.business_login(business_email, business_password)
-        return(response)
+        return(jsonify(name=response[0], api_token=response[1], image=response[2]))
+
+@app.route('/business/profile/', methods=['POST'])
+def get_business_profile():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        response = zatiq_businesses.get_business_profile(api_token)
+        return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], image_aspect_ratio=response[6], api_token=response[7], hours=response[8]))
 
 @app.route('/reviews/all/user/', methods=['POST'])
 def get_all_reviews_by_reviewer_id():
@@ -93,3 +102,8 @@ def add_food_item_as_business():
         item_name = jsonData['item_name']
         foods_by_current_restaurant_id = zatiq_food_items.add_food_item(restaurant_id, image, image_aspect_ratio, overview, item_name)
         return(foods_by_current_restaurant_id)
+
+@app.route('/food/cuisine/', methods=['POST'])
+def query_food_items_by_cuisine():
+    if request.method == 'POST':
+        z

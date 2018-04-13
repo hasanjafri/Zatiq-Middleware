@@ -7,3 +7,8 @@ class ZatiqFoodItemsMongoDBClient(object):
         check_food_items = Zatiq_Food_Items.objects(restaurant_id=restaurant_id).to_json()
         print(check_food_items)
         return(check_food_items)
+
+    def get_food_by_tags(self, tags):
+        pass
+
+    def get_food_by_id(self,)

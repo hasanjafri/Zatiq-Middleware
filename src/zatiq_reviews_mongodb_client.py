@@ -20,8 +20,9 @@ class ZatiqReviewsMongoDBClient(object):
         else:
             return(False)
 
-    def get_reviews_by_restaurant_id(self, restaurant_id):
+    def get_reviews_by_restaurant_id(self, restaurant_id, api_token):
         get_all_reviews = Zatiq_Reviews.objects(restaurant_id=restaurant_id).to_json()
+        check_business
         return(get_all_reviews)
 
     def add_review(self, restaurant_id, reviewer_id, food_item_id, text, image, rating, image_aspect_ratio, api_token):

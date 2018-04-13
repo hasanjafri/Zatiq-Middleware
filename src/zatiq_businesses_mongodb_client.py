@@ -42,6 +42,50 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return(False)
 
+    def check_valid_api_token(self, api_token):
+        valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        if len(valid_token) > 0:
+            return(True)
+        else:
+            return(False)
+    
+    def generate_business_hours(self, business):
+        hours_dict = {'start': {
+            'monday': business.monday_start,
+            'tuesday': business.tuesday_start,
+            'wednesday': business.wednesday_start,
+            'thursday': business.thursday_start,
+            'friday': business.friday_start,
+            'saturday': business.saturday_start,
+            'sunday': business.sunday_start
+        }, 'end': {
+            'monday': business.monday_end
+            'tuesday': business.tuesday_end
+            'wednesday': business.wednesday_end
+            'thursday': business.thursday_end
+            'friday': business.friday_end
+            'saturday': business.saturday_end
+            'sunday': business.sunday_end
+        }}
+        return(hours_dict)
+
+    def get_business_profile(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+        
+        if self.check_api_token_exists(api_token) == True:
+            get_business_info = Zatiq_Businesses.objects(zatiq_token=api_token)
+            email = get_business_info[0].business_email
+            name = get_business_info[0].business_name
+            website = get_business_info[0].website
+            address = get_business_info[0].address
+            number = get_business_info[0].number
+            image = get_business_info[0].image
+            image_aspect_ratio = get_business_info[0].image_aspect_ratio
+            api_token = get_business_info[0].zatiq_token
+            hours = self.generate_business_hours(get_business_info.hours)
+            return([email, name, website, address, number, image, image_aspect_ratio, api_token, hours])
+
     def business_login(self, business_email, business_password):
         if not business_email:
             return('Please specify your email!')
@@ -54,20 +98,23 @@ class ZatiqBusinessesMongoDBClient(object):
             encrypted_password = check_business_login[0].business_password
             if self.verify_password(business_password, encrypted_password) == True:
                 business_name = check_business_login[0].business_name
-                business_email = check_business_login[0].business_email
-                has_set_information = check_business_login[0].has_set_information
                 api_token = check_business_login[0].zatiq_token
-                return([business_name, business_email, has_set_information, api_token])
+                image = check_business_login[0].image
+                return([business_name, api_token, image])
             else:
                 return('Incorrect Password!')
         else:
             return("No such email address!")
 
-    def business_register(self, business_email, business_password):
+    def business_register(self, business_email, business_password, hours, business_name, address, website):
         if not business_email:
             return("Please specify your email")
         if not business_password:
             return("Please type in your password")
+        if not business_name:
+            return("Please enter your business name")
+        if not hours:
+            return("Please select your business hours")
 
         check_business_register = Zatiq_Businesses.objects(business_email=business_email)
         if len(check_business_register) > 0:
@@ -75,5 +122,13 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
-            register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True, set__business_password=encrypted_password, set__zatiq_token=api_token)
+            register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
+             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website,
+             set__hours__monday_start=hours['start']['monday'], set__hours_monday_end=hours['end']['monday'],
+             set__hours__tuesday_start=hours['start']['tuesday'], set__hours_tuesday_end=hours['end']['tuesday'],
+             set__hours__wednesday_start=hours['start']['wednesday'], set__hours_wednesday_end=hours['end']['wednesday'],
+             set__hours__thursday_start=hours['start']['thursday'], set__hours_thursday_end=hours['end']['thursday'],
+             set__hours__friday_start=hours['start']['friday'], set__hours_friday_end=hours['end']['friday'],
+             set__hours__saturday_start=hours['start']['saturday'], set__hours_monday_end=hours['end']['saturday'],
+             set__hours__sunday_start=hours['start']['sunday'], set__hours_sunday_end=hours['end']['sunday'])
             return(self.business_login(business_email, business_password))
