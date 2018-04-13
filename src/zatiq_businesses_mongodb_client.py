@@ -104,6 +104,7 @@ class ZatiqBusinessesMongoDBClient(object):
         
         if self.check_api_token_exists(api_token) == True:
             get_business_info = Zatiq_Businesses.objects(zatiq_token=api_token)
+            print(get_business_info)
             email = get_business_info[0].business_email
             name = get_business_info[0].business_name
             website = get_business_info[0].website
