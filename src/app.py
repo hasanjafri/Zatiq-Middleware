@@ -47,7 +47,8 @@ def register_as_business():
         number = jsonData['number']
         image = jsonData['image']['base64']
         image_aspect_ratio = jsonData['image']['ratio']
-        response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio)
+        features = jsonData['features']
+        response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
 
 @app.route('/business/login/', methods=['POST'])
@@ -68,9 +69,7 @@ def get_business_profile():
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        print(api_token)
         response = zatiq_businesses.get_business_profile(api_token)
-        print(response)
         return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], image_aspect_ratio=response[6], api_token=response[7], hours=response[8]))
 
 @app.route('/reviews/all/user/', methods=['POST'])
@@ -117,4 +116,45 @@ def add_food_item_as_business():
 @app.route('/food/cuisine/', methods=['POST'])
 def query_food_items_by_cuisine():
     if request.method == 'POST':
-        z
+        pass
+
+@app.route('/restaurant/menu/add/', methods=['POST'])
+def add_menu_photo():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        image = jsonData['base64']
+        image_aspect_ratio = jsonData['image_aspect_ratio']
+        add_menu = zatiq_businesses.upload_menu_photo(image, image_aspect_ratio, api_token)
+        return(jsonify(response=add_menu))
+
+@app.route('/restaurant/interior/add/', methods=['POST'])
+def add_interior_photo():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        image = jsonData['base64']
+        image_aspect_ratio = jsonData['image_aspect_ratio']
+        add_menu = zatiq_businesses.upload_interior_photo(image, image_aspect_ratio, api_token)
+        return(jsonify(response=add_menu))
+
+@app.route('/restaurant/menu/all/', methods=['POST'])
+def get_menus_for_restaurant():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
+        return(jsonify(menu_photos=menu_photos))
+
+@app.route('/restaurant/interior/all/', methods=['POST'])
+def get_interiors_for_restaurant():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
+        return(jsonify(interior_photos=menu_photos))
+

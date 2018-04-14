@@ -17,3 +17,8 @@ class Zatiq_Businesses(Document):
     date_modified = StringField(default=datetime.datetime.utcnow)
     price_range = StringField(required=False)
     average_food_rating = StringField(required=False)
+    delivery = BooleanField(required=True)
+    takeout = BooleanField(required=True)
+    reservation = BooleanField(required=True)
+    patio = BooleanField(required=True)
+    wheelchair_accessible = BooleanField(required=True)

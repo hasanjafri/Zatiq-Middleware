@@ -50,33 +50,55 @@ class ZatiqBusinessesMongoDBClient(object):
             return(True)
         else:
             return(False)
+
+    def get_restaurant_id_by_api_token(self, api_token):
+        valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
+        if (len(valid_token) > 0):
+            restaurant_id = valid_token[0].id
+            return(restaurant_id)
+        else:
+            return(None)
     
     def upload_menu_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
-            restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
-            new_menu = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
-            return('Upload successful')
-        else:
-            return('An error occurred')
+            restaurant = self.get_restaurant_id_by_api_token(api_token)
+            if restaurant != None:
+                new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+                return('Upload successful')
+            else:
+                return('An error occurred')
 
-    def generate_menu_photos_dict(self, photos):
-        menu_photos = {}
-        for photo in photos:
-            pass
-
-    def get_menu_by_restaurant(self, api_token):
+    def get_menu_photos_by_restaurant(self, api_token):
         if self.check_api_token_exists(api_token) == True:
             restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
             menu_photos = Zatiq_Menus.objects(restaurant_id=restaurant)
-            pass
+            result = self.generate_photos_dict(menu_photos)
+            return(result)
+
+    def generate_photos_dict(self, photos):
+        photos_dict = {}
+        for photo in range(len(photos)):
+            base64 = photos[photo].image
+            image_aspect_ratio = photos[photo].image_aspect_ratio
+            photo_info = {'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
+            photos_dict[photo] = photo_info
+        return(photos_dict)
 
     def upload_interior_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
+            restaurant = self.get_restaurant_id_by_api_token(api_token)
+            if restaurant != None:
+                new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+                return('Upload successful')
+            else:
+                return('An error occurred')
+
+    def get_interior_photos_by_restaurant(self, api_token):
+        if self.check_api_token_exists(api_token) == True:
             restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
-            new_interior = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
-            return('Upload successful')
-        else:
-            return('An error occurred')
+            interior_photos = Zatiq_Interiors.objects(restaurant_id=restaurant)
+            result = self.generate_photos_dict(interior_photos)
+            return(result)
     
     def generate_business_hours(self, business):
         hours_dict = {'start': {
@@ -139,7 +161,7 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return("No such email address!")
 
-    def business_register(self, business_email, business_password, hours, business_name, address, website, number, image, image_aspect_ratio):
+    def business_register(self, business_email, business_password, hours, business_name, address, website, number, image, image_aspect_ratio, features):
         if not business_email:
             return("Please specify your email")
         if not business_password:
@@ -163,5 +185,6 @@ class ZatiqBusinessesMongoDBClient(object):
              set__hours__thursday_start=hours['start']['thursday'], set__hours__thursday_end=hours['end']['thursday'],
              set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
              set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
-             set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'])
+             set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
+             set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelchair_accessible'])
             return(self.business_login(business_email, business_password))
