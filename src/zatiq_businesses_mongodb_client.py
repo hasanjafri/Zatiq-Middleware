@@ -85,7 +85,7 @@ class ZatiqBusinessesMongoDBClient(object):
     def generate_photos_dict(self, photos):
         photos_dict = {}
         for photo in range(len(photos)):
-            image_id = photos[photo].id
+            image_id = str(photos[photo].id)
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
             photo_info = {'image_id': image_id, 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
@@ -180,7 +180,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 try:
                     Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=False, set__zatiq_token=new_api_token)
                 except Exception as e:
-                    return "Error \n %s" % (e)
+                    return("Error \n %s" % (e))
                 business_name = check_business_login[0].business_name
                 image = check_business_login[0].image
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
