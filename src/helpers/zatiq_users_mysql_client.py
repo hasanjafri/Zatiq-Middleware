@@ -1,19 +1,22 @@
 import MySQLdb
 import secrets
 import requests
+import json
 
 class ZatiqUsersMySQLClient(object):
     def __init__(self):
         self.connect_to_db = MySQLdb.connect(
-            
+            host="127.0.0.1",
+            user="root",
+            passwd="zatiqserver",
+            db="zatiq_database"
         )
     
     def get_all_users(self):
         db_query = self.connect_to_db.cursor()
         db_query.execute("""SELECT * from zatiq_users""")
         response = db_query.fetchall()
-        print(response)
-        return("Done!")
+        return(json.dumps(response[0]))
     
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)
@@ -29,6 +32,35 @@ class ZatiqUsersMySQLClient(object):
         if len(response) > 0:
             self.generate_zatiq_api_token()
         else:
+            return(False)
+
+    def check_user_exists(self, user_email, id, method, authToken):
+        check_user_exists = self.connect_to_db.cursor()
+        
+        if method == "google":
+            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE user_email = %s AND google_id = %s""", (user_email, id))
+            res = check_user_exists.fetchall()
+            if len(res) > 0:
+                update_user_auth_token = self.connect_to_db.cursor()
+                update_user_auth_token.execute("""UPDATE zatiq_users SET auth_token = %s WHERE google_id = %s""", (authToken, id))
+                self.connect_to_db.commit()
+                return(True)
+            else:
+                return(False)
+
+        if method == 'facebook':
+            check_user_exists.execute("""SELECT * FROM zatiq_users WHERE user_email = %s AND facebook_id = %s""", (user_email, id))
+            res = check_user_exists.fetchall()
+            if len(res) > 0:
+                update_user_auth_token = self.connect_to_db.cursor()
+                update_user_auth_token.execute("""UPDATE zatiq_users SET auth_token = %s WHERE facebook_id = %s""", (authToken, id))
+                self.connect_to_db.commit()
+                return(True)
+            else:
+                return(False)
+
+        
+        if method != 'google' and method != 'facebook':
             return(False)
 
     def get_user_info(self, authToken, method):
@@ -63,7 +95,7 @@ class ZatiqUsersMySQLClient(object):
             user_name = user_info['name']
             user_email = user_info['email']
             api_token = response[0][5]
-            return(has_set_preferences, user_name, user_email, api_token)
+            return(json.dumps([has_set_preferences, user_name, user_email, api_token]))
         else:
             return("Could not authenticate")
 
@@ -76,7 +108,7 @@ class ZatiqUsersMySQLClient(object):
 
         response = db_query.fetchall()
         if len(response) > 0:
-            self.user_login(authToken, response[0][1], method)
+            return self.user_login(authToken, response[0][1], method)
         else:
             register_user = self.connect_to_db.cursor()
             user_info = self.get_user_info(authToken, method)
@@ -86,10 +118,22 @@ class ZatiqUsersMySQLClient(object):
             api_token = self.generate_zatiq_api_token()
 
             if method == 'google':
-                register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, google_id) VALUES (%s, %s, %s, %s, %s)""", (
-                    user_email, user_name, authToken, api_token, user_id))
+                if self.check_user_exists(user_email, user_id, method, authToken) == False:
+                    if register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, google_id) VALUES (%s, %s, %s, %s, %s)""", (
+                            user_email, user_name, authToken, api_token, user_id)) == 1:
+                        self.connect_to_db.commit()
+                        return self.user_login(authToken, user_email, method)
+                else:
+                    return self.user_login(authToken, user_email, method)
+                
 
             if method == 'facebook':
-                register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, facebook_id) VALUES (%s, %s, %s, %s, %s)""", (
-                    user_email, user_name, authToken, api_token, user_id))
+                if self.check_user_exists(user_email, user_id, method, authToken) == False:
+                    if register_user.execute("""INSERT INTO zatiq_users (user_email, user_name, auth_token, zatiq_token, facebook_id) VALUES (%s, %s, %s, %s, %s)""", (
+                            user_email, user_name, authToken, api_token, user_id)) == 1:
+                        self.connect_to_db.commit()
+                        return self.user_login(authToken, user_email, method)
+                else:
+                    return self.user_login(authToken, user_email, method)
+                
             
