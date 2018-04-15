@@ -183,6 +183,6 @@ def get_interiors_for_restaurant():
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
-        return(jsonify(interior_photos=menu_photos))
+        interior_photos = zatiq_businesses.get_interior_photos_by_restaurant(api_token)
+        return(jsonify(interior_photos=interior_photos))
 
