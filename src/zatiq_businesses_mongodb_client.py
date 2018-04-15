@@ -88,14 +88,14 @@ class ZatiqBusinessesMongoDBClient(object):
             return(result)
 
     def generate_photos_dict(self, photos):
-        photos_dict = {}
+        photos_list = []
         for photo in range(len(photos)):
             image_id = str(photos[photo].id)
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
             photo_info = {'image_id': image_id, 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
-            photos_dict[photo] = photo_info
-        return(photos_dict)
+            photos_list.append(photo_info)
+        return(photos_list)
 
     def upload_interior_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
