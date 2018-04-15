@@ -67,9 +67,16 @@ class ZatiqBusinessesMongoDBClient(object):
                 return('Upload successful')
             else:
                 return('An error occurred')
+    
+    def delete_menu_photo(self, image_id, api_token):
+        if self.check_valid_api_token(api_token) == True:
+            Zatiq_Menus.objects(id=image_id).delete()
+            return('Image deleted')
+        else:
+            return('An error occurred')
 
     def get_menu_photos_by_restaurant(self, api_token):
-        if self.check_api_token_exists(api_token) == True:
+        if self.check_valid_api_token(api_token) == True:
             restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
             menu_photos = Zatiq_Menus.objects(restaurant_id=restaurant)
             result = self.generate_photos_dict(menu_photos)
@@ -78,9 +85,10 @@ class ZatiqBusinessesMongoDBClient(object):
     def generate_photos_dict(self, photos):
         photos_dict = {}
         for photo in range(len(photos)):
+            image_id = photos[photo].id
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
-            photo_info = {'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
+            photo_info = {'image_id': image_id, 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
             photos_dict[photo] = photo_info
         return(photos_dict)
 
@@ -93,8 +101,15 @@ class ZatiqBusinessesMongoDBClient(object):
             else:
                 return('An error occurred')
 
+    def delete_interior_photo(self, image_id, api_token):
+        if self.check_valid_api_token(api_token) == True:
+            Zatiq_Interiors.objects(id=image_id).delete()
+            return('Image deleted')
+        else:
+            return('An error occurred')
+
     def get_interior_photos_by_restaurant(self, api_token):
-        if self.check_api_token_exists(api_token) == True:
+        if self.check_valid_api_token(api_token) == True:
             restaurant = Zatiq_Businesses.objects(zatiq_token=api_token)[0].id
             interior_photos = Zatiq_Interiors.objects(restaurant_id=restaurant)
             result = self.generate_photos_dict(interior_photos)
@@ -124,7 +139,7 @@ class ZatiqBusinessesMongoDBClient(object):
         if not api_token:
             return('Could not authenticate')
         
-        if self.check_api_token_exists(api_token) == True:
+        if self.check_valid_api_token(api_token) == True:
             get_business_info = Zatiq_Businesses.objects(zatiq_token=api_token)
             print(get_business_info)
             email = get_business_info[0].business_email
@@ -140,6 +155,16 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return('Could not authenticate')
 
+    def business_logout(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+        
+        if self.check_valid_api_token(api_token) == True:
+            logged_business = Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False, set__zatiq_token='NULL')
+            return('Logged out successfully')
+        else:
+            return('An error occurred')
+
     def business_login(self, business_email, business_password):
         if not business_email:
             return('Please specify your email!')
@@ -151,11 +176,15 @@ class ZatiqBusinessesMongoDBClient(object):
         if len(check_business_login) > 0:
             encrypted_password = check_business_login[0].business_password
             if self.verify_password(business_password, encrypted_password) == True:
+                new_api_token = self.generate_zatiq_api_token()
+                try:
+                    Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=False, set__zatiq_token=new_api_token)
+                except Exception as e:
+                    return "Error \n %s" % (e)
                 business_name = check_business_login[0].business_name
-                api_token = check_business_login[0].zatiq_token
                 image = check_business_login[0].image
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
-                return([business_name, api_token, image, image_aspect_ratio])
+                return([business_name, new_api_token, image, image_aspect_ratio])
             else:
                 return('Incorrect Password!')
         else:

@@ -58,10 +58,17 @@ def login_as_business():
         jsonData = request.get_json()
         business_email = jsonData['email']
         business_password = jsonData['password']
-        print(jsonData)
         response = zatiq_businesses.business_login(business_email, business_password)
-        print(response)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
+
+@app.route('/business/logout/', methods=['POST'])
+def logout_as_business():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        response = zatiq_businesses.business_logout(api_token)
+        return(jsonify(response=response))
 
 @app.route('/business/profile/', methods=['POST'])
 def get_business_profile():
@@ -125,9 +132,19 @@ def add_menu_photo():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         image = jsonData['base64']
-        image_aspect_ratio = jsonData['image_aspect_ratio']
+        image_aspect_ratio = jsonData['ratio']
         add_menu = zatiq_businesses.upload_menu_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
+
+@app.route('/restaurant/menu/delete/', methods=['POST'])
+def delete_menu_photo():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        image_id = jsonData['image_id']
+        delete_menu = zatiq_businesses.delete_menu_photo(image_id, api_token)
+        return(jsonify(response=delete_menu))
 
 @app.route('/restaurant/interior/add/', methods=['POST'])
 def add_interior_photo():
@@ -136,9 +153,19 @@ def add_interior_photo():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         image = jsonData['base64']
-        image_aspect_ratio = jsonData['image_aspect_ratio']
+        image_aspect_ratio = jsonData['ratio']
         add_menu = zatiq_businesses.upload_interior_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
+
+@app.route('/restaurant/interior/delete/', methods=['POST'])
+def delete_interior_photo():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        image_id = jsonData['image_id']
+        delete_interior = zatiq_businesses.delete_interior_photo(image_id, api_token)
+        return(jsonify(response=delete_interior))
 
 @app.route('/restaurant/menu/all/', methods=['POST'])
 def get_menus_for_restaurant():
