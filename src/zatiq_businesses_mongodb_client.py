@@ -63,8 +63,12 @@ class ZatiqBusinessesMongoDBClient(object):
         if self.check_valid_api_token(api_token) == True:
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
-                new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
-                return('Upload successful')
+                try:
+                    new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                image_id = str(new_menu_photo[0].id)
+                return({'image_id': image_id})
             else:
                 return('An error occurred')
     
@@ -96,8 +100,12 @@ class ZatiqBusinessesMongoDBClient(object):
         if self.check_valid_api_token(api_token) == True:
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
-                new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
-                return('Upload successful')
+                try:
+                    new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio).save()
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                image_id = str(new_interior_photo[0].id)
+                return({'image_id': image_id})
             else:
                 return('An error occurred')
 
