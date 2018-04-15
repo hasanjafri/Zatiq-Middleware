@@ -68,7 +68,7 @@ class ZatiqBusinessesMongoDBClient(object):
                     new_menu_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
-                image_id = str(new_menu_photo[0].id)
+                image_id = str(new_menu_photo.id)
                 return({'image_id': image_id})
             else:
                 return('An error occurred')
@@ -106,7 +106,7 @@ class ZatiqBusinessesMongoDBClient(object):
                     new_interior_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
-                image_id = str(new_interior_photo[0].id)
+                image_id = str(new_interior_photo.id)
                 return({'image_id': image_id})
             else:
                 return('An error occurred')
