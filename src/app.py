@@ -46,7 +46,7 @@ def register_as_business():
         website = jsonData['website']
         number = jsonData['number']
         image = jsonData['image']['base64']
-        image_aspect_ratio = jsonData['image']['ratio']
+        image_aspect_ratio = jsonData['image']['image_aspect_ratio']
         features = jsonData['features']
         response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
@@ -133,7 +133,7 @@ def add_menu_photo():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         image = jsonData['base64']
-        image_aspect_ratio = jsonData['ratio']
+        image_aspect_ratio = jsonData['image_aspect_ratio']
         add_menu = zatiq_businesses.upload_menu_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
 
@@ -154,7 +154,7 @@ def add_interior_photo():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         image = jsonData['base64']
-        image_aspect_ratio = jsonData['ratio']
+        image_aspect_ratio = jsonData['image_aspect_ratio']
         add_menu = zatiq_businesses.upload_interior_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
 
