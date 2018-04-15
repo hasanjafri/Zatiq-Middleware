@@ -112,12 +112,13 @@ def add_food_item_as_business():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
+        api_token = jsonData['api_token']
         restaurant_id = jsonData['restaurant_id']
         image = jsonData['image']
         image_aspect_ratio = jsonData['image_aspect_ratio']
         overview = jsonData['overview']
         item_name = jsonData['item_name']
-        foods_by_current_restaurant_id = zatiq_food_items.add_food_item(restaurant_id, image, image_aspect_ratio, overview, item_name)
+        foods_by_current_restaurant_id = zatiq_food_items.add_food_item(restaurant_id, image, image_aspect_ratio, overview, item_name, api_token)
         return(foods_by_current_restaurant_id)
 
 @app.route('/food/cuisine/', methods=['POST'])
