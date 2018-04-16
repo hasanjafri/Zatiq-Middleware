@@ -1,4 +1,5 @@
 from mongoengine import *
+import bson
 from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
 
@@ -6,19 +7,19 @@ class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood):
         if self.check_valid_api_token(api_token) == True:
             restaurant = self.get_restaurant_id_by_api_token(api_token)
+            food_item_id = self.generate_food_item_id()
             try:
-                add_food_item = Zatiq_Food_Items(restaurant_id=restaurant, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price,
-                tags_indian=tags['indian'], tags_greek=tags['greek'], tags_chinese=tags['chinese'], tags_japanese=tags['japanese'], tags_korean=tags['korean'], tags_sushi=tags['sushi'], tags_dessert=tags['dessert'], tags_burger=tags['burger'], tags_pizza=tags['pizza'],
-                tags_fast_food=tags['fast_food'], tags_halal=tags['halal'], tags_caribbean=tags['caribbean'], tags_mexican=tags['mexican'], tags_spicy=tags['spicy'], tags_fine_food=tags['fine_food'], tags_kosher=tags['kosher'], tags_healthy=tags['healthy'], tags_vegan=tags['vegan'], tags_vegetarian=tags['vegetarian'],
-                tags_gluten_free=tags['gluten_free'], tags_italian=tags['italian'], tags_middle_eastern=tags['middle_eastern'], tags_snack=tags['snack'], tags_thai=tags['thai'], tags_canadian=tags['canadian'], tags_vietnamese=tags['vietnamese'], tags_has_nuts=tags['has_nuts'], tags_lactose_free=tags['lactose_free'],
-                tags_meat_bear=meat['bear'], tags_meat_beef=meat['beef'], tags_meat_buffalo=meat['buffalo'], tags_meat_calf=meat['calf'], tags_meat_caribou=meat['caribou'], tags_meat_goat=meat['goat'], tags_meat_ham=meat['ham'], tags_meat_horse=meat['horse'], tags_meat_kangaroo=meat['kangaroo'], tags_meat_lamb=meat['lamb'], tags_meat_moose=meat['moose'], tags_meat_mutton=meat['mutton'], tags_meat_opossum=meat['opossum'],
-                tags_meat_pork=meat['pork'], tags_meat_bacon=meat['bacon'], tags_meat_rabbit=meat['rabbit'], tags_meat_snake=meat['snake'], tags_meat_squirrel=meat['squirrel'], tags_meat_turtle=meat['turtle'], tags_meat_veal=meat['veal'], tags_meat_chicken=meat['chicken'], tags_meat_hen=meat['hen'], tags_meat_duck=meat['duck'], tags_meat_goose=meat['goose'],
-                tags_meat_ostrich=meat['ostrich'], tags_meat_quail=meat['quail'], tags_meat_turkey=meat['turkey'], tags_seafood_clam=seafood['clam'], tags_seafood_pangasius=seafood['pangasius'], tags_seafood_cod=seafood['cod'], tags_seafood_crab=seafood['crab'], tags_seafood_catfish=seafood['catfish'], tags_seafood_alaska_pollack=seafood['alaska_pollack'], tags_seafood_tilapia=seafood['tilapia'], tags_seafood_salmon=seafood['salmon'], tags_seafood_tuna=seafood['tuna'],
-                tags_seafood_shrimp=seafood['shrimp'], tags_seafood_lobster=seafood['lobster'], tags_seafood_eel=seafood['eel'], tags_seafood_trout=seafood['trout'], tags_seafood_pike=seafood['pike'], tags_seafood_shark=seafood['shark'], meal_type__breakfast=meal_type['breakfast'], meal_type__lunch=meal_type['lunch'], meal_type__dinner=meal_type['dinner'])
-                add_food_item.save()
+                Zatiq_Food_Items.objects(_id=food_item_id).update_one(restaurant_id=restaurant, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, meal_type=meal_type, is_beverage=tags['is_beverage'], item_price=item_price,
+                set__tags_indian=tags['indian'], set__tags_greek=tags['greek'], set__tags_chinese=tags['chinese'], set__tags_japanese=tags['japanese'], set__tags_korean=tags['korean'], set__tags_sushi=tags['sushi'], set__tags_dessert=tags['dessert'], set__tags_burger=tags['burger'], set__tags_pizza=tags['pizza'],
+                set__tags_fast_food=tags['fast_food'], set__tags_halal=tags['halal'], set__tags_caribbean=tags['caribbean'], set__tags_mexican=tags['mexican'], set__tags_spicy=tags['spicy'], set__tags_fine_food=tags['fine_food'], set__tags_kosher=tags['kosher'], set__tags_healthy=tags['healthy'], set__tags_vegan=tags['vegan'], set__tags_vegetarian=tags['vegetarian'],
+                set__tags_gluten_free=tags['gluten_free'], set__tags_italian=tags['italian'], set__tags_middle_eastern=tags['middle_eastern'], set__tags_snack=tags['snack'], set__tags_thai=tags['thai'], set__tags_canadian=tags['canadian'], set__tags_vietnamese=tags['vietnamese'], set__tags_has_nuts=tags['has_nuts'], set__tags_lactose_free=tags['lactose_free'],
+                set__tags__meat_bear=meat['bear'], set__tags__meat_beef=meat['beef'], set__tags__meat_buffalo=meat['buffalo'], set__tags__meat_calf=meat['calf'], set__tags__meat_caribou=meat['caribou'], set__tags__meat_goat=meat['goat'], set__tags__meat_ham=meat['ham'], set__tags__meat_horse=meat['horse'], set__tags__meat_kangaroo=meat['kangaroo'], set__tags__meat_lamb=meat['lamb'], set__tags__meat_moose=meat['moose'], set__tags__meat_mutton=meat['mutton'], set__tags__meat_opossum=meat['opossum'],
+                set__tags__meat_pork=meat['pork'], set__tags__meat_bacon=meat['bacon'], set__tags__meat_rabbit=meat['rabbit'], set__tags__meat_snake=meat['snake'], set__tags__meat_squirrel=meat['squirrel'], set__tags__meat_turtle=meat['turtle'], set__tags__meat_veal=meat['veal'], set__tags__meat_chicken=meat['chicken'], set__tags__meat_hen=meat['hen'], set__tags__meat_duck=meat['duck'], set__tags__meat_goose=meat['goose'],
+                set__tags__meat_ostrich=meat['ostrich'], set__tags__meat_quail=meat['quail'], set__tags__meat_turkey=meat['turkey'], set__tags__seafood_clam=seafood['clam'], set__tags__seafood_pangasius=seafood['pangasius'], set__tags__seafood_cod=seafood['cod'], set__tags__seafood_crab=seafood['crab'], set__tags__seafood_catfish=seafood['catfish'], set__tags__seafood_alaska_pollack=seafood['alaska_pollack'], set__tags__seafood_tilapia=seafood['tilapia'], set__tags__seafood_salmon=seafood['salmon'], set__tags__seafood_tuna=seafood['tuna'],
+                set__tags__seafood_shrimp=seafood['shrimp'], set__tags__seafood_lobster=seafood['lobster'], set__tags__seafood_eel=seafood['eel'], set__tags__seafood_trout=seafood['trout'], set__tags__seafood_pike=seafood['pike'], set__tags__seafood_shark=seafood['shark'], set__meal_type__breakfast=meal_type['breakfast'], set__meal_type__lunch=meal_type['lunch'], set__meal_type__dinner=meal_type['dinner'])
             except Exception as e:
                 return("Error \n %s" % (e))
-            new_food_item_id = str(add_food_item.id)
+            new_food_item_id = str(Zatiq_Food_Items.objects(_id=food_item_id)[0].id)
             return({'image_id': new_food_item_id})
         else:
             return('Could not authenticate')
@@ -26,6 +27,10 @@ class ZatiqFoodItemsMongoDBClient(object):
     def extract_food_tags(self, tags, meat, seafood):
         tags = {}
         pass
+
+    def generate_food_item_id(self):
+        food_item_id = bson.objectid.ObjectId()
+        return(food_item_id)
 
     def get_food_by_tags(self, tags):
         pass
