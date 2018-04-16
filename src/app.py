@@ -20,7 +20,7 @@ def login_as_user():
         user_auth_token = jsonData['accessToken']
         login_method = jsonData['method']
         response = zatiq_users.user_register(user_auth_token, login_method)
-        return(response)
+        return(jsonify(user_name=response[0], user_email=response[1], api_token=response[2]))
 
 @app.route('/users/list/')
 def test_get_all_users():
@@ -87,6 +87,14 @@ def logout_as_business():
         response = zatiq_businesses.business_logout(api_token)
         return(jsonify(response=response))
 
+@app.route('/user/logout/', methods=['POST'])
+def logout_as_user():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        pass
+
 @app.route('/business/profile/', methods=['POST'])
 def get_business_profile():
     if request.method == 'POST':
@@ -94,7 +102,7 @@ def get_business_profile():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         response = zatiq_businesses.get_business_profile(api_token)
-        return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], image_aspect_ratio=response[6], api_token=response[7], hours=response[8]))
+        return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], image_aspect_ratio=response[6], api_token=response[7], hours=response[8], delivery=response[9], takeout=response[10], reservation=response[11], patio=response[12], wheelchair_accessible=response[13]))
 
 @app.route('/reviews/all/user/', methods=['POST'])
 def get_all_reviews_by_reviewer_id():

@@ -23,6 +23,23 @@ class ZatiqUsersMongoDBClient(object):
         else:
             self.generate_zatiq_api_token()
 
+    def check_valid_api_token(self, api_token):
+        valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        if len(valid_token) > 0:
+            return(True)
+        else:
+            return(False)
+    
+    def user_logout(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+        
+        if self.check_valid_api_token(api_token) == True:
+            logged_user = Zatiq_Users.objects(zatiq_token=api_token).update_one(upsert=False, set__zatiq_token='NULL', set__auth_token='NULL')
+            return('Logged out successfully')
+        else:
+            return('An error occurred')
+
     def check_api_token_exists(self, api_token):
         check_api_token = Zatiq_Users.objects(zatiq_token=api_token)
         if len(check_api_token) > 0:
@@ -75,7 +92,7 @@ class ZatiqUsersMongoDBClient(object):
             user_name = user_info['name']
             user_email = user_info['email']
             api_token = check_user_login[0].zatiq_token
-            return(json.dumps([user_name, user_email, api_token]))
+            return([user_name, user_email, api_token])
         else:
             return('Could not authenticate')
         

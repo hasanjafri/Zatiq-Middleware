@@ -160,8 +160,13 @@ class ZatiqBusinessesMongoDBClient(object):
             image = get_business_info[0].image
             image_aspect_ratio = get_business_info[0].image_aspect_ratio
             api_token = get_business_info[0].zatiq_token
+            delivery = get_business_info[0].delivery
+            takeout = get_business_info[0].takeout
+            reservation = get_business_info[0].reservation
+            patio = get_business_info[0].patio
+            wheelchair_accessible = get_business_info[0].wheelchair_accessible
             hours = self.generate_business_hours(get_business_info[0].hours)
-            return([email, name, website, address, number, image, image_aspect_ratio, api_token, hours])
+            return([email, name, website, address, number, image, image_aspect_ratio, api_token, hours, delivery, takeout, reservation, patio, wheelchair_accessible])
         else:
             return('Could not authenticate')
 
