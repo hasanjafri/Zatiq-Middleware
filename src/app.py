@@ -51,6 +51,23 @@ def register_as_business():
         response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
 
+@app.route('/business/profile/edit/', methods=['POST'])
+def edit_business_profile():
+    if request.method == 'POST':
+        zatiq_businesses = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        hours = jsonData['date']
+        name = jsonData['name']
+        address = jsonData['address']
+        website = jsonData['website']
+        number = jsonData['number']
+        image = jsonData['image']['base64']
+        image_aspect_ratio = jsonData['image']['image_aspect_ratio']
+        features = jsonData['features']
+        response = zatiq_businesses.update_business_profile(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
+        return(jsonify(response=response))  
+
 @app.route('/business/login/', methods=['POST'])
 def login_as_business():
     if request.method == 'POST':

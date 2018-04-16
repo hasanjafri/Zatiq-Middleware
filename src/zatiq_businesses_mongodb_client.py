@@ -165,6 +165,24 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return('Could not authenticate')
 
+    def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
+                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image, set__image_aspect_ratio=image_aspect_ratio,
+                set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
+                set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
+                set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
+                set__hours__thursday_start=hours['start']['thursday'], set__hours__thursday_end=hours['end']['thursday'],
+                set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
+                set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
+                set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
+                set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'])
+            except Exception as e:
+                return("Error \n %s" % (e))
+            return("Edit successful")
+
+
     def business_logout(self, api_token):
         if not api_token:
             return('Could not authenticate')
