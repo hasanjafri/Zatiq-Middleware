@@ -183,9 +183,17 @@ class ZatiqBusinessesMongoDBClient(object):
                 set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
                 set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
                 set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'])
+                zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
+                if len(zatiq_business) > 0:
+                    new_name = zatiq_business[0].business_name
+                    new_image = zatiq_business[0].image
+                    new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
+                    api_token = zatiq_business[0].api_token
+                else:
+                    return('An error occurred')
             except Exception as e:
                 return("Error \n %s" % (e))
-            return("Edit successful")
+            return([new_name, new_image, new_image_aspect_ratio, api_token])
         else:
             return('Could not authenticate')
 

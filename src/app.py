@@ -66,7 +66,7 @@ def edit_business_profile():
         image_aspect_ratio = jsonData['image']['image_aspect_ratio']
         features = jsonData['features']
         response = zatiq_businesses.update_business_profile(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
-        return(jsonify(response=response))  
+        return(jsonify(name=response[0], image=response[1], image_aspect_ratio=response[2], api_token=response[3]))  
 
 @app.route('/business/login/', methods=['POST'])
 def login_as_business():
