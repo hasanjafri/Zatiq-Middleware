@@ -186,13 +186,13 @@ class ZatiqBusinessesMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
-                if len(zatiq_business) > 0:
-                    new_name = zatiq_business[0].business_name
-                    new_image = zatiq_business[0].image
-                    new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
-                    api_token = zatiq_business[0].zatiq_token
-                else:
-                    return('An error occurred')
+            if len(zatiq_business) > 0:
+                new_name = zatiq_business[0].business_name
+                new_image = zatiq_business[0].image
+                new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
+                api_token = zatiq_business[0].zatiq_token
+            else:
+                return('An error occurred')
             return([new_name, new_image, new_image_aspect_ratio, api_token])
         else:
             return('Could not authenticate')
