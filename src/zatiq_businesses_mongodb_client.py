@@ -151,7 +151,7 @@ class ZatiqBusinessesMongoDBClient(object):
         
         if self.check_valid_api_token(api_token) == True:
             get_business_info = Zatiq_Businesses.objects(zatiq_token=api_token)
-            print(get_business_info)
+            print(get_business_info[0])
             email = get_business_info[0].business_email
             name = get_business_info[0].business_name
             website = get_business_info[0].website
@@ -160,7 +160,7 @@ class ZatiqBusinessesMongoDBClient(object):
             image = get_business_info[0].image
             image_aspect_ratio = get_business_info[0].image_aspect_ratio
             api_token = get_business_info[0].zatiq_token
-            hours = self.generate_business_hours(get_business_info.hours)
+            hours = self.generate_business_hours(get_business_info[0].hours)
             return([email, name, website, address, number, image, image_aspect_ratio, api_token, hours])
         else:
             return('Could not authenticate')
