@@ -132,7 +132,6 @@ def add_food_item_as_business():
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        restaurant_id = jsonData['restaurant_id']
         image = jsonData['image']
         image_aspect_ratio = jsonData['image_aspect_ratio']
         overview = jsonData['overview']
