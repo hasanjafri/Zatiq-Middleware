@@ -186,6 +186,8 @@ class ZatiqBusinessesMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             return("Edit successful")
+        else:
+            return('Could not authenticate')
 
 
     def business_logout(self, api_token):
