@@ -3,9 +3,6 @@ from zatiq_meat_types import Zatiq_Meat_Types
 from zatiq_sea_food_types import Zatiq_Sea_Food_Types
 
 class Zatiq_Food_Item_Tags(EmbeddedDocument):
-    breakfast = BooleanField(default=False)
-    brunch = BooleanField(default=False)
-    lunch = BooleanField(default=False)
     indian = BooleanField(default=False)
     greek = BooleanField(default=False)
     chinese = BooleanField(default=False)
@@ -17,10 +14,9 @@ class Zatiq_Food_Item_Tags(EmbeddedDocument):
     pizza = BooleanField(default=False)
     fast_food = BooleanField(default=False)
     halal = BooleanField(default=False)
-    cheap = BooleanField(default=False)
     caribbean = BooleanField(default=False)
     mexican = BooleanField(default=False)
-    spicy = StringField(default='0')
+    spicy = BooleanField(default=False)
     fine_food = BooleanField(default=False)
     kosher = BooleanField(default=False)
     healthy = BooleanField(default=False)
@@ -33,8 +29,7 @@ class Zatiq_Food_Item_Tags(EmbeddedDocument):
     thai = BooleanField(default=False)
     canadian = BooleanField(default=False)
     vietnamese = BooleanField(default=False)
-    dinner = BooleanField(default=False)
     has_nuts = BooleanField(default=False)
     lactose_free = BooleanField(default=False)
-    meat_type = EmbeddedDocumentField(Zatiq_Meat_Types)
-    sea_food_type = EmbeddedDocumentField(Zatiq_Sea_Food_Types)
+    meat = EmbeddedDocumentField(Zatiq_Meat_Types)
+    seafood = EmbeddedDocumentField(Zatiq_Sea_Food_Types)

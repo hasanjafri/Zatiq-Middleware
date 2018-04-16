@@ -1,6 +1,7 @@
 from mongoengine import *
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_food_item_tags import Zatiq_Food_Item_Tags
+from zatiq_meal_types import Zatiq_Meal_Types
 import datetime
 
 class Zatiq_Food_Items(Document):
@@ -8,6 +9,7 @@ class Zatiq_Food_Items(Document):
    item_name = StringField(required=True)
    overview = StringField(required=True)
    image = StringField(required=True)
+   meal_type = EmbeddedDocumentField(Zatiq_Meal_Types)
    image_aspect_ratio = StringField(required=True)
    tags = EmbeddedDocumentField(Zatiq_Food_Item_Tags)
    is_beverage = BooleanField(default=False)
