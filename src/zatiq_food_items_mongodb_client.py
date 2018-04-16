@@ -3,11 +3,11 @@ from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
 
 class ZatiqFoodItemsMongoDBClient(object):
-    def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, bouffet_item, meat, seafood):
+    def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood):
         if self.check_valid_api_token(api_token) == True:
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             try:
-                add_food_item = Zatiq_Food_Items(restaurant_id=restaurant, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, meal_type=meal_type, is_beverage=tags['is_beverage'], item_price=item_price, bouffet_item=bouffet_item,
+                add_food_item = Zatiq_Food_Items(restaurant_id=restaurant, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, meal_type=meal_type, is_beverage=tags['is_beverage'], item_price=item_price,
                 set__tags_indian=tags['indian'], set__tags_greek=tags['greek'], set__tags_chinese=tags['chinese'], set__tags_japanese=tags['japanese'], set__tags_korean=tags['korean'], set__tags_sushi=tags['sushi'], set__tags_dessert=tags['dessert'], set__tags_burger=tags['burger'], set__tags_pizza=tags['pizza'],
                 set__tags_fast_food=tags['fast_food'], set__tags_halal=tags['halal'], set__tags_caribbean=tags['caribbean'], set__tags_mexican=tags['mexican'], set__tags_spicy=tags['spicy'], set__tags_fine_food=tags['fine_food'], set__tags_kosher=tags['kosher'], set__tags_healthy=tags['healthy'], set__tags_vegan=tags['vegan'], set__tags_vegetarian=tags['vegetarian'],
                 set__tags_gluten_free=tags['gluten_free'], set__tags_italian=tags['italian'], set__tags_middle_eastern=tags['middle_eastern'], set__tags_snack=tags['snack'], set__tags_thai=tags['thai'], set__tags_canadian=tags['canadian'], set__tags_vietnamese=tags['vietnamese'], set__tags_has_nuts=tags['has_nuts'], set__tags_lactose_free=tags['lactose_free'],
