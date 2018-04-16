@@ -140,8 +140,7 @@ def add_food_item_as_business():
         seafood = jsonData['seafood']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
-        bouffet_item = jsonData['bouffet_item']
-        foods_by_current_restaurant_id = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, bouffet_item, meat, seafood)
+        foods_by_current_restaurant_id = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood)
         return(foods_by_current_restaurant_id)
 
 @app.route('/food/cuisine/', methods=['POST'])
