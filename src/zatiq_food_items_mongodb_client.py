@@ -19,7 +19,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             new_food_item_id = str(add_food_item.id)
-            return(['Food item added', new_food_item_id])
+            return({'image_id': new_food_item_id)}
         else:
             return('Could not authenticate')
 

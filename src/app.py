@@ -141,10 +141,7 @@ def add_food_item_as_business():
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
         response = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood)
-        if len(response) > 1:
-            return(jsonify(response=response[0], food_item_id=response[1]))
-        else:
-            return(jsonify(response=response[0]))
+        return(jsonify(response=response))
 
 @app.route('/food/cuisine/', methods=['POST'])
 def query_food_items_by_cuisine():
