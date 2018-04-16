@@ -3,7 +3,7 @@ from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
 
 class ZatiqFoodItemsMongoDBClient(object):
-    def add_food_item(self, image, image_aspect_ratio, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood):
+    def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood):
         if self.check_valid_api_token(api_token) == True:
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             try:
