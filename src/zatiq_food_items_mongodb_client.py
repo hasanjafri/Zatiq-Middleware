@@ -19,8 +19,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                 set__tags__seafood__shrimp=seafood['shrimp'], set__tags__seafood__lobster=seafood['lobster'], set__tags__seafood__eel=seafood['eel'], set__tags__seafood__trout=seafood['trout'], set__tags__seafood__pike=seafood['pike'], set__tags__seafood__shark=seafood['shark'], set__meal_type__breakfast=meal_type['breakfast'], set__meal_type__lunch=meal_type['lunch'], set__meal_type__dinner=meal_type['dinner'])
             except Exception as e:
                 return("Error \n %s" % (e))
-            new_food_item_id = str(Zatiq_Food_Items.objects(id=food_item_id)[0].id)
-            return({'image_id': new_food_item_id})
+            new_food_item_id = Zatiq_Food_Items.objects(id=food_item_id)[0].id
+            return({'image_id': str(new_food_item_id)})
         else:
             return('Could not authenticate')
 
