@@ -38,7 +38,7 @@ class ZatiqFoodItemsMongoDBClient(object):
     def get_restaurant_id_by_api_token(self, api_token):
         valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
         if (len(valid_token) > 0):
-            restaurant_id = str(valid_token[0].id)
+            restaurant_id = valid_token[0].id
             return(restaurant_id)
         else:
             return(None)
@@ -51,7 +51,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             if len(foods_by_restaurant) > 0:
-                food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
+                food_items_dict = self.generate_food_items_dict(foods_by_restaurant[0])
                 return(food_items_dict)
             else:
                 return('Could not find any food items with that restaurant id')
