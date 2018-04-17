@@ -1,0 +1,36 @@
+from mongoengine import *
+from zatiq_meat_types import Zatiq_Meat_Types
+from zatiq_sea_food_types import Zatiq_Sea_Food_Types
+
+class Zatiq_User_Preferences(EmbeddedDocument):
+    indian = BooleanField(default=True)
+    greek = BooleanField(default=True)
+    chinese = BooleanField(default=True)
+    japanese = BooleanField(default=True)
+    korean = BooleanField(default=True)
+    sushi = BooleanField(default=True)
+    dessert = BooleanField(default=True)
+    burger = BooleanField(default=True)
+    pizza = BooleanField(default=True)
+    fast_food = BooleanField(default=True)
+    halal = BooleanField(default=False)
+    caribbean = BooleanField(default=True)
+    mexican = BooleanField(default=True)
+    spicy = BooleanField(default=True)
+    fine_food = BooleanField(default=True)
+    kosher = BooleanField(default=False)
+    healthy = BooleanField(default=False)
+    vegan = BooleanField(default=False)
+    vegetarian = BooleanField(default=False)
+    gluten_free = BooleanField(default=False)
+    italian = BooleanField(default=True)
+    middle_eastern = BooleanField(default=True)
+    snack = BooleanField(default=True)
+    thai = BooleanField(default=True)
+    canadian = BooleanField(default=True)
+    vietnamese = BooleanField(default=True)
+    has_nuts = BooleanField(default=True)
+    lactose_free = BooleanField(default=False)
+    meat = EmbeddedDocumentField(Zatiq_Meat_Types)
+    seafood = EmbeddedDocumentField(Zatiq_Sea_Food_Types)
+
