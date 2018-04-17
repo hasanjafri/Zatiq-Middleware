@@ -93,6 +93,7 @@ class ZatiqFoodItemsMongoDBClient(object):
     def generate_food_items_dict(self, food_items):
         food_items_list = []
         for food_item in range(len(food_items)):
+            food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
@@ -101,7 +102,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             tags = self.generate_tags_dict(food_items[food_item].tags)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
-            food_item_info = {'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_item_info = {'food_item_id': food_item_id, 'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
