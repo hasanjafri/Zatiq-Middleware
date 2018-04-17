@@ -208,3 +208,23 @@ def get_interiors_for_restaurant():
         interior_photos = zatiq_businesses.get_interior_photos_by_restaurant(api_token)
         return(jsonify(interior_photos=interior_photos))
 
+@app.route('/food/id/', methods=['POST'])
+def get_food_item_by_id():
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        food_item_id = jsonData['food_item_id']
+        food_item = zatiq_food_items.get_food_by_id(api_token, food_item_id)
+        return(jsonify(response=food_item))
+
+@app.route('/food/restaurant_id/', methods=['POST'])
+def get_food_items_by_restaurant_id():
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token)
+        return(jsonify(response=food_items))
+
+

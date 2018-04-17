@@ -43,14 +43,18 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return(None)
 
-    def get_food_items_by_restaurant_id(self, restaurant_id, api_token):
+    def get_food_items_by_restaurant_id(self, api_token):
         if self.check_valid_api_token(api_token) == True:
+            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
                 foods_by_restaurant = Zatiq_Food_Items.objects(restaurant_id=restaurant_id)
             except Exception as e:
                 return("Error \n %s" % (e))
             if len(foods_by_restaurant) > 0:
                 food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
+                return(food_items_dict)
+            else:
+                return('Could not find any food items with that restaurant id')
                 
     def check_valid_api_token(self, api_token):
         valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
@@ -58,6 +62,19 @@ class ZatiqFoodItemsMongoDBClient(object):
             return(True)
         else:
             return(False)
+
+    def get_food_by_id(self, api_token, food_item_id):
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                food_item = Zatiq_Food_Items.objects(id=food_item_id)
+            except Exception as e:
+                return("Error \n %s" %(e))
+            if len(food_item) > 0:
+                food_item_dict = self.generate_food_items_dict(food_item)
+                return(food_item_dict)
+            else:
+                return('No food item found with that id')
+                
 
     def generate_food_items_dict(self, food_items):
         food_items_dict = {}
@@ -67,10 +84,30 @@ class ZatiqFoodItemsMongoDBClient(object):
             overview = food_items[food_item].overview
             image = food_items[food_item].image
             image_aspect_ratio = food_items[food_item].image_aspect_ratio
-            tags = food_items[food_item].overview
-            photo_info = {'image_id': image_id, 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
-            food_items_dict[photo] = photo_info
+            tags = self.generate_tags_dict(food_items[food_item].tags)
+            meats = self.generate_meats_dict(food_items[food_item].tags.meat)
+            seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
+            food_item_info = {'restaurant_id': restaurant_id, 'item_name': item_name, 'overview': overview, 'image': image, 'image_aspect_ratio': image_aspect_ratio, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_items_dict[food_item] = food_item_info
         return(food_items_dict)
+
+    def generate_tags_dict(self, tags):
+        tags_dict = {'indian': tags.indian, 'greek': tags.greek, 'chinese': tags.chinese, 'japanese': tags.japanese, 'korean': tags.korean, 'sushi': tags.sushi, 'dessert': tags.dessert, 'burger': tags.burger,
+            'pizza': tags.pizza, 'fast_food': tags.fast_food, 'halal': tags.halal, 'caribbean': tags.caribbean, 'mexican': tags.mexican, 'spicy': tags.spicy, 'fine_food': tags.fine_food, 'kosher': tags.kosher,
+            'healthy': tags.healthy, 'vegan': tags.vegan, 'vegetarian': tags.vegetarian, 'gluten_free': tags.gluten_free, 'italian': tags.italian, 'middle_eastern': tags.middle_eastern, 'snack': tags.snack, 'thai': tags.thai,
+            'canadian': tags.canadian, 'vietnamese': tags.vietnamese, 'has_nuts': tags.has_nuts, 'lactose_free': tags.lactose_free}
+        return(tags_dict)
+
+    def generate_meats_dict(self, meats):
+        meats_dict = {'bear': meats.bear, 'beef': meats.beef, 'buffalo': meats.buffalo, 'calf': meats.calf, 'caribou': meats.caribou, 'goat': meats.goat, 'ham': meats.ham, 'horse': meats.horse, 'kangaroo': meats.kangaroo, 'lamb': meats.lamb,
+            'moose': meats.moose, 'mutton': meats.mutton, 'opossum': meats.opossum, 'pork': meats.pork, 'bacon': meats.bacon, 'rabbit': meats.rabbit, 'snake': meats.snake, 'squirrel': meats.squirrel, 'turtle': meats.turtle, 'veal': meats.veal,
+            'chicken': meats.chicken, 'hen': meats.hen, 'duck': meats.duck, 'goose': meats.goose, 'ostrich': meats.ostrich, 'quail': meats.quail, 'turkey': meats.turkey}
+        return(meats_dict)
+
+    def generate_seafoods_dict(self, sea):
+        seafoods_dict = {'clam': sea.clam, 'pangasius': sea.pangasius, 'cod': sea.cod, 'crab': sea.crab, 'catfish': sea.catfish, 'alaska_pollack': sea.alaska_pollack, 'tilapia': sea.tilapia, 'salmon': sea.salmon, 'tuna': sea.tuna, 'shrimp': sea.shrimp,
+            'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
+        return(seafoods_dict)
 
     def generate_food_items_tags__dict(self, tags):
         tags__dict = {}
