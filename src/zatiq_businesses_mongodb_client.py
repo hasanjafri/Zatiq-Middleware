@@ -93,7 +93,7 @@ class ZatiqBusinessesMongoDBClient(object):
             image_id = str(photos[photo].id)
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
-            photo_info = {'image_id': image_id, 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}
+            photo_info = {'image_id': image_id, 'image': {'base64': base64, 'image_aspect_ratio': image_aspect_ratio}}
             photos_list.append(photo_info)
         return(photos_list)
 
