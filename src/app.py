@@ -102,7 +102,7 @@ def get_business_profile():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         response = zatiq_businesses.get_business_profile(api_token)
-        return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], image_aspect_ratio=response[6], api_token=response[7], hours=response[8], delivery=response[9], takeout=response[10], reservation=response[11], patio=response[12], wheelchair_accessible=response[13]))
+        return(jsonify(email=response[0], name=response[1], website=response[2], address=response[3], number=response[4], image=response[5], api_token=response[6], hours=response[7], delivery=response[8], takeout=response[9], reservation=response[10], patio=response[11], wheelchair_accessible=response[12]))
 
 @app.route('/user/review/add/', methods=['POST'])
 def add_review_as_user():
