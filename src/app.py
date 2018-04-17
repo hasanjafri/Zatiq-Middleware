@@ -216,7 +216,7 @@ def get_food_item_by_id():
         api_token = jsonData['api_token']
         food_item_id = jsonData['food_item_id']
         food_item = zatiq_food_items.get_food_by_id(api_token, food_item_id)
-        return(jsonify(response=food_item))
+        return(jsonify(food_item=food_item))
 
 @app.route('/food/restaurantid/', methods=['POST'])
 def get_food_items_by_restaurant_id():
@@ -225,6 +225,6 @@ def get_food_items_by_restaurant_id():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token)
-        return(food_items)
+        return(jsonify(food_items=food_items)
 
 
