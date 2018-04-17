@@ -114,4 +114,5 @@ class ZatiqUsersMongoDBClient(object):
                 else:
                     return(self.user_login(authToken, user_email, method))
 
-    def update_user_preferences(self, api_token, )
+    def update_user_preferences(self, api_token):
+        pass
