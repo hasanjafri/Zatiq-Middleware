@@ -98,11 +98,12 @@ class ZatiqFoodItemsMongoDBClient(object):
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
             image = food_items[food_item].image
+            meal_types = self.generate_meals_dict(food_items[food_item].meal_type)
             image_aspect_ratio = food_items[food_item].image_aspect_ratio
             tags = self.generate_tags_dict(food_items[food_item].tags)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
-            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'item_name': item_name, 'meal_type': meal_types, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
@@ -112,6 +113,10 @@ class ZatiqFoodItemsMongoDBClient(object):
             'healthy': tags.healthy, 'vegan': tags.vegan, 'vegetarian': tags.vegetarian, 'gluten_free': tags.gluten_free, 'italian': tags.italian, 'middle_eastern': tags.middle_eastern, 'snack': tags.snack, 'thai': tags.thai,
             'canadian': tags.canadian, 'vietnamese': tags.vietnamese, 'has_nuts': tags.has_nuts, 'lactose_free': tags.lactose_free}
         return(tags_dict)
+
+    def generate_meals_dict(self, meal_types):
+        meals_dict = {'breakfast': meal_types.breakfast, 'lunch': meal_types.lunch, 'dinner': meal_types.dinner}
+        return(meals_dict)
 
     def generate_meats_dict(self, meats):
         meats_dict = {'bear': meats.bear, 'beef': meats.beef, 'buffalo': meats.buffalo, 'calf': meats.calf, 'caribou': meats.caribou, 'goat': meats.goat, 'ham': meats.ham, 'horse': meats.horse, 'kangaroo': meats.kangaroo, 'lamb': meats.lamb,
