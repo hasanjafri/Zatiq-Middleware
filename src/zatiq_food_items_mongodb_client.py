@@ -23,6 +23,9 @@ class ZatiqFoodItemsMongoDBClient(object):
             return({'food_item_id': str(new_food_item_id)})
         else:
             return('Could not authenticate')
+    
+    def update_food_item(self, api_token, food_item_id):
+        
 
     def extract_food_tags(self, tags, meat, seafood):
         tags = {}
@@ -77,7 +80,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                 
 
     def generate_food_items_dict(self, food_items):
-        food_items_dict = {}
+        food_items_list = []
         for food_item in range(len(food_items)):
             restaurant_id = food_items[food_item].restaurant_id
             item_name = food_items[food_item].item_name
@@ -88,7 +91,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
             food_item_info = {'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': image, 'image_aspect_ratio': image_aspect_ratio, 'tags': tags, 'meat': meats, 'seafood': seafoods}
-            food_items_dict[food_item] = food_item_info
+            food_items_list.append(food_item_info)
         return(food_items_dict)
 
     def generate_tags_dict(self, tags):
@@ -108,8 +111,3 @@ class ZatiqFoodItemsMongoDBClient(object):
         seafoods_dict = {'clam': sea.clam, 'pangasius': sea.pangasius, 'cod': sea.cod, 'crab': sea.crab, 'catfish': sea.catfish, 'alaska_pollack': sea.alaska_pollack, 'tilapia': sea.tilapia, 'salmon': sea.salmon, 'tuna': sea.tuna, 'shrimp': sea.shrimp,
             'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
         return(seafoods_dict)
-
-    def generate_food_items_tags__dict(self, tags):
-        tags__dict = {}
-        for tag in range(len(tags)):
-            pass
