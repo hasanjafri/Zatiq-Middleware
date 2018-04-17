@@ -87,14 +87,6 @@ def logout_as_business():
         response = zatiq_businesses.business_logout(api_token)
         return(jsonify(response=response))
 
-@app.route('/user/logout/', methods=['POST'])
-def logout_as_user():
-    if request.method == 'POST':
-        zatiq_users = ZatiqUsersMongoDBClient()
-        jsonData = request.get_json()
-        api_token = jsonData['api_token']
-        pass
-
 @app.route('/business/profile/', methods=['POST'])
 def get_business_profile():
     if request.method == 'POST':
@@ -243,6 +235,25 @@ def edit_food_item():
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
         response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood)
+        return(jsonify(response=response))
+
+@app.route('/user/preferences/', methods=['POST'])
+def update_user_preferences():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        user_preferences = jsonData['preferences']
+        pass
+
+@app.route('/business/delete/food/', methods=['POST'])
+def delete_food_item():
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        food_item_id = jsonData['food_item_id']
+        api_token = jsonData['api_token']
+        response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
 

@@ -29,16 +29,6 @@ class ZatiqUsersMongoDBClient(object):
             return(True)
         else:
             return(False)
-    
-    def user_logout(self, api_token):
-        if not api_token:
-            return('Could not authenticate')
-        
-        if self.check_valid_api_token(api_token) == True:
-            logged_user = Zatiq_Users.objects(zatiq_token=api_token).update_one(upsert=False, set__zatiq_token='NULL', set__auth_token='NULL')
-            return('Logged out successfully')
-        else:
-            return('An error occurred')
 
     def check_api_token_exists(self, api_token):
         check_api_token = Zatiq_Users.objects(zatiq_token=api_token)
@@ -123,3 +113,5 @@ class ZatiqUsersMongoDBClient(object):
                     return(self.user_login(authToken, user_email, method))
                 else:
                     return(self.user_login(authToken, user_email, method))
+
+    def update_user_preferences(self, api_token, )

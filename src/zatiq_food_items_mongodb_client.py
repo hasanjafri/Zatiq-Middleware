@@ -42,6 +42,17 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return('Could not authenticate')
 
+    def delete_food_item(self, api_token, food_item_id):
+        if self.check_valid_api_token(api_token) == True:
+            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+            try:
+                Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).delete()
+            except Exception as e:
+                return("Error \n %s" %(e))
+            return('Food item deleted')
+        else:
+            return('Could not authenticate')
+
     def generate_food_item_id(self):
         food_item_id = bson.objectid.ObjectId()
         return(food_item_id)
