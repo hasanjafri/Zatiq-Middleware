@@ -51,7 +51,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             if len(foods_by_restaurant) > 0:
-                food_items_dict = self.generate_food_items_dict(foods_by_restaurant[0])
+                food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
                 return(food_items_dict)
             else:
                 return('Could not find any food items with that restaurant id')
@@ -89,6 +89,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
             food_item_info = {'restaurant_id': restaurant_id, 'item_name': item_name, 'overview': overview, 'image': image, 'image_aspect_ratio': image_aspect_ratio, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_dict[food_item] = food_item_info
+        print(food_items_dict)
         return(food_items_dict)
 
     def generate_tags_dict(self, tags):
