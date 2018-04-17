@@ -38,7 +38,9 @@ class ZatiqFoodItemsMongoDBClient(object):
                 set__tags__seafood__shrimp=seafood['shrimp'], set__tags__seafood__lobster=seafood['lobster'], set__tags__seafood__eel=seafood['eel'], set__tags__seafood__trout=seafood['trout'], set__tags__seafood__pike=seafood['pike'], set__tags__seafood__shark=seafood['shark'], set__meal_type__breakfast=meal_type['breakfast'], set__meal_type__lunch=meal_type['lunch'], set__meal_type__dinner=meal_type['dinner'])
             except Exception as e:
                 return("Error \n %s" % (e))
-            return
+            return(['Update successful', food_item_id])
+        else:
+            return('Could not authenticate')
 
     def generate_food_item_id(self):
         food_item_id = bson.objectid.ObjectId()
@@ -99,7 +101,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             tags = self.generate_tags_dict(food_items[food_item].tags)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
-            food_item_info = {'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': image, 'image_aspect_ratio': image_aspect_ratio, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_item_info = {'restaurant_id': str(restaurant_id), 'item_name': item_name, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 

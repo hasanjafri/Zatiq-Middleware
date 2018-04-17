@@ -227,4 +227,22 @@ def get_food_items_by_restaurant_id():
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token)
         return(jsonify(food_items=food_items))
 
+@app.route('/business/edit/food/', methods=['POST'])
+def edit_food_item():
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        food_item_id = jsonData['food_item_id']
+        api_token = jsonData['api_token']
+        image = jsonData['image']
+        overview = jsonData['overview']
+        item_name = jsonData['item_name']
+        tags = jsonData['tags']
+        meat = jsonData['meat']
+        seafood = jsonData['seafood']
+        meal_type = jsonData['meal_type']
+        item_price = jsonData['item_price']
+        response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood)
+        return(jsonify(response=response))
+
 
