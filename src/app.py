@@ -218,7 +218,7 @@ def get_food_item_by_id():
         food_item = zatiq_food_items.get_food_by_id(api_token, food_item_id)
         return(jsonify(response=food_item))
 
-@app.route('/food/restaurant_id/', methods=['POST'])
+@app.route('/food/restaurantid/', methods=['POST'])
 def get_food_items_by_restaurant_id():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
