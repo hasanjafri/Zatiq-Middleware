@@ -25,7 +25,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             return('Could not authenticate')
     
     def update_food_item(self, api_token, food_item_id):
-        
+        pass
 
     def extract_food_tags(self, tags, meat, seafood):
         tags = {}
