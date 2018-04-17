@@ -225,6 +225,6 @@ def get_food_items_by_restaurant_id():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token)
-        return(jsonify(response=food_items))
+        return(food_items)
 
 
