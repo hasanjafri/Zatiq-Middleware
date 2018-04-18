@@ -256,4 +256,13 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
+@app.route('/user/profile/', methods=['POST'])
+def get_user_profile():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        response = zatiq_users.get_user_profile(api_token)
+        return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
+
 

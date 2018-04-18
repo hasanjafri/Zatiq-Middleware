@@ -23,6 +23,14 @@ class ZatiqUsersMongoDBClient(object):
         else:
             self.generate_zatiq_api_token()
 
+    def get_user_id_by_api_token(self, api_token):
+        valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        if (len(valid_token) > 0):
+            user_id = valid_token[0].id
+            return(user_id)
+        else:
+            return(None)
+
     def check_valid_api_token(self, api_token):
         valid_token = Zatiq_Users.objects(zatiq_token=api_token)
         if len(valid_token) > 0:
@@ -68,6 +76,23 @@ class ZatiqUsersMongoDBClient(object):
         
         if method != 'google' and method != 'facebook':
             return('Could not authenticate')
+
+    def get_user_profile(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+            user_email = get_user_info[0].user_email
+            auth_token = get_user_info[0].auth_token
+            user_name = get_user_info[0].user_name
+            preferences = self.generate_preferences_dict(get_user_info[0].preferences)
+            return([user_email, auth_token, user_name, preferences])
+
+    def generate_preferences_dict(self, preferences):
+        preferences_dict = {'halal': preferences.halal, 'spicy': preferences.spicy, 'kosher': preferences.kosher, 'healthy': preferences.healthy,
+            'vegan': preferences.vegan, 'vegetarian': preferences.vegetarian, 'gluten_free': preferences.gluten_free, 'nuts_allergy': preferences.nuts_allergy, 'lactose_intolerant': preferences.lactose_intolerant}
+        return(preferences_dict)
     
     def user_login(self, authToken, userEmail, method):
         if not authToken:
@@ -114,5 +139,19 @@ class ZatiqUsersMongoDBClient(object):
                 else:
                     return(self.user_login(authToken, user_email, method))
 
-    def update_user_preferences(self, api_token):
-        pass
+    def update_user_preferences(self, api_token, preferences):
+        if not api_token:
+            return('Could not authenticate')
+        
+        if self.check_valid_api_token(api_token) == True:
+            user_id = self.get_user_id_by_api_token(api_token)
+            if user_id != None:
+                try:
+                    Zatiq_Users.objects(zatiq_token=api_token).update_one(upsert=False,
+                        set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
+                        set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'], set__preferences__nuts_allergy=preferences['nuts_allergy'],
+                        set__preferences__lactose_intolerant=preferences['lactose_intolerant'])
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                try:
+                    updated_user 
