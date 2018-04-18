@@ -153,5 +153,4 @@ class ZatiqUsersMongoDBClient(object):
                         set__preferences__lactose_intolerant=preferences['lactose_intolerant'])
                 except Exception as e:
                     return("Error \n %s" % (e))
-                try:
-                    updated_user 
+                pass
