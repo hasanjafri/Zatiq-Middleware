@@ -13,4 +13,3 @@ class Zatiq_Users(Document):
     facebook_id = StringField()
     google_id = StringField()
     date_accessed = DateTimeField(default=datetime.datetime.utcnow)
-    last_eaten = ListField(ReferenceField(Zatiq_Food_Items))
