@@ -82,7 +82,10 @@ class ZatiqUsersMongoDBClient(object):
             return('Could not authenticate')
 
         if self.check_valid_api_token(api_token) == True:
-            get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+            try:
+                get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+            except Exception as e:
+                return("Error \n %s" % (e))
             user_email = get_user_info[0].user_email
             auth_token = get_user_info[0].auth_token
             user_name = get_user_info[0].user_name
@@ -153,4 +156,17 @@ class ZatiqUsersMongoDBClient(object):
                         set__preferences__lactose_intolerant=preferences['lactose_intolerant'])
                 except Exception as e:
                     return("Error \n %s" % (e))
-                pass
+                try:
+                    get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                user_email = get_user_info[0].user_email
+                auth_token = get_user_info[0].auth_token
+                user_name = get_user_info[0].user_name
+                preferences = self.generate_preferences_dict(get_user_info[0].preferences)
+                return([user_email, auth_token, user_name, preferences])
+            else:
+                return('No such user')
+        else:
+            return('Could not authenticate')
+

@@ -244,7 +244,8 @@ def update_user_preferences():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         user_preferences = jsonData['preferences']
-        pass
+        response = zatiq_users.update_user_preferences(api_token, user_preferences)
+        return(jsonify(user_email=response[0], auth_token=response[1), user_name=response[2], preferences=response[3])
 
 @app.route('/business/delete/food/', methods=['POST'])
 def delete_food_item():
