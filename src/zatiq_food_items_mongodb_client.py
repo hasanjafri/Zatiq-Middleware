@@ -110,20 +110,21 @@ class ZatiqFoodItemsMongoDBClient(object):
             overview = food_items[food_item].overview
             image = food_items[food_item].image
             item_price = food_items[food_item].item_price
+            is_beverage = food_items[food_item].is_beverage
             meal_types = self.generate_meals_dict(food_items[food_item].meal_type)
             image_aspect_ratio = food_items[food_item].image_aspect_ratio
-            tags = self.generate_tags_dict(food_items[food_item].tags)
+            tags = self.generate_tags_dict(food_items[food_item].tags, is_beverage)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
             food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'item_name': item_name, 'meal_type': meal_types, 'item_price': item_price, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
-    def generate_tags_dict(self, tags):
+    def generate_tags_dict(self, tags, is_beverage):
         tags_dict = {'indian': tags.indian, 'greek': tags.greek, 'chinese': tags.chinese, 'japanese': tags.japanese, 'korean': tags.korean, 'sushi': tags.sushi, 'dessert': tags.dessert, 'burger': tags.burger,
             'pizza': tags.pizza, 'fast_food': tags.fast_food, 'halal': tags.halal, 'caribbean': tags.caribbean, 'mexican': tags.mexican, 'spicy': tags.spicy, 'fine_food': tags.fine_food, 'kosher': tags.kosher,
             'healthy': tags.healthy, 'vegan': tags.vegan, 'vegetarian': tags.vegetarian, 'gluten_free': tags.gluten_free, 'italian': tags.italian, 'middle_eastern': tags.middle_eastern, 'snack': tags.snack, 'thai': tags.thai,
-            'canadian': tags.canadian, 'vietnamese': tags.vietnamese, 'has_nuts': tags.has_nuts, 'lactose_free': tags.lactose_free}
+            'canadian': tags.canadian, 'vietnamese': tags.vietnamese, 'has_nuts': tags.has_nuts, 'lactose_free': tags.lactose_free, 'is_beverage': is_beverage}
         return(tags_dict)
 
     def generate_meals_dict(self, meal_types):
