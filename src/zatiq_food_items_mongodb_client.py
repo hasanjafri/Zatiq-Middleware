@@ -79,7 +79,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                 food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
                 return(food_items_dict)
             else:
-                return('Could not find any food items with that restaurant id')
+                return([])
                 
     def check_valid_api_token(self, api_token):
         valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
