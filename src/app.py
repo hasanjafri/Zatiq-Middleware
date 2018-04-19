@@ -81,7 +81,10 @@ def login_as_business():
         business_email = jsonData['email']
         business_password = jsonData['password']
         response = zatiq_businesses.business_login(business_email, business_password)
-        return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
+        if len(response) > 1:
+            return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
+        else:
+            return(jsonify(response=response[0]))
 
 @app.route('/business/logout/', methods=['POST'])
 def logout_as_business():

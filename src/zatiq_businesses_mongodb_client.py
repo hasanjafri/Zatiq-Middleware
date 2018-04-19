@@ -208,9 +208,9 @@ class ZatiqBusinessesMongoDBClient(object):
 
     def business_login(self, business_email, business_password):
         if not business_email:
-            return('Please specify your email!')
+            return(['Please specify your email!'])
         if not business_password:
-            return('Please type your password!')
+            return(['Please type your password!'])
 
         check_business_login = Zatiq_Businesses.objects(business_email=business_email)
 
@@ -227,23 +227,23 @@ class ZatiqBusinessesMongoDBClient(object):
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
                 return([business_name, new_api_token, image, image_aspect_ratio])
             else:
-                return('Incorrect Password!')
+                return(['Incorrect Password!'])
         else:
-            return("No such email address!")
+            return(["No such email address!"])
 
     def business_register(self, business_email, business_password, hours, business_name, address, website, number, image, image_aspect_ratio, features):
         if not business_email:
-            return("Please specify your email")
+            return(["Please specify your email"])
         if not business_password:
-            return("Please type in your password")
+            return(["Please type in your password"])
         if not business_name:
-            return("Please enter your business name")
+            return(["Please enter your business name"])
         if not hours:
-            return("Please select your business hours")
+            return(["Please select your business hours"])
 
         check_business_register = Zatiq_Businesses.objects(business_email=business_email)
         if len(check_business_register) > 0:
-            return("Business is already registered with this email")
+            return(["Business is already registered with this email"])
         else:
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
