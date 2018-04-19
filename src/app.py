@@ -27,17 +27,6 @@ def login_as_user():
         response = zatiq_users.user_register(user_auth_token, login_method)
         return(jsonify(user_name=response[0], user_email=response[1], api_token=response[2]))
 
-@app.route('/users/list/')
-def test_get_all_users():
-    all_users = ZatiqUsersMongoDBClient().get_all_users()
-    return(all_users)
-
-@app.route('/user/')
-def test_get_specific_user():
-    api_token = request.get_json()['api_token']
-    user = ZatiqUsersMongoDBClient().get_specific_user(api_token)
-    return(user)
-
 @app.route('/business/register/', methods=['POST'])
 def register_as_business():
     if request.method == 'POST':
