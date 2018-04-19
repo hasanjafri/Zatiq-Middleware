@@ -35,7 +35,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                 set__tags__meat__bear=meat['bear'], set__tags__meat__beef=meat['beef'], set__tags__meat__buffalo=meat['buffalo'], set__tags__meat__calf=meat['calf'], set__tags__meat__caribou=meat['caribou'], set__tags__meat__goat=meat['goat'], set__tags__meat__ham=meat['ham'], set__tags__meat__horse=meat['horse'], set__tags__meat__kangaroo=meat['kangaroo'], set__tags__meat__lamb=meat['lamb'], set__tags__meat__moose=meat['moose'], set__tags__meat__mutton=meat['mutton'], set__tags__meat__opossum=meat['opossum'],
                 set__tags__meat__pork=meat['pork'], set__tags__meat__bacon=meat['bacon'], set__tags__meat__rabbit=meat['rabbit'], set__tags__meat__snake=meat['snake'], set__tags__meat__squirrel=meat['squirrel'], set__tags__meat__turtle=meat['turtle'], set__tags__meat__veal=meat['veal'], set__tags__meat__chicken=meat['chicken'], set__tags__meat__hen=meat['hen'], set__tags__meat__duck=meat['duck'], set__tags__meat__goose=meat['goose'],
                 set__tags__meat__ostrich=meat['ostrich'], set__tags__meat__quail=meat['quail'], set__tags__meat__turkey=meat['turkey'], set__tags__seafood__clam=seafood['clam'], set__tags__seafood__pangasius=seafood['pangasius'], set__tags__seafood__cod=seafood['cod'], set__tags__seafood__crab=seafood['crab'], set__tags__seafood__catfish=seafood['catfish'], set__tags__seafood__alaska_pollack=seafood['alaska_pollack'], set__tags__seafood__tilapia=seafood['tilapia'], set__tags__seafood__salmon=seafood['salmon'], set__tags__seafood__tuna=seafood['tuna'],
-                set__tags__seafood__shrimp=seafood['shrimp'], set__tags__seafood__lobster=seafood['lobster'], set__tags__seafood__eel=seafood['eel'], set__tags__seafood__trout=seafood['trout'], set__tags__seafood__pike=seafood['pike'], set__tags__seafood__shark=seafood['shark'], set__meal_type__breakfast=meal_type['breakfast'], set__meal_type__lunch=meal_type['lunch'], set__meal_type__dinner=meal_type['dinner'])
+                set__tags__seafood__shrimp=seafood['shrimp'], set__tags__seafood__lobster=seafood['lobster'], set__tags__seafood__eel=seafood['eel'], set__tags__seafood__trout=seafood['trout'], set__tags__seafood__pike=seafood['pike'], set__tags__seafood__shark=seafood['shark'], set__meal_type__breakfast=meal_type['breakfast'], set__meal_type__lunch=meal_type['lunch'], set__meal_type__dinner=meal_type['dinner'], set__meal_type__brunch=meal_type['brunch'])
             except Exception as e:
                 return("Error \n %s" % (e))
             return(['Update successful', food_item_id])
@@ -128,7 +128,7 @@ class ZatiqFoodItemsMongoDBClient(object):
         return(tags_dict)
 
     def generate_meals_dict(self, meal_types):
-        meals_dict = {'breakfast': meal_types.breakfast, 'lunch': meal_types.lunch, 'dinner': meal_types.dinner}
+        meals_dict = {'breakfast': meal_types.breakfast, 'lunch': meal_types.lunch, 'dinner': meal_types.dinner, 'brunch': meal_types.brunch}
         return(meals_dict)
 
     def generate_meats_dict(self, meats):
@@ -141,3 +141,40 @@ class ZatiqFoodItemsMongoDBClient(object):
         seafoods_dict = {'clam': sea.clam, 'pangasius': sea.pangasius, 'cod': sea.cod, 'crab': sea.crab, 'catfish': sea.catfish, 'alaska_pollack': sea.alaska_pollack, 'tilapia': sea.tilapia, 'salmon': sea.salmon, 'tuna': sea.tuna, 'shrimp': sea.shrimp,
             'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
         return(seafoods_dict)
+
+    def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                food_items = Zatiq_Food_Items.objects(tags[cuisine_type]=True)
+            except Exception as e:
+                return("Error \n %s" % (e))
+            
+            if len(food_items) > 0:
+                food_items_dict = self.generate_food_items_dict(food_items)
+                return(food_items_dict)
+            else:
+                return([])
+        else:
+            return('Could not authenticate')
+
+    def get_food_items_by_time_of_day(self, api_token, time):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                food_items = Zatiq_Food_Items.objects(meal_type[time]=True)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            if len(food_items) > 0:
+                food_items_dict = self.generate_food_items_dict(food_items)
+                return(food_items_dict)
+            else:
+                return([])
+        else:
+            return('Could not authenticate')
+                    

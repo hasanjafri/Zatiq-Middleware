@@ -20,6 +20,7 @@ class Zatiq_Food_Item_Tags(EmbeddedDocument):
     fine_food = BooleanField(default=False)
     kosher = BooleanField(default=False)
     healthy = BooleanField(default=False)
+    quick_bite = BooleanField(default=False)
     vegan = BooleanField(default=False)
     vegetarian = BooleanField(default=False)
     gluten_free = BooleanField(default=False)

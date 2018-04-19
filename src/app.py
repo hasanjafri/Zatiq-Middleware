@@ -8,6 +8,11 @@ from mongoengine import *
 app = Flask(__name__)
 connect('zatiq_database')
 
+timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
+cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',
+    'indian', 'italian', 'japanese', 'korean', 'kosher', 'mexican', 'middle_eastern', 'pizza', 'quick_bite', 'spicy', 'sushi', 'thai',
+    'vegan', 'vegetarian', 'vietnamese']
+
 @app.route('/')
 def hello_world():
     return('Hello World!')
@@ -256,6 +261,24 @@ def delete_food_item():
         api_token = jsonData['api_token']
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
+
+@app.route('/search/<cuisine_type>/', methods=['POST'])
+def search_food_items_by_cuisine_type(cuisine_type):
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        cuisine_type = cuisine_type.lower()
+        if cuisine_type in timely_meals:
+            zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+            response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type)
+            return(jsonify(food_items=response))
+        elif cuisine_type in cuisine_types:
+            zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+            response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type)
+            return(jsonify(food_items=response))
+        else:
+            return('Could not find that category')
 
 @app.route('/user/profile/', methods=['POST'])
 def get_user_profile():
