@@ -158,7 +158,7 @@ class ZatiqFoodItemsMongoDBClient(object):
 
         if self.check_valid_api_token(api_token, user_type) == True:
             try:
-                food_items = Zatiq_Food_Items.objects.filter('tags__{}=True'.join(cuisine_type))
+                food_items = Zatiq_Food_Items.objects.filter(**{'tags__{}'.format(cuisine_type): True})
             except Exception as e:
                 return("Error \n %s" % (e))
             
@@ -176,7 +176,7 @@ class ZatiqFoodItemsMongoDBClient(object):
 
         if self.check_valid_api_token(api_token, user_type) == True:
             try:
-                food_items = Zatiq_Food_Items.objects.filter('meal_type__{}=True'.join(time))
+                food_items = Zatiq_Food_Items.objects.filter(**{'meal_type__{}'.format(time): True})
             except Exception as e:
                 return("Error \n %s" % (e))
 
