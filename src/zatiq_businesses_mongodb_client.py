@@ -6,6 +6,7 @@ from config import secret
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_menus import Zatiq_Menus
 from zatiq_interiors import Zatiq_Interiors
+from zatiq_reviews import Zatiq_Reviews
 
 class ZatiqBusinessesMongoDBClient(object):
     def get_all_businesses(self):
@@ -58,6 +59,41 @@ class ZatiqBusinessesMongoDBClient(object):
             return(restaurant_id)
         else:
             return(None)
+
+    def generate_reviews_list(self, reviews):
+        reviews_list = []
+        for review in reviews:
+            restaurant_name = self.get_business_name_by_id(reviews[review].restaurant_id)
+            restaurant_id = reviews[review].restaurant_id
+            food_item_name = self.get_food_name_by_id(reviews[review].food_item_id)
+            food_item_id = reviews[review].food_item_id
+            text = reviews[review].text
+            image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
+            rating = reviews[review].rating
+            date_created = reviews[review].date_created
+            review_info = {'restaurant_id': str(restaurant_id), 'restaurant_name': restaurant_name, 'food_item_id': food_item_id,
+                'food_item_name': food_item_name, 'text': text, 'image': image, 'rating': rating, 'date_created': date_created}
+            reviews_list.append(review_info)
+        return(reviews_list)
+
+    def get_all_reviews(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+            try:
+                all_reviews = Zatiq_Reviews.objects(restaurant_id=restaurant_id)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            if len(all_reviews) > 0:   
+                reviews_list = self.generate_reviews_list(all_reviews)
+                return(reviews_list)
+            else:
+                return('No reviews found for business')
+        else:
+            return('Could not authenticate')
     
     def upload_menu_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:

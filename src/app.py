@@ -110,7 +110,6 @@ def add_review_as_user():
         zatiq_reviews = ZatiqReviewsMongoDBClient()
         jsonData = request.get_json()
         restaurant_id = jsonData['restaurant_id']
-        reviewer_id = jsonData['reviewer_id']
         food_item_id = jsonData['food_item_id']
         text = jsonData['text']
         rating = jsonData['rating']
@@ -123,8 +122,26 @@ def add_review_as_user():
             image = None
             image_aspect_ratio = None
             
-        all_reviews_by_restaurantid = zatiq_reviews.add_review(restaurant_id, reviewer_id, food_item_id, text, image, rating, image_aspect_ratio, api_token)
-        return(all_reviews_by_restaurantid)
+        add_review = zatiq_reviews.add_review(restaurant_id, food_item_id, text, image, rating, image_aspect_ratio, api_token)
+        return(jsonify(response=add_review))
+
+@app.route('/user/reviews/all/', methods=['POST'])
+def get_all_reviews_by_user():
+    if request.method == 'POST':
+        zatiq_reviews = ZatiqReviewsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        self_reviews = zatiq_reviews.get_all_reviews_by_reviewer_id(api_token)
+        return(jsonify(response=self_reviews))
+
+@app.route('/business/reviews/all/', methods=['POST'])
+def get_all_reviews_for_business():
+    if request.method == 'POST':
+        zatiq_business_reviews = ZatiqBusinessesMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        business_reviews = zatiq_business_reviews.get_all_reviews(api_token)
+        return(jsonify(response=business_reviews))
 
 @app.route('/business/add/food/', methods=['POST'])
 def add_food_item_as_business():
@@ -142,11 +159,6 @@ def add_food_item_as_business():
         item_price = jsonData['item_price']
         response = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood)
         return(jsonify(response=response))
-
-@app.route('/food/cuisine/', methods=['POST'])
-def query_food_items_by_cuisine():
-    if request.method == 'POST':
-        pass
 
 @app.route('/restaurant/menu/add/', methods=['POST'])
 def add_menu_photo():
