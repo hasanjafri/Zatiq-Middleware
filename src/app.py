@@ -269,6 +269,7 @@ def search_food_items_by_cuisine_type(cuisine_type):
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         user_type = jsonData['type'].lower()
+        print(cuisine_type)
         cuisine_type = cuisine_type.lower()
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
