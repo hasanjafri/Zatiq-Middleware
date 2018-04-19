@@ -262,41 +262,21 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@app.route('/user/search/<cuisine_type>/', methods=['POST'])
+@app.route('/search/<cuisine_type>/', methods=['POST'])
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
+        user_type = jsonData['type'].lower()
         cuisine_type = cuisine_type.lower()
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type)
+            response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type, user_type)
             return(jsonify(food_items=response))
         elif cuisine_type in cuisine_types:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type)
-            return(jsonify(food_items=response))
-        else:
-            return('Could not find that category')
-
-
-@app.route('/business/search/<cuisine_type>/', methods=['POST'])
-def search_food_items_by_cuisine_type_business(cuisine_type):
-    if request.method == 'POST':
-        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-        jsonData = request.get_json()
-        api_token = jsonData['api_token']
-        cuisine_type = cuisine_type.lower()
-        if cuisine_type in timely_meals:
-            zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_time_of_day(
-                api_token, cuisine_type)
-            return(jsonify(food_items=response))
-        elif cuisine_type in cuisine_types:
-            zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_cuisine_type(
-                api_token, cuisine_type)
+            response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type, user_type)
             return(jsonify(food_items=response))
         else:
             return('Could not find that category')

@@ -2,6 +2,7 @@ from mongoengine import *
 import bson
 from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
+from zatiq_users import Zatiq_Users
 
 class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood):
@@ -81,10 +82,19 @@ class ZatiqFoodItemsMongoDBClient(object):
             else:
                 return([])
                 
-    def check_valid_api_token(self, api_token):
-        valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
-        if len(valid_token) > 0:
-            return(True)
+    def check_valid_api_token(self, api_token, user_type=None):
+        if user_type == 'business' or user_type == None:   
+            valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
+            if len(valid_token) > 0:
+                return(True)
+            else:
+                return(False)
+        elif user_type == 'user':
+            valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+            if len(valid_token) > 0:
+                return(True)
+            else:
+                return(False)
         else:
             return(False)
 
@@ -142,11 +152,11 @@ class ZatiqFoodItemsMongoDBClient(object):
             'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
         return(seafoods_dict)
 
-    def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
+    def get_food_items_by_cuisine_type(self, api_token, cuisine_type, user_type):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token) == True:
+        if self.check_valid_api_token(api_token, user_type) == True:
             try:
                 food_items = Zatiq_Food_Items.objects.filter('tags__{}=True'.join(cuisine_type))
             except Exception as e:
@@ -160,11 +170,11 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return('Could not authenticate')
 
-    def get_food_items_by_time_of_day(self, api_token, time):
+    def get_food_items_by_time_of_day(self, api_token, time, user_type):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token) == True:
+        if self.check_valid_api_token(api_token, user_type) == True:
             try:
                 food_items = Zatiq_Food_Items.objects.filter('meal_type__{}=True'.join(time))
             except Exception as e:
