@@ -1,6 +1,5 @@
 from mongoengine import *
 import secrets
-import json
 from simplecrypt import encrypt, decrypt
 from config import secret
 from zatiq_businesses import Zatiq_Businesses
@@ -9,16 +8,6 @@ from zatiq_interiors import Zatiq_Interiors
 from zatiq_reviews import Zatiq_Reviews
 
 class ZatiqBusinessesMongoDBClient(object):
-    def get_all_businesses(self):
-        all_businesses = []
-        for user in Zatiq_Businesses.objects:
-            all_businesses.append(user.user_name)
-        return(json.dumps(all_businesses))
-
-    def get_specific_business(self, businessEmail):
-        business = Zatiq_Businesses.objects(business_email=businessEmail)
-        return(json.dumps(business[0].business_name))
-
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)
         if (self.check_api_token_exists(api_token) == False):

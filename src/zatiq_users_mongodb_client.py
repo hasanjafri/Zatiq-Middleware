@@ -8,17 +8,6 @@ from zatiq_menus import Zatiq_Menus
 from zatiq_interiors import Zatiq_Interiors
 
 class ZatiqUsersMongoDBClient(object):
-    def get_all_users(self):
-        all_users = []
-        for user in Zatiq_Users.objects:
-            all_users.append(user.user_name)
-        print(all_users)
-        return(json.dumps(all_users))
-    
-    def get_specific_user(self, api_token):
-        user = Zatiq_Users.objects(zatiq_token=api_token)
-        return(json.dumps(user[0].auth_token))
-
     def generate_zatiq_api_token(self):
         api_token = secrets.token_urlsafe(32)
         if (self.check_api_token_exists(api_token) == False):

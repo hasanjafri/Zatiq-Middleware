@@ -18,4 +18,5 @@ class Zatiq_Food_Items(Document):
    average_review = StringField(default='0.00')
    bouffet_item = BooleanField(default=False)
    date_created = DateTimeField(default=datetime.datetime.utcnow)
+   views = IntField(default=1)
 

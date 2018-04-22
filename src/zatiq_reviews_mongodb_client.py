@@ -1,5 +1,4 @@
 from mongoengine import *
-import json
 from zatiq_reviews import Zatiq_Reviews
 from zatiq_users import Zatiq_Users
 from zatiq_businesses import Zatiq_Businesses

@@ -58,9 +58,6 @@ class ZatiqFoodItemsMongoDBClient(object):
         food_item_id = bson.objectid.ObjectId()
         return(food_item_id)
 
-    def get_food_by_tags(self, tags):
-        pass
-
     def get_restaurant_id_by_api_token(self, api_token):
         valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
         if (len(valid_token) > 0):
@@ -150,6 +147,10 @@ class ZatiqFoodItemsMongoDBClient(object):
     def generate_food_items_dict(self, food_items):
         food_items_list = []
         for food_item in range(len(food_items)):
+            try:
+                Zatiq_Food_Items.objects(id=food_items[food_item].id).modify(inc__views=1)
+            except Exception as e:
+                print("Error \n %s" % (e))
             food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id.id
             restaurant_info = self.get_restaurant_info(restaurant_id)
