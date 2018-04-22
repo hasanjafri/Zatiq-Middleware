@@ -301,7 +301,12 @@ def get_user_profile():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         response = zatiq_users.get_user_profile(api_token)
-        return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
+        if len(response) == 4:
+            return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
+        elif len(response) == 3:
+            return(jsonify(user_email=response[0], user_name=response[1], preferences=response[2]))
+        else:
+            return(jsonify(response=response))
 
 @app.route('/user/menu/all/', methods=['POST'])
 def get_restaurant_menu():
