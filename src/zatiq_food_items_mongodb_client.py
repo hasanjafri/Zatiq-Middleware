@@ -115,16 +115,18 @@ class ZatiqFoodItemsMongoDBClient(object):
             return("Error \n %s" % (e))
 
         if len(zatiq_business) > 0:
+            email = zatiq_business[0].business_email
             name = zatiq_business[0].business_name
+            website = zatiq_business[0].website
             hours = self.generate_business_hours(zatiq_business[0].hours)
             number = zatiq_business[0].number
+            features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible}
             image = {'base64': zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
             address = zatiq_business[0].address
-            features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible}
-            restaurant_info = {'business_name': name, 'business_hours': hours, 'business_number': number, 'business_logo': image, 'business_address': address, 'features': features}
+            restaurant_info = {'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             return(restaurant_info)
         else:
-            return({})
+            return('Could not find a restaurant with that id')
 
     def generate_business_hours(self, business):
         hours_dict = {'start': {
