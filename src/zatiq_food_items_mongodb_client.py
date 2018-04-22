@@ -237,5 +237,8 @@ class ZatiqFoodItemsMongoDBClient(object):
             if button == 'popular':
                 try:
                     food_items = Zatiq_Food_Items.objects.filter()
-                    pass
+                except Exception as e:
+                    return("Error \n %s" % (e))
+        else:
+            return('Could not authenticate')
                     
