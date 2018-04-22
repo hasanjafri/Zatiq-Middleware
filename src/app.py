@@ -298,3 +298,24 @@ def get_user_profile():
         api_token = jsonData['api_token']
         response = zatiq_users.get_user_profile(api_token)
         return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
+
+@app.route('/user/menu/all/', methods=['POST'])
+def get_restaurant_menu():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        restaurant_id = jsonData['restaurant_id']
+        response = zatiq_users.get_menu_pictures(api_token, restaurant_id)
+        return(jsonify(response=response))
+
+@app.route('/user/interior/all/', methods=['POST'])
+def get_restaurant_menu():
+    if request.method == 'POST':
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        restaurant_id = jsonData['restaurant_id']
+        response = zatiq_users.get_menu_pictures(api_token, restaurant_id)
+        return(jsonify(response=response))
+

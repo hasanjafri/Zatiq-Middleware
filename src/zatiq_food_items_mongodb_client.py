@@ -120,7 +120,8 @@ class ZatiqFoodItemsMongoDBClient(object):
             name = zatiq_business[0].business_name
             hours = self.generate_business_hours(zatiq_business[0].hours)
             number = zatiq_business[0].number
-            restaurant_info = {'business_name': name, 'business_hours': hours, 'business_number': number}
+            image = {'base64': zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
+            restaurant_info = {'business_name': name, 'business_hours': hours, 'business_number': number, 'business_logo': image}
             return(restaurant_info)
         else:
             return({})

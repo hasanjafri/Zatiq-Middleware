@@ -4,6 +4,8 @@ import requests
 import json
 from zatiq_users import Zatiq_Users
 from zatiq_food_items import Zatiq_Food_Items
+from zatiq_menus import Zatiq_Menus
+from zatiq_interiors import Zatiq_Interiors
 
 class ZatiqUsersMongoDBClient(object):
     def get_all_users(self):
@@ -175,3 +177,43 @@ class ZatiqUsersMongoDBClient(object):
         else:
             return('Could not authenticate')
 
+    def get_menu_pictures(self, api_token, restaurant_id):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                menu_pictures = Zatiq_Menus.objects(restaurant_id=restaurant_id)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            result = self.generate_photos_dict(menu_pictures)
+            return(result)
+        else:
+            return('Could not authenticate')
+
+    def get_interior_pictures(self, api_token, restaurant_id):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                interior_pictures = Zatiq_Interiors.objects(restaurant_id=restaurant_id)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            result = self.generate_photos_dict(interior_pictures)
+            return(result)
+        else:
+            return('Could not authenticate')
+
+    def generate_photos_dict(self, photos):
+        photos_list = []
+        for photo in range(len(photos)):
+            image_id = str(photos[photo].id)
+            base64 = photos[photo].image
+            image_aspect_ratio = photos[photo].image_aspect_ratio
+            photo_info = {'image_id': image_id, 'image': {
+                'base64': base64, 'image_aspect_ratio': image_aspect_ratio}}
+            photos_list.append(photo_info)
+        return(photos_list)
