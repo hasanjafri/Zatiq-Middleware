@@ -12,7 +12,7 @@ timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
 cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',
     'indian', 'italian', 'japanese', 'korean', 'kosher', 'mexican', 'middle_eastern', 'pizza', 'quick_bite', 'spicy', 'sushi', 'thai',
     'vegan', 'vegetarian', 'vietnamese']
-buttons = ['popular', 'surprise_me', 'newest', 'promotions']
+buttons = ['top_picks', 'surprise_me', 'newest', 'promotions']
 
 @app.route('/')
 def hello_world():
