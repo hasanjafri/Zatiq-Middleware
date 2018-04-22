@@ -22,3 +22,4 @@ class Zatiq_Businesses(Document):
     reservation = BooleanField(required=True)
     patio = BooleanField(required=True)
     wheelchair_accessible = BooleanField(required=True)
+    view_count = IntField(default=0)

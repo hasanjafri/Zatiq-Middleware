@@ -12,6 +12,7 @@ timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
 cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',
     'indian', 'italian', 'japanese', 'korean', 'kosher', 'mexican', 'middle_eastern', 'pizza', 'quick_bite', 'spicy', 'sushi', 'thai',
     'vegan', 'vegetarian', 'vietnamese']
+buttons = ['popular', 'surprise_me', 'newest', 'promotions']
 
 @app.route('/')
 def hello_world():
@@ -225,7 +226,8 @@ def get_food_items_by_restaurant_id():
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token)
+        user_type = jsonData['type'].lower()
+        food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, user_type)
         return(jsonify(food_items=food_items))
 
 @app.route('/business/edit/food/', methods=['POST'])
@@ -273,8 +275,7 @@ def search_food_items_by_cuisine_type(cuisine_type):
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         user_type = jsonData['type'].lower()
-        print(cuisine_type)
-        cuisine_type = cuisine_type.lower()
+        cuisine_type = cuisine_type.replace(' ', '_').lower()
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type, user_type)
@@ -294,5 +295,3 @@ def get_user_profile():
         api_token = jsonData['api_token']
         response = zatiq_users.get_user_profile(api_token)
         return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
-
-

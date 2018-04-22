@@ -69,8 +69,8 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return(None)
 
-    def get_food_items_by_restaurant_id(self, api_token):
-        if self.check_valid_api_token(api_token) == True:
+    def get_food_items_by_restaurant_id(self, api_token, user_type):
+        if self.check_valid_api_token(api_token, user_type) == True:
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
                 foods_by_restaurant = Zatiq_Food_Items.objects(restaurant_id=restaurant_id)
@@ -109,13 +109,48 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return(food_item_dict)
             else:
                 return('No food item found with that id')
-                
+
+    def get_restaurant_info(self, restaurant_id):
+        try:
+            zatiq_business = Zatiq_Businesses.objects(id=restaurant_id)
+        except Exception as e:
+            return("Error \n %s" % (e))
+
+        if len(zatiq_business) > 0:
+            name = zatiq_business[0].business_name
+            hours = self.generate_business_hours(zatiq_business[0].hours)
+            number = zatiq_business[0].number
+            restaurant_info = {'business_name': name, 'business_hours': hours, 'business_number': number}
+            return(restaurant_info)
+        else:
+            return({})
+
+    def generate_business_hours(self, business):
+        hours_dict = {'start': {
+            'monday': business.monday_start,
+            'tuesday': business.tuesday_start,
+            'wednesday': business.wednesday_start,
+            'thursday': business.thursday_start,
+            'friday': business.friday_start,
+            'saturday': business.saturday_start,
+            'sunday': business.sunday_start
+        }, 'end': {
+            'monday': business.monday_end,
+            'tuesday': business.tuesday_end,
+            'wednesday': business.wednesday_end,
+            'thursday': business.thursday_end,
+            'friday': business.friday_end,
+            'saturday': business.saturday_end,
+            'sunday': business.sunday_end
+        }}
+        return(hours_dict)
 
     def generate_food_items_dict(self, food_items):
         food_items_list = []
         for food_item in range(len(food_items)):
             food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id
+            restaurant_info = self.get_restaurant_info(restaurant_id)
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
             image = food_items[food_item].image
@@ -126,7 +161,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             tags = self.generate_tags_dict(food_items[food_item].tags, is_beverage)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
-            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'item_name': item_name, 'meal_type': meal_types, 'item_price': item_price, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': restaurant_info, item_name': item_name, 'meal_type': meal_types, 'item_price': item_price, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
@@ -187,4 +222,20 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return([])
         else:
             return('Could not authenticate')
+
+    def get_food_items_by_button(self, api_token, user_type, button):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token, user_type) == True:
+            if button == 'promotions':
+                try:
+                    food_items = Zatiq_Food_Items.objects.filter()
+                except Exception as e:
+                    return("Error \n %s" % (e))
+
+            if button == 'popular':
+                try:
+                    food_items = Zatiq_Food_Items.objects.filter()
+                    pass
                     

@@ -14,6 +14,7 @@ class Zatiq_Food_Items(Document):
    tags = EmbeddedDocumentField(Zatiq_Food_Item_Tags)
    is_beverage = BooleanField(default=False)
    item_price = StringField(default='0.00')
+   discount_price = StringField(required=False)
    average_review = StringField(default='0.00')
    bouffet_item = BooleanField(default=False)
    date_created = DateTimeField(default=datetime.datetime.utcnow)
