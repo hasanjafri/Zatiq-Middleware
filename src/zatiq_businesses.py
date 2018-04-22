@@ -1,8 +1,8 @@
 from mongoengine import *
 import datetime
 from zatiq_business_hours import Zatiq_Business_Hours
-from zatiq_user_preferences import Zatiq_User_Preferences
-from zatiq_user_history import Zatiq_User_History
+from zatiq_business_preferences import Zatiq_Business_Preferences
+from zatiq_business_history import Zatiq_Business_History
 
 class Zatiq_Businesses(Document):
     business_email = StringField(required=True)
@@ -25,5 +25,5 @@ class Zatiq_Businesses(Document):
     patio = BooleanField(required=True)
     wheelchair_accessible = BooleanField(required=True)
     view_count = IntField(default=0)
-    preferences = EmbeddedDocumentField(Zatiq_User_Preferences)
-    history = EmbeddedDocumentListField(Zatiq_User_History)
+    preferences = EmbeddedDocumentField(Zatiq_Business_Preferences)
+    history = EmbeddedDocumentListField(Zatiq_Business_History)
