@@ -6,6 +6,7 @@ from zatiq_users import Zatiq_Users
 from zatiq_food_items import Zatiq_Food_Items
 from zatiq_menus import Zatiq_Menus
 from zatiq_interiors import Zatiq_Interiors
+from zatiq_businesses import Zatiq_Businesses
 
 class ZatiqUsersMongoDBClient(object):
     def generate_zatiq_api_token(self):
@@ -24,11 +25,21 @@ class ZatiqUsersMongoDBClient(object):
             return(None)
 
     def check_valid_api_token(self, api_token):
-        valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        try:
+            valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        except Exception as e:
+            return("Error \n %s" % (e))
         if len(valid_token) > 0:
             return(True)
         else:
-            return(False)
+            try:
+                valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
+            except Exception as e:
+                return("Error \n %s" % (e))
+            if len(valid_token) > 0:
+                return(True)
+            else:
+                return(False)
 
     def check_api_token_exists(self, api_token):
         check_api_token = Zatiq_Users.objects(zatiq_token=api_token)
