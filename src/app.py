@@ -310,7 +310,7 @@ def get_restaurant_menu():
         return(jsonify(response=response))
 
 @app.route('/user/interior/all/', methods=['POST'])
-def get_restaurant_menu():
+def get_restaurant_interior():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
