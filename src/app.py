@@ -227,7 +227,7 @@ def get_food_items_by_restaurant_id():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         user_type = jsonData['type'].lower()
-        if jsonData['restaurant_id']:
+        if 'restaurant_id' in jsonData:
             restaurant_id = jsonData['restaurant_id']
         else:
             restaurant_id = None
