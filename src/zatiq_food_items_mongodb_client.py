@@ -115,6 +115,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             return("Error \n %s" % (e))
 
         if len(zatiq_business) > 0:
+            restaurant_id = zatiq_business[0].id
             email = zatiq_business[0].business_email
             name = zatiq_business[0].business_name
             website = zatiq_business[0].website
@@ -123,7 +124,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible}
             image = {'base64': zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
             address = zatiq_business[0].address
-            restaurant_info = {'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
+            restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             return(restaurant_info)
         else:
             return('Could not find a restaurant with that id')

@@ -323,3 +323,8 @@ def get_restaurant_interior():
         response = zatiq_users.get_menu_pictures(api_token, restaurant_id)
         return(jsonify(response=response))
 
+@app.route('/find/restaurant/name/', methods=['POST'])
+def get_restaurant_by_name():
+    if request.method == 'POST':
+        pass
+
