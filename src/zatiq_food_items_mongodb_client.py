@@ -66,9 +66,10 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return(None)
 
-    def get_food_items_by_restaurant_id(self, api_token, user_type):
+    def get_food_items_by_restaurant_id(self, api_token, user_type, restaurant_id=None):
         if self.check_valid_api_token(api_token, user_type) == True:
-            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+            if restaurant_id == None:
+                restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
                 foods_by_restaurant = Zatiq_Food_Items.objects(restaurant_id=restaurant_id)
             except Exception as e:
