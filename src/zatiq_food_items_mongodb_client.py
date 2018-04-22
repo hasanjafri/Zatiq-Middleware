@@ -150,7 +150,7 @@ class ZatiqFoodItemsMongoDBClient(object):
         for food_item in range(len(food_items)):
             food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id
-            print(restaurant_id)
+            print(str(restaurant_id))
             restaurant_info = self.get_restaurant_info(restaurant_id)
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
