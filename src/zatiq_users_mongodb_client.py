@@ -89,11 +89,17 @@ class ZatiqUsersMongoDBClient(object):
                 get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
             except Exception as e:
                 return("Error \n %s" % (e))
-            user_email = get_user_info[0].user_email
-            auth_token = get_user_info[0].auth_token
-            user_name = get_user_info[0].user_name
-            preferences = self.generate_preferences_dict(get_user_info[0].preferences)
-            return([user_email, auth_token, user_name, preferences])
+
+            if len(get_user_info) > 0:
+                user_email = get_user_info[0].user_email
+                auth_token = get_user_info[0].auth_token
+                user_name = get_user_info[0].user_name
+                preferences = self.generate_preferences_dict(get_user_info[0].preferences)
+                return([user_email, auth_token, user_name, preferences])
+            else:
+                try:
+                    get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+
 
     def generate_preferences_dict(self, preferences):
         preferences_dict = {'halal': preferences.halal, 'spicy': preferences.spicy, 'kosher': preferences.kosher, 'healthy': preferences.healthy,
@@ -149,13 +155,31 @@ class ZatiqUsersMongoDBClient(object):
                 else:
                     return(self.user_login(authToken, user_email, method))
 
+    def check_business_or_user(self, api_token):
+        try:
+            zatiq_user = Zatiq_Users.objects(zatiq_token=api_token)
+        except Exception as e:
+            return("Error \n %s" % (e))
+
+        if len(zatiq_user) > 0:
+            return('user')
+        else:
+            try:
+                zatiq_user = Zatiq_Businesses.objects(zatiq_token=api_token)
+            except Exception as e:
+                return("Error \n %s" % (e))
+            
+            if len(zatiq_user) > 0:
+                return('business')
+            else:
+                return('none')
+
     def update_user_preferences(self, api_token, preferences):
         if not api_token:
             return('Could not authenticate')
         
         if self.check_valid_api_token(api_token) == True:
-            user_id = self.get_user_id_by_api_token(api_token)
-            if user_id != None:
+            if self.check_business_or_user(api_token) == 'user':
                 try:
                     Zatiq_Users.objects(zatiq_token=api_token).update_one(upsert=False,
                         set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
@@ -172,8 +196,24 @@ class ZatiqUsersMongoDBClient(object):
                 user_name = get_user_info[0].user_name
                 preferences = self.generate_preferences_dict(get_user_info[0].preferences)
                 return([user_email, auth_token, user_name, preferences])
+            elif self.check_business_or_user(api_token) == 'business':
+                try:
+                    Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
+                        set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
+                        set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'], set__preferences__nuts_allergy=preferences['nuts_allergy'],
+                        set__preferences__lactose_intolerant=preferences['lactose_intolerant'])
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                try:
+                    get_user_info = Zatiq_Businesses.objects(zatiq_token=api_token)
+                except Exception as e:
+                    return("Error \n %s" % (e))
+                user_email = get_user_info[0].business_email
+                user_name = get_user_info[0].business_name
+                preferences = self.generate_preferences_dict(get_user_info[0].preferences)
+                return([user_email, user_name, preferences])
             else:
-                return('No such user')
+                return('Could not find that user')
         else:
             return('Could not authenticate')
 
@@ -186,7 +226,6 @@ class ZatiqUsersMongoDBClient(object):
                 menu_pictures = Zatiq_Menus.objects(restaurant_id=restaurant_id)
             except Exception as e:
                 return("Error \n %s" % (e))
-
             result = self.generate_photos_dict(menu_pictures)
             return(result)
         else:
@@ -201,7 +240,6 @@ class ZatiqUsersMongoDBClient(object):
                 interior_pictures = Zatiq_Interiors.objects(restaurant_id=restaurant_id)
             except Exception as e:
                 return("Error \n %s" % (e))
-
             result = self.generate_photos_dict(interior_pictures)
             return(result)
         else:

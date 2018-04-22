@@ -278,5 +278,7 @@ class ZatiqBusinessesMongoDBClient(object):
              set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
              set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
              set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
-             set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'])
+             set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'],
+             set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
+             set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
             return(self.business_login(business_email, business_password))
