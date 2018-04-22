@@ -85,21 +85,33 @@ class ZatiqUsersMongoDBClient(object):
             return('Could not authenticate')
 
         if self.check_valid_api_token(api_token) == True:
-            try:
-                get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
-            except Exception as e:
-                return("Error \n %s" % (e))
+            if self.check_business_or_user(api_token) == 'user':
+                try:
+                    get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+                except Exception as e:
+                    return("Error \n %s" % (e))
 
-            if len(get_user_info) > 0:
                 user_email = get_user_info[0].user_email
                 auth_token = get_user_info[0].auth_token
                 user_name = get_user_info[0].user_name
                 preferences = self.generate_preferences_dict(get_user_info[0].preferences)
                 return([user_email, auth_token, user_name, preferences])
-            else:
+
+            elif self.check_business_or_user(api_token) == 'business':
                 try:
                     get_user_info = Zatiq_Users.objects(zatiq_token=api_token)
+                except Exception as e:
+                    return("Error \n %s" % (e))
 
+                user_email = get_user_info[0].business_email
+                user_name = get_user_info[0].business_name
+                preferences = self.generate_preferences_dict(get_user_info[0].preferences)
+                return([user_email, user_name, preferences])
+
+            else:
+                return('Could not find that user')
+        else:
+            return('Could not authenticate')
 
     def generate_preferences_dict(self, preferences):
         preferences_dict = {'halal': preferences.halal, 'spicy': preferences.spicy, 'kosher': preferences.kosher, 'healthy': preferences.healthy,
