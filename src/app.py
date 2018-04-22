@@ -227,7 +227,10 @@ def get_food_items_by_restaurant_id():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         user_type = jsonData['type'].lower()
-        restaurant_id = jsonData['restaurant_id']
+        if jsonData['restaurant_id']:
+            restaurant_id = jsonData['restaurant_id']
+        else:
+            restaurant_id = None
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, user_type, restaurant_id)
         return(jsonify(food_items=food_items))
 
