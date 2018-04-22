@@ -284,6 +284,9 @@ def search_food_items_by_cuisine_type(cuisine_type):
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type, user_type)
             return(jsonify(food_items=response))
+        elif cuisine_type in buttons:
+            zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+            return(jsonify(response="Temporarily Unavailable"), 503)
         else:
             return('Could not find that category')
 
