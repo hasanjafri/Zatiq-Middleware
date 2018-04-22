@@ -150,8 +150,7 @@ class ZatiqFoodItemsMongoDBClient(object):
         for food_item in range(len(food_items)):
             food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id
-            print(str(restaurant_id))
-            restaurant_info = self.get_restaurant_info(restaurant_id)
+            #restaurant_info = self.get_restaurant_info(restaurant_id)
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
             image = food_items[food_item].image
@@ -162,7 +161,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             tags = self.generate_tags_dict(food_items[food_item].tags, is_beverage)
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
-            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': restaurant_info, 'item_name': item_name, 'meal_type': meal_types, 'item_price': item_price, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
+            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': 'restaurant_info', 'item_name': item_name, 'meal_type': meal_types, 'item_price': item_price, 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
