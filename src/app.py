@@ -106,8 +106,8 @@ def add_review_as_user():
         api_token = jsonData['api_token']
 
         if 'image' in jsonData:
-            image = jsonData['image']
-            image_aspect_ratio = jsonData['image_aspect_ratio']
+            image = jsonData['image']['base64']
+            image_aspect_ratio = jsonData['image']['image_aspect_ratio']
         else:
             image = None
             image_aspect_ratio = None
