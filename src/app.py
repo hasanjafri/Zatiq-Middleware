@@ -105,7 +105,7 @@ def add_review_as_user():
         rating = jsonData['rating']
         api_token = jsonData['api_token']
 
-        if jsonData['image']:
+        if 'image' in jsonData:
             image = jsonData['image']
             image_aspect_ratio = jsonData['image_aspect_ratio']
         else:
