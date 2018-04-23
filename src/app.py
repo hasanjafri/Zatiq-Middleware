@@ -131,7 +131,7 @@ def get_all_reviews_for_business():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         business_reviews = zatiq_business_reviews.get_all_reviews(api_token)
-        return(jsonify(response=business_reviews))
+        return(jsonify(reviews=business_reviews))
 
 @app.route('/business/add/food/', methods=['POST'])
 def add_food_item_as_business():
