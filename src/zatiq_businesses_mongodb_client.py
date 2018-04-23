@@ -52,8 +52,8 @@ class ZatiqBusinessesMongoDBClient(object):
     def generate_reviews_list(self, reviews):
         reviews_list = []
         for review in range(len(reviews)):
-            restaurant_id = reviews[review].restaurant_id
-            food_item_id = reviews[review].food_item_id
+            restaurant_id = reviews[review].restaurant_id.id
+            food_item_id = reviews[review].food_item_id.id
             text = reviews[review].text
             image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
             rating = reviews[review].rating
