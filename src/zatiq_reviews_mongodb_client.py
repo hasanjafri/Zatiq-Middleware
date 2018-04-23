@@ -92,9 +92,9 @@ class ZatiqReviewsMongoDBClient(object):
                     self_reviews_dict = self.generate_reviews_list(reviews)
                     return(self_reviews_dict)
                 else:
-                    return('No reviews found by user')
+                    return([])
             else:
-                return('No reviews found by user')
+                return([])
         else:
             return('Could not authenticate')
 

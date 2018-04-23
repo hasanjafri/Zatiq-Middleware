@@ -77,7 +77,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 reviews_list = self.generate_reviews_list(all_reviews)
                 return(reviews_list)
             else:
-                return('No reviews found for business')
+                return([])
         else:
             return('Could not authenticate')
     
