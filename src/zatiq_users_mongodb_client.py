@@ -135,13 +135,13 @@ class ZatiqUsersMongoDBClient(object):
         else:
             return('Could not authenticate')
         
-    def user_register(self, authToken, method):
+    def user_register(self, authToken, method, email):
         if not authToken:
             return('Could not authenticate')
         
-        check_user_register = Zatiq_Users.objects(auth_token=authToken)
+        check_user_register = Zatiq_Users.objects(user_email=email)
         if len(check_user_register) > 0:
-            return(self.user_login(authToken, check_user_register[0].user_email, method))
+            return(self.user_login(authToken, email, method))
         else:
             user_info = self.get_user_info(authToken, method)
             user_id = user_info['id']
@@ -161,8 +161,8 @@ class ZatiqUsersMongoDBClient(object):
             if method == 'facebook':
                 if self.check_user_exists(user_email, user_id, method, authToken) == False:
                     user_register = Zatiq_Users.objects(auth_token=authToken).update_one(upsert=True, set__user_email=user_email, set__user_name=user_name, set__facebook_id=user_id, set__zatiq_token=api_token,
-                    set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
-                    set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
+                        set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
+                        set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
                     return(self.user_login(authToken, user_email, method))
                 else:
                     return(self.user_login(authToken, user_email, method))
