@@ -14,7 +14,7 @@ class ZatiqReviewsMongoDBClient(object):
 
     def get_business_name_by_id(self, business_id):
         try:
-            business_name = Zatiq_Businesses(id=business_id)
+            business_name = Zatiq_Businesses.objects(id=business_id)
         except Exception as e:
             return("Error \n %s" % (e))
         return(business_name[0].business_name)
