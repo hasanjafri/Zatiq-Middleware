@@ -261,15 +261,53 @@ class ZatiqFoodItemsMongoDBClient(object):
         if self.check_valid_api_token(api_token) == True:
             if button == 'promotions':
                 try:
-                    food_items = Zatiq_Food_Items.objects.filter()
+                    food_items = Zatiq_Food_Items.objects.order_by('discount_price')
                 except Exception as e:
                     return("Error \n %s" % (e))
 
-            if button == 'popular':
+                if len(food_items) > 0:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)
+                else:
+                    return('Temporarily Unavailable')
+
+            elif button == 'top_picks':
                 try:
-                    food_items = Zatiq_Food_Items.objects.filter()
+                    food_items = Zatiq_Food_Items.objects.order_by('-views')
                 except Exception as e:
                     return("Error \n %s" % (e))
+
+                if len(food_items) > 0:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)
+                else:
+                    return('Temporarily Unavailable')
+
+            elif button == 'newest':
+                try:
+                    food_items = Zatiq_Food_Items.objects.order_by('-date_created')
+                except Exception as e:
+                    return("Error \n %s" % (e)) 
+
+                if len(food_items) > 0:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)
+                else:
+                    return('Temporarily Unavailable')
+
+            elif button == 'surprise_me':
+                try:
+                    food_items = Zatiq_Food_Items.objects.order_by('views')
+                except Exception as e:
+                    return("Error \n %s" % (e))
+
+                if len(food_items) > 0:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)  
+                else:
+                    return('Temporarily Unavailable')
+
+            else:
+                return('Category not found')
         else:
-            return('Could not authenticate')
-                    
+            return('Could not authenticate')                    
