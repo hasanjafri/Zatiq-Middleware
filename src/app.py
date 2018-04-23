@@ -325,7 +325,7 @@ def get_restaurant_interior():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         restaurant_id = jsonData['restaurant_id']
-        response = zatiq_users.get_menu_pictures(api_token, restaurant_id)
+        response = zatiq_users.get_interior_pictures(api_token, restaurant_id)
         return(jsonify(response=response))
 
 @app.route('/find/restaurant/name/', methods=['POST'])
