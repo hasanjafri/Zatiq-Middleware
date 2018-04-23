@@ -124,7 +124,7 @@ class ZatiqUsersMongoDBClient(object):
         if not userEmail:
             return('Could not authenticate')
 
-        check_user_login = Zatiq_Users.objects(auth_token=authToken)
+        check_user_login = Zatiq_Users.objects(user_email=userEmail)
 
         if len(check_user_login) > 0:
             user_info = self.get_user_info(authToken, method)
