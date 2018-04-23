@@ -122,7 +122,7 @@ def get_all_reviews_by_user():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         self_reviews = zatiq_reviews.get_all_reviews_by_reviewer_id(api_token)
-        return(jsonify(response=self_reviews))
+        return(jsonify(reviews=self_reviews))
 
 @app.route('/business/reviews/all/', methods=['POST'])
 def get_all_reviews_for_business():
