@@ -66,8 +66,8 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return(None)
 
-    def get_food_items_by_restaurant_id(self, api_token, user_type, restaurant_id):
-        if self.check_valid_api_token(api_token, user_type) == True:
+    def get_food_items_by_restaurant_id(self, api_token, restaurant_id):
+        if self.check_valid_api_token(api_token) == True:
             if restaurant_id == None:
                 restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
@@ -80,11 +80,11 @@ class ZatiqFoodItemsMongoDBClient(object):
             else:
                 return([])
 
-    def find_food_grid(self, api_token, user_type):
+    def find_food_grid(self, api_token):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token, user_type) == True:
+        if self.check_valid_api_token(api_token) == True:
             try:
                 zatiq_food_items = Zatiq_Food_Items.objects()
             except Exception as e:
@@ -102,21 +102,22 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return('Could not authenticate')
                 
-    def check_valid_api_token(self, api_token, user_type=None):
-        if user_type == 'business' or user_type == None:   
-            valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
-            if len(valid_token) > 0:
-                return(True)
-            else:
-                return(False)
-        elif user_type == 'user':
+    def check_valid_api_token(self, api_token):
+        try:
             valid_token = Zatiq_Users.objects(zatiq_token=api_token)
+        except Exception as e:
+            return("Error \n %s" % (e))
+        if len(valid_token) > 0:
+            return(True)
+        else:
+            try:
+                valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
+            except Exception as e:
+                return("Error \n %s" % (e))
             if len(valid_token) > 0:
                 return(True)
             else:
                 return(False)
-        else:
-            return(False)
 
     def get_food_by_id(self, api_token, food_item_id):
         if self.check_valid_api_token(api_token) == True:
@@ -217,11 +218,11 @@ class ZatiqFoodItemsMongoDBClient(object):
             'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
         return(seafoods_dict)
 
-    def get_food_items_by_cuisine_type(self, api_token, cuisine_type, user_type):
+    def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token, user_type) == True:
+        if self.check_valid_api_token(api_token) == True:
             try:
                 food_items = Zatiq_Food_Items.objects.filter(**{'tags__{}'.format(cuisine_type): True})
             except Exception as e:
@@ -235,11 +236,11 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return('Could not authenticate')
 
-    def get_food_items_by_time_of_day(self, api_token, time, user_type):
+    def get_food_items_by_time_of_day(self, api_token, time):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token, user_type) == True:
+        if self.check_valid_api_token(api_token) == True:
             try:
                 food_items = Zatiq_Food_Items.objects.filter(**{'meal_type__{}'.format(time): True})
             except Exception as e:
@@ -253,11 +254,11 @@ class ZatiqFoodItemsMongoDBClient(object):
         else:
             return('Could not authenticate')
 
-    def get_food_items_by_button(self, api_token, user_type, button):
+    def get_food_items_by_button(self, api_token, button):
         if not api_token:
             return('Could not authenticate')
 
-        if self.check_valid_api_token(api_token, user_type) == True:
+        if self.check_valid_api_token(api_token) == True:
             if button == 'promotions':
                 try:
                     food_items = Zatiq_Food_Items.objects.filter()

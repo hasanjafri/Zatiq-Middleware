@@ -226,12 +226,11 @@ def get_food_items_by_restaurant_id():
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        user_type = jsonData['type'].lower()
         if 'restaurant_id' in jsonData:
             restaurant_id = jsonData['restaurant_id']
         else:
             restaurant_id = None
-        food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, user_type, restaurant_id)
+        food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, restaurant_id)
         return(jsonify(food_items=food_items))
 
 @app.route('/business/edit/food/', methods=['POST'])
@@ -278,18 +277,19 @@ def search_food_items_by_cuisine_type(cuisine_type):
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        user_type = jsonData['type'].lower()
         cuisine_type = cuisine_type.replace(' ', '_').lower()
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type, user_type)
+            response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type)
             return(jsonify(food_items=response))
         elif cuisine_type in cuisine_types:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
-            response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type, user_type)
+            response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type)
             return(jsonify(food_items=response))
         elif cuisine_type in buttons:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+            if cuisine_type == 'top_picks':
+                
             return(jsonify(response="Temporarily Unavailable"), 503)
         else:
             return('Could not find that category')
@@ -344,8 +344,5 @@ def get_food_grid():
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
         api_token = jsonData['api_token']
-        user_type = jsonData['type']
-        response = zatiq_food_items.find_food_grid(api_token, user_type)
+        response = zatiq_food_items.find_food_grid(api_token)
         return(jsonify(food_items=response))
-
-
