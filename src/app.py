@@ -331,5 +331,10 @@ def get_restaurant_interior():
 @app.route('/find/restaurant/name/', methods=['POST'])
 def get_restaurant_by_name():
     if request.method == 'POST':
-        pass
+        zatiq_users = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        text = jsonData['text']
+        response = zatiq_users.get_restaurant_by_name(api_token, text)
+        return(jsonify(response=response))
 

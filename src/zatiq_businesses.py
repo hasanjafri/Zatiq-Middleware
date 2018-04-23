@@ -25,3 +25,9 @@ class Zatiq_Businesses(Document):
     wheelchair_accessible = BooleanField(required=True)
     view_count = IntField(default=0)
     preferences = EmbeddedDocumentField(Zatiq_Business_Preferences)
+
+    meta = {'indexes': [
+        {'fields': ['$business_name', '$website'],
+         'default_language': 'english',
+         'weights': {'business_name': 10, 'website': 2}}
+    ]}

@@ -267,3 +267,57 @@ class ZatiqUsersMongoDBClient(object):
                 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}}
             photos_list.append(photo_info)
         return(photos_list)
+
+    def get_restaurant_by_name(self, api_token, name):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                restaurant_by_name = Zatiq_Businesses.objects.search_text(name)
+            except Exception as e:
+                return("Error \n %s" % (e))
+            
+            if len(restaurant_by_name) > 0:
+                restaurant_info = self.generate_restaurants_list(restaurant_by_name)
+                return(restaurant_info)
+            else:
+                return('Did not find any restaurants with that name')
+        else:
+            return('Could not authenticate')
+
+    def generate_restaurants_list(self, restaurants):
+        restaurant_list = []
+        for restaurant in range(len(restaurants)):
+            restaurant_id = restaurants[restaurant].id
+            email = restaurants[restaurant].business_email
+            name = restaurants[restaurant].business_name
+            website = restaurants[restaurant].website
+            hours = self.generate_business_hours(restaurants[restaurant].hours)
+            number = restaurants[restaurant].number
+            features = {'delivery': restaurants[restaurant].delivery, 'takeout': restaurants[restaurant].takeout, 'reservation': restaurants[restaurant].reservation, 'patio': restaurants[restaurant].patio, 'wheelchair_accessible': restaurants[restaurant].wheelchair_accessible}
+            image = {'base64': restaurants[restaurant].image, 'image_aspect_ratio': restaurants[restaurant].image_aspect_ratio}
+            address = restaurants[restaurant].address
+            restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
+            restaurant_list.append(restaurant_info)
+        return(restaurant_list)
+
+    def generate_business_hours(self, business):
+        hours_dict = {'start': {
+            'monday': business.monday_start,
+            'tuesday': business.tuesday_start,
+            'wednesday': business.wednesday_start,
+            'thursday': business.thursday_start,
+            'friday': business.friday_start,
+            'saturday': business.saturday_start,
+            'sunday': business.sunday_start
+        }, 'end': {
+            'monday': business.monday_end,
+            'tuesday': business.tuesday_end,
+            'wednesday': business.wednesday_end,
+            'thursday': business.thursday_end,
+            'friday': business.friday_end,
+            'saturday': business.saturday_end,
+            'sunday': business.sunday_end
+        }}
+        return(hours_dict)
