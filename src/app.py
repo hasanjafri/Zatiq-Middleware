@@ -24,8 +24,9 @@ def login_as_user():
         zatiq_users = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
         user_auth_token = jsonData['accessToken']
+        user_email = jsonData['email']
         login_method = jsonData['method']
-        response = zatiq_users.user_register(user_auth_token, login_method)
+        response = zatiq_users.user_register(user_auth_token, login_method, user_email)
         return(jsonify(user_name=response[0], user_email=response[1], api_token=response[2]))
 
 @app.route('/business/register/', methods=['POST'])
