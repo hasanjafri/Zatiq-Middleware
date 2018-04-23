@@ -72,7 +72,7 @@ class ZatiqReviewsMongoDBClient(object):
             image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
             rating = reviews[review].rating
             date_created = reviews[review].date_created
-            review_info = {'restaurant_id': str(restaurant_id), 'restaurant_name': restaurant_name, 'food_item_id': food_item_id,
+            review_info = {'restaurant_id': str(restaurant_id), 'restaurant_name': restaurant_name, 'food_item_id': str(food_item_id),
                 'food_item_name': food_item_name, 'text': text, 'image': image, 'rating': rating, 'date_created': date_created}
             reviews_list.append(review_info)
         return(reviews_list)
