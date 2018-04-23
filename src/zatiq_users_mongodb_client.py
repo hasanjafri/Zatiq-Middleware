@@ -150,7 +150,7 @@ class ZatiqUsersMongoDBClient(object):
             api_token = self.generate_zatiq_api_token()
 
             if method == 'google':
-                if self.check_user_exists(user_email, user_id, method, authToken) == False:
+                if self.check_user_exists(user_id, user_email, method, authToken) == False:
                     user_register = Zatiq_Users.objects(auth_token=authToken).update_one(upsert=True, set__user_email=user_email, set__user_name=user_name, set__google_id=user_id, set__zatiq_token=api_token,
                         set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
                         set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
@@ -159,7 +159,7 @@ class ZatiqUsersMongoDBClient(object):
                     return(self.user_login(authToken, user_email, method))
 
             if method == 'facebook':
-                if self.check_user_exists(user_email, user_id, method, authToken) == False:
+                if self.check_user_exists(user_id, user_email, method, authToken) == False:
                     user_register = Zatiq_Users.objects(auth_token=authToken).update_one(upsert=True, set__user_email=user_email, set__user_name=user_name, set__facebook_id=user_id, set__zatiq_token=api_token,
                         set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
                         set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
