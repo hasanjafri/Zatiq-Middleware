@@ -11,5 +11,5 @@ class Zatiq_Reviews(Document):
    text = StringField(required=True)
    image = StringField(required=True)
    image_aspect_ratio = StringField(required=True)
-   rating = StringField(required=True, default='0.00')
+   rating = IntField(default=0)
    date_created = DateTimeField(default=datetime.datetime.utcnow)
