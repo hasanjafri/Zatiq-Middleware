@@ -15,7 +15,7 @@ class Zatiq_Businesses(Document):
     zatiq_token = StringField(required=True)
     hours = EmbeddedDocumentField(Zatiq_Business_Hours)
     date_created = DateTimeField(default=datetime.datetime.utcnow)
-    date_modified = DateTimeField(default=datetime.datetime.utcnow)
+    date_accessed = DateTimeField(default=datetime.datetime.utcnow)
     price_range = StringField(required=False)
     average_food_rating = StringField(required=False)
     delivery = BooleanField(required=True)
@@ -31,3 +31,9 @@ class Zatiq_Businesses(Document):
          'default_language': 'english',
          'weights': {'business_name': 10, 'website': 2}}
     ]}
+
+    def save(self, *args, **kwargs):
+        if not self.date_created:
+            self.date_created = datetime.datetime.utcnow()
+        self.date_accessed = datetime.datetime.utcnow()
+        return(super(Zatiq_Businesses, self).save(*args, **kwargs))

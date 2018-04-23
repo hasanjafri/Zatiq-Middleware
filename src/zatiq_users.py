@@ -15,3 +15,9 @@ class Zatiq_Users(Document):
     date_accessed = DateTimeField(default=datetime.datetime.utcnow)
     preferences = EmbeddedDocumentField(Zatiq_User_Preferences)
     history = EmbeddedDocumentListField(Zatiq_User_History)
+
+    def save(self, *args, **kwargs):
+        if not self.date_created:
+            self.date_created = datetime.datetime.utcnow()
+        self.date_accessed = datetime.datetime.utcnow()
+        return(super(Zatiq_Users, self).save(*args, **kwargs))
