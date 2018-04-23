@@ -282,7 +282,7 @@ class ZatiqUsersMongoDBClient(object):
                 restaurant_info = self.generate_restaurants_list(restaurant_by_name)
                 return(restaurant_info)
             else:
-                return('Did not find any restaurants with that name')
+                return([])
         else:
             return('Could not authenticate')
 
