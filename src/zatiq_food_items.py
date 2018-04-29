@@ -20,3 +20,9 @@ class Zatiq_Food_Items(Document):
    date_created = DateTimeField(default=datetime.datetime.utcnow)
    views = IntField(default=1)
 
+   meta = {'indexes': [
+       {'fields': ['$item_name', '$overview'],
+        'default_language': 'english',
+        'weights': {'item_name': 10, 'overview': 2}}
+   ]}
+

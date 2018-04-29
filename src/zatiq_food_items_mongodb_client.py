@@ -101,6 +101,28 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return([])
         else:
             return('Could not authenticate')
+
+    def find_food_grid_by_name(self, api_token, name):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                zatiq_food_items = Zatiq_Food_Items.objects.search_text(name)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            if len(zatiq_food_items) > 0:
+                if len(zatiq_food_items) > 25:
+                    food_items_dict = self.generate_food_items_dict(zatiq_food_items[0:25])
+                    return(food_items_dict)
+                else:
+                    food_items_dict = self.generate_food_items_dict(zatiq_food_items)
+                    return(food_items_dict)
+            else:
+                return([])
+        else:
+            return('Could not authenticate')
                 
     def check_valid_api_token(self, api_token):
         try:

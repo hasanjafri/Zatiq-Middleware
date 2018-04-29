@@ -179,7 +179,7 @@ class ZatiqBusinessesMongoDBClient(object):
             website = get_business_info[0].website
             address = get_business_info[0].address
             number = get_business_info[0].number
-            features = {'delivery': get_business_info[0].delivery, 'takeout': get_business_info[0].takeout, 'reservation': get_business_info[0].reservation, 'patio': get_business_info[0].patio, 'wheelchair_accessible': get_business_info[0].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
+            features = {'delivery': get_business_info[0].delivery, 'takeout': get_business_info[0].takeout, 'reservation': get_business_info[0].reservation, 'patio': get_business_info[0].patio, 'wheelchair_accessible': get_business_info[0].wheelchair_accessible, 'parking': get_business_info[0].parking, 'buffet': get_business_info[0].buffet, 'family_friendly': get_business_info[0].family_friendly, 'pescetarian_friendly': get_business_info[0].pescetarian_friendly, 'wifi': get_business_info[0].wifi}
             image = {'base64': get_business_info[0].image, 'image_aspect_ratio': get_business_info[0].image_aspect_ratio}
             hours = self.generate_business_hours(get_business_info[0].hours)
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}

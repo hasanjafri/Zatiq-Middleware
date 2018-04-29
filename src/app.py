@@ -346,3 +346,13 @@ def get_food_grid():
         api_token = jsonData['api_token']
         response = zatiq_food_items.find_food_grid(api_token)
         return(jsonify(food_items=response))
+
+@app.route('/food/grid/name/', methods=['POST'])
+def get_food_grid_by_name():
+    if request.method == 'POST':
+        zatiq_food_items = ZatiqFoodItemsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        text = jsonData['text']
+        response = zatiq_food_items.find_food_grid_by_name(api_token, text)
+        return(jsonify(response=response))
