@@ -269,7 +269,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
-                    return('Temporarily Unavailable')
+                    return([])
 
             elif button == 'top_picks':
                 try:
@@ -281,7 +281,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
-                    return('Temporarily Unavailable')
+                    return([])
 
             elif button == 'newest':
                 try:
@@ -293,7 +293,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
-                    return('Temporarily Unavailable')
+                    return([])
 
             elif button == 'surprise_me':
                 try:
@@ -305,7 +305,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)  
                 else:
-                    return('Temporarily Unavailable')
+                    return([])
 
             else:
                 return('Category not found')
