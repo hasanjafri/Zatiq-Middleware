@@ -98,7 +98,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                     food_items_dict = self.generate_food_items_dict(zatiq_food_items)
                     return(food_items_dict)
             else:
-                return('Could not find any food items. Please try again.')
+                return([])
         else:
             return('Could not authenticate')
                 
