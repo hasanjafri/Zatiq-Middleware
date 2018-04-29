@@ -295,7 +295,7 @@ class ZatiqUsersMongoDBClient(object):
             website = restaurants[restaurant].website
             hours = self.generate_business_hours(restaurants[restaurant].hours)
             number = restaurants[restaurant].number
-            features = {'delivery': restaurants[restaurant].delivery, 'takeout': restaurants[restaurant].takeout, 'reservation': restaurants[restaurant].reservation, 'patio': restaurants[restaurant].patio, 'wheelchair_accessible': restaurants[restaurant].wheelchair_accessible}
+            features = {'delivery': restaurants[restaurant].delivery, 'takeout': restaurants[restaurant].takeout, 'reservation': restaurants[restaurant].reservation, 'patio': restaurants[restaurant].patio, 'wheelchair_accessible': restaurants[restaurant].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
             image = {'base64': restaurants[restaurant].image, 'image_aspect_ratio': restaurants[restaurant].image_aspect_ratio}
             address = restaurants[restaurant].address
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}

@@ -179,7 +179,7 @@ class ZatiqBusinessesMongoDBClient(object):
             website = get_business_info[0].website
             address = get_business_info[0].address
             number = get_business_info[0].number
-            features = {'delivery': get_business_info[0].delivery, 'takeout': get_business_info[0].takeout, 'reservation': get_business_info[0].reservation, 'patio': get_business_info[0].patio, 'wheelchair_accessible': get_business_info[0].wheelchair_accessible}
+            features = {'delivery': get_business_info[0].delivery, 'takeout': get_business_info[0].takeout, 'reservation': get_business_info[0].reservation, 'patio': get_business_info[0].patio, 'wheelchair_accessible': get_business_info[0].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
             image = {'base64': get_business_info[0].image, 'image_aspect_ratio': get_business_info[0].image_aspect_ratio}
             hours = self.generate_business_hours(get_business_info[0].hours)
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
@@ -199,7 +199,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
                 set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
                 set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
-                set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'])
+                set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelchair_accessible'], set__parking=features['parking'], set__buffet=features['buffet'], set__family_friendly=features['family_friendly'], set__pescetarian_friendly=features['pescetarian_friendly'], set__wifi=features['wifi'])
             except Exception as e:
                 return("Error \n %s" % (e))
             zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
@@ -275,7 +275,7 @@ class ZatiqBusinessesMongoDBClient(object):
              set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
              set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
              set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
-             set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelChair'],
+             set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelchair_accessible'], set__parking=features['parking'], set__buffet=features['buffet'], set__family_friendly=features['family_friendly'], set__pescetarian_friendly=features['pescetarian_friendly'], set__wifi=features['wifi'],
              set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
              set__preferences__gluten_free=False, set__preferences__nuts_allergy=True, set__preferences__lactose_intolerant=False)
             return(self.business_login(business_email, business_password))
