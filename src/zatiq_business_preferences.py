@@ -12,4 +12,9 @@ class Zatiq_Business_Preferences(EmbeddedDocument):
     gluten_free = BooleanField(required=True)
     nuts_allergy = BooleanField(required=True)
     lactose_intolerant = BooleanField(required=True)
-
+    milk_allergy = BooleanField(required=True)
+    eggs_allergy = BooleanField(required=True)
+    fish_allergy = BooleanField(required=True)
+    crustacean_allergy = BooleanField(required=True)
+    wheat_allergy = BooleanField(required=True)
+    soybeans_allergy = BooleanField(required=True)
