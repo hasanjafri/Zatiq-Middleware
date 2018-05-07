@@ -10,7 +10,6 @@ class Zatiq_Business_Preferences(EmbeddedDocument):
     vegan = BooleanField(required=True)
     vegetarian = BooleanField(required=True)
     gluten_free = BooleanField(required=True)
-    nuts_allergy = BooleanField(required=True)
     lactose_intolerant = BooleanField(required=True)
     milk_allergy = BooleanField(required=True)
     eggs_allergy = BooleanField(required=True)
