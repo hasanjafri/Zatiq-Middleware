@@ -18,3 +18,8 @@ class Zatiq_Business_Preferences(EmbeddedDocument):
     crustacean_allergy = BooleanField(required=True)
     wheat_allergy = BooleanField(required=True)
     soybeans_allergy = BooleanField(required=True)
+    jain = BooleanField(required=True)
+    omnivore = BooleanField(required=True)
+    pescatarian = BooleanField(required=True)
+    peanuts_allergy = BooleanField(required=True)
+    treenuts_allergy = BooleanField(required=True)
