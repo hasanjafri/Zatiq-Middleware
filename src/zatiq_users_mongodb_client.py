@@ -220,7 +220,7 @@ class ZatiqUsersMongoDBClient(object):
                 try:
                     Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
                         set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
-                        set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'], set__preferences__nuts_allergy=preferences['nuts_allergy'],
+                        set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'],
                         set__preferences__lactose_intolerant=preferences['lactose_intolerant'], set__preferences__milk_allergy=preferences['milk_allergy'], set__preferences__eggs_allergy=preferences['eggs_allergy'],
                         set__preferences__fish_allergy=preferences['fish_allergy'], set__preferences__crustacean_allergy=preferences['crustacean_allergy'], set__preferences__wheat_allergy=preferences['wheat_allergy'], set__preferences__soybeans_allergy=preferences['soybeans_allergy'],
                         set__preferences__jain=preferences['jain'], set__preferences__omnivore=preferences['omnivore'], set__preferences__pescatarian=preferences['pescatarian'], set__preferences__peanuts_allergy=preferences['peanuts_allergy'], set__preferences__treenuts_allergy=preferences['treenuts_allergy'])
