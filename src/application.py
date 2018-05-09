@@ -5,7 +5,7 @@ from zatiq_reviews_mongodb_client import ZatiqReviewsMongoDBClient
 from zatiq_food_items_mongodb_client import ZatiqFoodItemsMongoDBClient
 from mongoengine import *
 
-app = Flask(__name__)
+application = Flask(__name__)
 connect('zatiq_database', host='165.227.43.65')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
@@ -356,3 +356,7 @@ def get_food_grid_by_name():
         text = jsonData['text']
         response = zatiq_food_items.find_food_grid_by_name(api_token, text)
         return(jsonify(response=response))
+
+if __name__ == "__main__":
+    application.debug = True
+    application.run()
