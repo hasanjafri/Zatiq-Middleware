@@ -145,10 +145,11 @@ def add_food_item_as_business():
         item_name = jsonData['item_name']
         tags = jsonData['tags']
         meat = jsonData['meat']
+        calories = jsonData['calories']
         seafood = jsonData['seafood']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
-        response = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood)
+        response = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories)
         return(jsonify(response=response))
 
 @application.route('/restaurant/menu/add/', methods=['POST'])
@@ -247,6 +248,7 @@ def edit_food_item():
         tags = jsonData['tags']
         meat = jsonData['meat']
         seafood = jsonData['seafood']
+        calories = jsonData['calories']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
         response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood)
@@ -355,6 +357,15 @@ def get_food_grid_by_name():
         api_token = jsonData['api_token']
         text = jsonData['text']
         response = zatiq_food_items.find_food_grid_by_name(api_token, text)
+        return(jsonify(response=response))
+
+@application.route('/restaurants/nearby/', methods=['POST'])
+def get_nearby_restaurants():
+    if request.method == 'POST':
+        zatiq_restaurants = ZatiqUsersMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        response = zatiq_restaurants.get_nearby_restaurants(api_token)
         return(jsonify(response=response))
 
 if __name__ == "__main__":

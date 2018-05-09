@@ -296,6 +296,29 @@ class ZatiqUsersMongoDBClient(object):
         else:
             return('Could not authenticate')
 
+    def get_nearby_restaurants(self, api_token):
+        if not api_token:
+            return('Could not authenticate')
+
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                zatiq_food_items = Zatiq_Food_Items.objects()
+            except Exception as e:
+                return("Error \n %s" % (e))
+            
+            if len(zatiq_food_items) > 0:
+                if len(zatiq_food_items) > 10:
+                    restaurants = random.sample(zatiq_food_items, 10)
+                    restaurants_list = self.generate_restaurants_list(restaurants)
+                    return(restaurants_list)
+                else:
+                    restaurants_list = self.generate_restaurants_list(restaurants)
+                    return(restaurants_list)
+            else:
+                return([])
+        else:
+            return('Could not authenticate')
+
     def generate_restaurants_list(self, restaurants):
         restaurant_list = []
         for restaurant in range(len(restaurants)):
