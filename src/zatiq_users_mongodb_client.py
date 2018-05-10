@@ -302,7 +302,7 @@ class ZatiqUsersMongoDBClient(object):
 
         if self.check_valid_api_token(api_token) == True:
             try:
-                zatiq_food_items = Zatiq_Food_Items.objects()
+                zatiq_food_items = Zatiq_Businesses.objects()
             except Exception as e:
                 return("Error \n %s" % (e))
             
