@@ -312,7 +312,7 @@ class ZatiqUsersMongoDBClient(object):
                     restaurants_list = self.generate_restaurants_list(restaurants)
                     return(restaurants_list)
                 else:
-                    restaurants_list = self.generate_restaurants_list(restaurants)
+                    restaurants_list = self.generate_restaurants_list(zatiq_food_items)
                     return(restaurants_list)
             else:
                 return([])
