@@ -13,7 +13,7 @@ class Zatiq_Food_Items(Document):
    image_aspect_ratio = StringField(required=True)
    tags = EmbeddedDocumentField(Zatiq_Food_Item_Tags)
    is_beverage = BooleanField(default=False)
-   calories = DecimalField(precision=2, rounding='ROUND_HALF_UP', required=True)
+   calories = IntField(required=True)
    item_price = DecimalField(precision=2, rounding='ROUND_HALF_UP', default=0.00)
    discount_price = DecimalField(precision=2, rounding='ROUND_HALF_UP', default=0.00)
    average_review = StringField(default='0.00')

@@ -251,7 +251,7 @@ def edit_food_item():
         calories = jsonData['calories']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
-        response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood)
+        response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
         return(jsonify(response=response[0], food_item_id=response[1]))
 
 @application.route('/user/preferences/', methods=['POST'])
