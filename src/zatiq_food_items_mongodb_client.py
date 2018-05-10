@@ -216,7 +216,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             meats = self.generate_meats_dict(food_items[food_item].tags.meat)
             seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
             calories = food_items[food_item].calories
-            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': restaurant_info, 'item_name': item_name, 'meal_type': meal_types, 'item_price': str(item_price), 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods, 'calories': calories}
+            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': restaurant_info, 'item_name': item_name, 'meal_type': meal_types, 'item_price': str(item_price), 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods, 'calories': str(calories)}
             food_items_list.append(food_item_info)
         return(food_items_list)
 
