@@ -23,6 +23,7 @@ def login_as_user():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
+        print(jsonData)
         user_auth_token = jsonData['accessToken']
         user_email = jsonData['email']
         login_method = jsonData['method']
