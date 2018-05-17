@@ -48,7 +48,7 @@ class ZatiqAWSS3Client(object):
 
     def verify_upload_succeeded(self, key):
         check_object_exists = self.s3_client.list_objects_v2(Bucket=S3_BUCKET, Prefix=key)
-        if check_unique_key['KeyCount'] >= 1:
+        if check_object_exists['KeyCount'] >= 1:
             return(True)
         else:
             return(False)
