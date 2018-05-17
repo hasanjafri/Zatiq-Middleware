@@ -8,7 +8,7 @@ S3_BUCKET = 'zatiqbusiness-images'
 
 class ZatiqAWSS3Client(object):
     def __init__(self):
-        self.s3_client = boto3.client("s3", config=botocore.client.Config(signature_version='s3v4'))
+        self.s3_client = boto3.client("s3", config=botocore.client.Config(signature_version='s3v4', region_name='ca-central-1'))
 
     def generate_unique_image_key(self):
         image_key = secrets.token_urlsafe(16)
