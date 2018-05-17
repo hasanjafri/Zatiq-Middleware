@@ -4,14 +4,19 @@ import random
 from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_users import Zatiq_Users
+from zatiq_aws_s3_client import ZatiqAWSS3Client
 
 class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return("Invalid image")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             food_item_id = self.generate_food_item_id()
             try:
-                Zatiq_Food_Items.objects(id=food_item_id).update_one(upsert=True, restaurant_id=restaurant, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
+                Zatiq_Food_Items.objects(id=food_item_id).update_one(upsert=True, restaurant_id=restaurant, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
                 set__tags__indian=tags['indian'], set__tags__greek=tags['greek'], set__tags__chinese=tags['chinese'], set__tags__japanese=tags['japanese'], set__tags__korean=tags['korean'], set__tags__sushi=tags['sushi'], set__tags__dessert=tags['dessert'], set__tags__burger=tags['burger'], set__tags__pizza=tags['pizza'],
                 set__tags__fast_food=tags['fast_food'], set__tags__halal=tags['halal'], set__tags__caribbean=tags['caribbean'], set__tags__mexican=tags['mexican'], set__tags__spicy=tags['spicy'], set__tags__fine_food=tags['fine_food'], set__tags__kosher=tags['kosher'], set__tags__healthy=tags['healthy'], set__tags__vegan=tags['vegan'], set__tags__vegetarian=tags['vegetarian'],
                 set__tags__gluten_free=tags['gluten_free'], set__tags__italian=tags['italian'], set__tags__middle_eastern=tags['middle_eastern'], set__tags__snack=tags['snack'], set__tags__thai=tags['thai'], set__tags__canadian=tags['canadian'], set__tags__vietnamese=tags['vietnamese'], set__tags__has_nuts=tags['has_nuts'], set__tags__lactose_free=tags['lactose_free'],
@@ -28,9 +33,13 @@ class ZatiqFoodItemsMongoDBClient(object):
     
     def update_food_item(self, api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return("Invalid image")
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
-                Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image['base64'], image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
+                Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
                 set__tags__indian=tags['indian'], set__tags__greek=tags['greek'], set__tags__chinese=tags['chinese'], set__tags__japanese=tags['japanese'], set__tags__korean=tags['korean'], set__tags__sushi=tags['sushi'], set__tags__dessert=tags['dessert'], set__tags__burger=tags['burger'], set__tags__pizza=tags['pizza'],
                 set__tags__fast_food=tags['fast_food'], set__tags__halal=tags['halal'], set__tags__caribbean=tags['caribbean'], set__tags__mexican=tags['mexican'], set__tags__spicy=tags['spicy'], set__tags__fine_food=tags['fine_food'], set__tags__kosher=tags['kosher'], set__tags__healthy=tags['healthy'], set__tags__vegan=tags['vegan'], set__tags__vegetarian=tags['vegetarian'],
                 set__tags__gluten_free=tags['gluten_free'], set__tags__italian=tags['italian'], set__tags__middle_eastern=tags['middle_eastern'], set__tags__snack=tags['snack'], set__tags__thai=tags['thai'], set__tags__canadian=tags['canadian'], set__tags__vietnamese=tags['vietnamese'], set__tags__has_nuts=tags['has_nuts'], set__tags__lactose_free=tags['lactose_free'],
@@ -241,6 +250,28 @@ class ZatiqFoodItemsMongoDBClient(object):
         seafoods_dict = {'clam': sea.clam, 'pangasius': sea.pangasius, 'cod': sea.cod, 'crab': sea.crab, 'catfish': sea.catfish, 'alaska_pollack': sea.alaska_pollack, 'tilapia': sea.tilapia, 'salmon': sea.salmon, 'tuna': sea.tuna, 'shrimp': sea.shrimp,
             'lobster': sea.lobster, 'eel': sea.eel, 'trout': sea.trout, 'pike': sea.pike, 'shark': sea.shark}
         return(seafoods_dict)
+
+    def get_user_preferences(self, api_token):
+        preferences_list = []
+
+        try:
+            zatiq_user = Zatiq_Users.objects(zatiq_token=api_token)
+        except Exception as e:
+            return("Error \n %s" % (e))
+
+        if len(zatiq_user) > 0:
+            for preference in zatiq_user[0].preferences.keys():
+                if zatiq_user[0].preferences[preference] == True:
+                    preferences_list.append(str(preference))
+            return(preferences_list)
+        else:
+            try:
+                zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            if len(zatiq_business) > 0:
+                for preference in zatiq_business[0].preferences
 
     def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
         if not api_token:
