@@ -57,7 +57,7 @@ class ZatiqAWSS3Client(object):
         unique_key = self.generate_unique_image_key()
         imagepath = self.save_b64_image(b64str)
         try:
-            self.s3_client.upload_file(Filename=imagepath, Bucket=S3_BUCKET, Key=unique_key, CreateBucketConfiguration={'LocationConstraint': 'ca-central-1'})
+            self.s3_client.upload_file(Filename=imagepath, Bucket=S3_BUCKET, Key=unique_key)
         except boto3.exceptions.S3UploadFailedError as e:
             return("Error \n %s" % (e))
 
