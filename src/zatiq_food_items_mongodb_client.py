@@ -271,7 +271,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
 
             if len(zatiq_business) > 0:
-                for preference in zatiq_business[0].preferences
+                #for preference in zatiq_business[0].preferences
+                pass
 
     def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
         if not api_token:
