@@ -6,6 +6,7 @@ from zatiq_businesses import Zatiq_Businesses
 from zatiq_menus import Zatiq_Menus
 from zatiq_interiors import Zatiq_Interiors
 from zatiq_reviews import Zatiq_Reviews
+from zatiq_aws_s3_client import ZatiqAWSS3Client
 
 class ZatiqBusinessesMongoDBClient(object):
     def generate_zatiq_api_token(self):
@@ -83,10 +84,14 @@ class ZatiqBusinessesMongoDBClient(object):
     
     def upload_menu_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return('Invalid image')
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
                 try:
-                    new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio)
+                    new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image_url, image_aspect_ratio=image_aspect_ratio)
                     new_menu_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
@@ -121,10 +126,14 @@ class ZatiqBusinessesMongoDBClient(object):
 
     def upload_interior_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return('Invalid image')
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
                 try:
-                    new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image, image_aspect_ratio=image_aspect_ratio)
+                    new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image_url, image_aspect_ratio=image_aspect_ratio)
                     new_interior_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
@@ -189,9 +198,13 @@ class ZatiqBusinessesMongoDBClient(object):
 
     def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
         if self.check_valid_api_token(api_token) == True:
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return('Invalid image')
             try:
                 Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
-                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image, set__image_aspect_ratio=image_aspect_ratio,
+                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image_url, set__image_aspect_ratio=image_aspect_ratio,
                 set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
                 set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
                 set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
@@ -266,8 +279,12 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
+            s3 = ZatiqAWSS3Client()
+            image_url = s3.upload_image_to_s3(image)
+            if image_url == 'Upload Failed':
+                return('Invalid image')
             register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
-             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number, set__image=image, set__image_aspect_ratio=image_aspect_ratio,
+             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number, set__image=image_url, set__image_aspect_ratio=image_aspect_ratio,
              set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
              set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
              set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
