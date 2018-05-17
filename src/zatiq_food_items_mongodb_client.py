@@ -10,7 +10,7 @@ class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
             s3 = ZatiqAWSS3Client()
-            image_url = s3.upload_image_to_s3(image)
+            image_url = s3.upload_image_to_s3(image['base64'])
             if image_url == 'Upload Failed':
                 return("Invalid image")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
@@ -34,7 +34,7 @@ class ZatiqFoodItemsMongoDBClient(object):
     def update_food_item(self, api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
             s3 = ZatiqAWSS3Client()
-            image_url = s3.upload_image_to_s3(image)
+            image_url = s3.upload_image_to_s3(image['base64'])
             if image_url == 'Upload Failed':
                 return("Invalid image")
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
