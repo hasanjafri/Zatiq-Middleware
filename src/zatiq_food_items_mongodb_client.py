@@ -285,6 +285,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
             
             if len(food_items) > 0:
+                if len(food_items) > 5:
+                    food_items = random.sample(food_items, 5)
                 food_items_dict = self.generate_food_items_dict(food_items)
                 return(food_items_dict)
             else:
@@ -303,6 +305,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
 
             if len(food_items) > 0:
+                if len(food_items) > 5:
+                    food_items = random.sample(food_items, 5)
                 food_items_dict = self.generate_food_items_dict(food_items)
                 return(food_items_dict)
             else:
@@ -322,6 +326,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
+                    if len(food_items) > 5:
+                        food_items = random.sample(food_items, 5)
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
@@ -334,6 +340,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
+                    if len(food_items) > 5:
+                        food_items = random.sample(food_items, 5)
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
@@ -346,6 +354,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e)) 
 
                 if len(food_items) > 0:
+                    if len(food_items) > 5:
+                        food_items = random.sample(food_items, 5)
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)
                 else:
@@ -358,6 +368,8 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
+                    if len(food_items) > 5:
+                        food_items = random.sample(food_items, 5)
                     food_items_dict = self.generate_food_items_dict(food_items)
                     return(food_items_dict)  
                 else:
