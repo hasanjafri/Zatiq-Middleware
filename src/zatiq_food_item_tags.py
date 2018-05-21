@@ -28,6 +28,7 @@ class Zatiq_Food_Item_Tags(EmbeddedDocument):
     middle_eastern = BooleanField(default=False)
     snack = BooleanField(default=False)
     thai = BooleanField(default=False)
+    has_nuts = BooleanField(default=False)
     canadian = BooleanField(default=False)
     vietnamese = BooleanField(default=False)
     lactose_free = BooleanField(default=False)
