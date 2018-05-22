@@ -63,7 +63,7 @@ class ZatiqAWSS3Client(object):
 
         if self.verify_upload_succeeded(unique_key) == True:
             self.delete_temp_image(imagepath)
-            url = self.s3_client.generate_presigned_url(ClientMethod='get_object', Params={'Bucket': S3_BUCKET, 'Key': unique_key}, ExpiresIn=604800)
+            url = self.s3_client.generate_presigned_url(ClientMethod='get_object', Params={'Bucket': S3_BUCKET, 'Key': unique_key}, ExpiresIn=604799)
             return(url)
         else:
             return("Upload failed")
