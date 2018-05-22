@@ -303,8 +303,7 @@ class ZatiqFoodItemsMongoDBClient(object):
                 food_items = Zatiq_Food_Items.objects.filter(**{'tags__{}'.format(cuisine_type): True})
             except Exception as e:
                 return("Error \n %s" % (e))
-            
-            if self.
+        
             if len(food_items) > 0:
                 food_items_dict = self.generate_food_items_dict(food_items)
                 return(food_items_dict)
