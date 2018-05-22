@@ -101,6 +101,9 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
 
             if len(zatiq_food_items) > 0:
+                #if self.check_user(api_token) == 'user':
+                    #user_preferences = self.get_user_preferences(api_token)
+                    #filtered_food = self.filter_food(zatiq_food_items, user_preferences)
                 if len(zatiq_food_items) > 25:
                     food_items_dict = self.generate_food_items_dict(zatiq_food_items[0:25])
                     return(food_items_dict)
@@ -111,6 +114,20 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return([])
         else:
             return('Could not authenticate')
+
+    def filter_food(self, food_items, preferences):
+        filtered_items = food_items
+        for preference in preferences:
+            for food_item in range(len(filtered_items)):
+                pass
+
+        if 'vegan' in preferences:
+            filtered_items = []
+            for food_item in range(len(food_items)):
+                if food_items[food_item].tags.vegan == True:
+                    filtered_items.append(food_items[food_item])
+                    pass
+
 
     def find_food_grid_by_name(self, api_token, name):
         if not api_token:
@@ -267,14 +284,15 @@ class ZatiqFoodItemsMongoDBClient(object):
                     preferences_list.append(str(preference))
             return(preferences_list)
         else:
-            try:
-                zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
-            except Exception as e:
-                return("Error \n %s" % (e))
+            return([])
 
-            if len(zatiq_business) > 0:
-                #for preference in zatiq_business[0].preferences
-                pass
+    def check_user(self, api_token):
+        try:
+            user_token = Zatiq_Users.objects(zatiq_token=api_token)
+        except Exception as e:
+            return("Error \n %s" % (e))
+        if len(user_token) > 0:
+            return('user')
 
     def get_food_items_by_cuisine_type(self, api_token, cuisine_type):
         if not api_token:
@@ -286,6 +304,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
             
+            if self.
             if len(food_items) > 0:
                 food_items_dict = self.generate_food_items_dict(food_items)
                 return(food_items_dict)
