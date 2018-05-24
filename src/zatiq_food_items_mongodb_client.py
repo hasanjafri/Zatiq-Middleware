@@ -4,15 +4,14 @@ import random
 from zatiq_food_items import Zatiq_Food_Items
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_users import Zatiq_Users
-from zatiq_aws_s3_client import ZatiqAWSS3Client
+from requests import post
 
 class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
-            s3 = ZatiqAWSS3Client()
-            image_url = s3.upload_image_to_s3(image['base64'])
-            if image_url == 'Upload Failed':
-                return("Invalid image")
+            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            if 'Error' in image_url:
+                return("Invalid image provided")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             food_item_id = self.generate_food_item_id()
             try:
@@ -33,10 +32,9 @@ class ZatiqFoodItemsMongoDBClient(object):
     
     def update_food_item(self, api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
-            s3 = ZatiqAWSS3Client()
-            image_url = s3.upload_image_to_s3(image['base64'])
-            if image_url == 'Upload Failed':
-                return("Invalid image")
+            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            if 'Error' in image_url:
+                return("Invalid image provided")
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
                 Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
@@ -56,10 +54,16 @@ class ZatiqFoodItemsMongoDBClient(object):
     def delete_food_item(self, api_token, food_item_id):
         if self.check_valid_api_token(api_token) == True:
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+            local_image_path = Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id)[0].image
             try:
                 Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).delete()
             except Exception as e:
                 return("Error \n %s" %(e))
+                
+            delete_image = post("http://167.99.177.29:5000/delete/", data={'imagepath': local_image_path}).json()['response']
+            if 'Error' in delete_image:
+                with open('./food_delete_failed.txt', 'a') as file:
+                    file.write('(food_id:{}, restaurant_id:{})\n'.format(food_item_id, restaurant_id))
             return('Food item deleted')
         else:
             return('Could not authenticate')

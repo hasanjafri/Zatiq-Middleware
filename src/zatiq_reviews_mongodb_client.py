@@ -3,7 +3,6 @@ from zatiq_reviews import Zatiq_Reviews
 from zatiq_users import Zatiq_Users
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_food_items import Zatiq_Food_Items
-from zatiq_aws_s3_client import ZatiqAWSS3Client
 
 class ZatiqReviewsMongoDBClient(object):
     def check_valid_api_token(self, api_token):
@@ -50,10 +49,9 @@ class ZatiqReviewsMongoDBClient(object):
             return("You must select a rating out of 5 stars")
 
         if self.check_valid_api_token(api_token) == True:
-            s3 = ZatiqAWSS3Client()
-            image_url = s3.upload_image_to_s3(image)
-            if image_url == 'Upload Failed':
-                return('Invalid image')
+            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            if 'Error' in image_url:
+                return("Invalid image provided")
             reviewer_id = self.get_reviewer_id_by_api_token(api_token)
             if reviewer_id != None:  
                 try:
