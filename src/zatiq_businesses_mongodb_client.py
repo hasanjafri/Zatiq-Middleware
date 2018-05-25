@@ -296,7 +296,8 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            #image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            print(post("http://167.99.177.29:5000/upload/", data={'imagedata': image}))
             if 'Error' in image_url:
                 return("Invalid image provided")
             register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
