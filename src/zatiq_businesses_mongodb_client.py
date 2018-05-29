@@ -274,6 +274,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 business_name = check_business_login[0].business_name
                 image = check_business_login[0].image
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
+                print(business_name, new_api_token, image, image_aspect_ratio)
                 return([business_name, new_api_token, image, image_aspect_ratio])
             else:
                 return(['Incorrect Password!'])

@@ -7,8 +7,8 @@ from requests import post
 from mongoengine import *
 
 application = Flask(__name__)
-connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
-#connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
+#connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
+connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
 cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',
