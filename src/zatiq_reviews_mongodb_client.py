@@ -72,7 +72,7 @@ class ZatiqReviewsMongoDBClient(object):
             food_item_name = self.get_food_name_by_id(reviews[review].food_item_id.id)
             food_item_id = reviews[review].food_item_id
             text = reviews[review].text
-            image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
+            image = {'base64': 'http://167.99.177.29:5000/image/'+reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
             rating = reviews[review].rating
             date_created = reviews[review].date_created
             review_info = {'restaurant_id': str(restaurant_id), 'restaurant_name': restaurant_name, 'food_item_id': str(food_item_id),

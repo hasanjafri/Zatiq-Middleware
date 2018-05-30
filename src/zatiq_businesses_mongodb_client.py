@@ -60,7 +60,7 @@ class ZatiqBusinessesMongoDBClient(object):
             image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
             rating = reviews[review].rating
             date_created = reviews[review].date_created
-            review_info = {'restaurant_id': str(restaurant_id), 'food_item_id': str(food_item_id), 'text': text, 'image': image, 'rating': rating, 'date_created': date_created}
+            review_info = {'restaurant_id': str(restaurant_id), 'food_item_id': str(food_item_id), 'text': text, 'image': 'http://167.99.177.29:5000/image/'+image, 'rating': rating, 'date_created': date_created}
             reviews_list.append(review_info)
         return(reviews_list)
 
@@ -130,7 +130,7 @@ class ZatiqBusinessesMongoDBClient(object):
             image_id = str(photos[photo].id)
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
-            photo_info = {'image_id': image_id, 'image': {'base64': base64, 'image_aspect_ratio': image_aspect_ratio}}
+            photo_info = {'image_id': image_id, 'image': {'base64': 'http://167.99.177.29:5000/image/'+base64, 'image_aspect_ratio': image_aspect_ratio}}
             photos_list.append(photo_info)
         return(photos_list)
 
@@ -208,7 +208,7 @@ class ZatiqBusinessesMongoDBClient(object):
             address = get_business_info[0].address
             number = get_business_info[0].number
             features = {'delivery': get_business_info[0].delivery, 'takeout': get_business_info[0].takeout, 'reservation': get_business_info[0].reservation, 'patio': get_business_info[0].patio, 'wheelchair_accessible': get_business_info[0].wheelchair_accessible, 'parking': get_business_info[0].parking, 'buffet': get_business_info[0].buffet, 'family_friendly': get_business_info[0].family_friendly, 'pescetarian_friendly': get_business_info[0].pescetarian_friendly, 'wifi': get_business_info[0].wifi}
-            image = {'base64': get_business_info[0].image, 'image_aspect_ratio': get_business_info[0].image_aspect_ratio}
+            image = {'base64': 'http://167.99.177.29:5000/image/'+get_business_info[0].image, 'image_aspect_ratio': get_business_info[0].image_aspect_ratio}
             hours = self.generate_business_hours(get_business_info[0].hours)
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             return(restaurant_info)
@@ -217,7 +217,8 @@ class ZatiqBusinessesMongoDBClient(object):
 
     def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            old_image_url = Zatiq_Businesses.objects(zatiq_token=api_token)[0].image
+            image_url = post("http://167.99.177.29:5000/update/", data={'imagedata': image, 'imagepath': old_image_url}).json()['response']
             if 'Error' in image_url:
                 return("Invalid image provided")
             try:
@@ -236,7 +237,7 @@ class ZatiqBusinessesMongoDBClient(object):
             zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
             if len(zatiq_business) > 0:
                 new_name = zatiq_business[0].business_name
-                new_image = zatiq_business[0].image
+                new_image = 'http://167.99.177.29:5000/image/'+zatiq_business[0].image
                 new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
                 api_token = zatiq_business[0].zatiq_token
             else:
@@ -273,7 +274,7 @@ class ZatiqBusinessesMongoDBClient(object):
                 except Exception as e:
                     return("Error \n %s" % (e))
                 business_name = check_business_login[0].business_name
-                image = check_business_login[0].image
+                image = 'http://167.99.177.29:5000/image/'+check_business_login[0].image
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
                 logging.warning(business_name, new_api_token, image, image_aspect_ratio)
                 return([business_name, new_api_token, image, image_aspect_ratio])

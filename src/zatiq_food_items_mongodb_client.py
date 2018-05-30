@@ -32,10 +32,11 @@ class ZatiqFoodItemsMongoDBClient(object):
     
     def update_food_item(self, api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+            old_image_url = Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id)[0].image
+            image_url = post("http://167.99.177.29:5000/update/", data={'imagedata': image, 'imagepath': old_image_url}).json()['response']
             if 'Error' in image_url:
                 return("Invalid image provided")
-            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             try:
                 Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
                 set__tags__indian=tags['indian'], set__tags__greek=tags['greek'], set__tags__chinese=tags['chinese'], set__tags__japanese=tags['japanese'], set__tags__korean=tags['korean'], set__tags__sushi=tags['sushi'], set__tags__dessert=tags['dessert'], set__tags__burger=tags['burger'], set__tags__pizza=tags['pizza'],
@@ -198,7 +199,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             hours = self.generate_business_hours(zatiq_business[0].hours)
             number = zatiq_business[0].number
             features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
-            image = {'base64': zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
+            image = {'base64': 'http://167.99.177.29:5000/image/'+zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
             address = zatiq_business[0].address
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             return(restaurant_info)
@@ -237,7 +238,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             restaurant_info = self.get_restaurant_info(restaurant_id)
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
-            image = food_items[food_item].image
+            image = 'http://167.99.177.29:5000/image/'+food_items[food_item].image
             item_price = food_items[food_item].item_price
             is_beverage = food_items[food_item].is_beverage
             meal_types = self.generate_meals_dict(food_items[food_item].meal_type)
