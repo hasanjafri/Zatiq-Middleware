@@ -9,13 +9,13 @@ from requests import post
 class ZatiqFoodItemsMongoDBClient(object):
     def add_food_item(self, image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories):
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             food_item_id = self.generate_food_item_id()
             try:
-                Zatiq_Food_Items.objects(id=food_item_id).update_one(upsert=True, restaurant_id=restaurant, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
+                Zatiq_Food_Items.objects(id=food_item_id).update_one(upsert=True, restaurant_id=restaurant, item_name=item_name, image=image_url.text, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
                 set__tags__indian=tags['indian'], set__tags__greek=tags['greek'], set__tags__chinese=tags['chinese'], set__tags__japanese=tags['japanese'], set__tags__korean=tags['korean'], set__tags__sushi=tags['sushi'], set__tags__dessert=tags['dessert'], set__tags__burger=tags['burger'], set__tags__pizza=tags['pizza'],
                 set__tags__fast_food=tags['fast_food'], set__tags__halal=tags['halal'], set__tags__caribbean=tags['caribbean'], set__tags__mexican=tags['mexican'], set__tags__spicy=tags['spicy'], set__tags__fine_food=tags['fine_food'], set__tags__kosher=tags['kosher'], set__tags__healthy=tags['healthy'], set__tags__vegan=tags['vegan'], set__tags__vegetarian=tags['vegetarian'],
                 set__tags__gluten_free=tags['gluten_free'], set__tags__italian=tags['italian'], set__tags__middle_eastern=tags['middle_eastern'], set__tags__snack=tags['snack'], set__tags__thai=tags['thai'], set__tags__canadian=tags['canadian'], set__tags__vietnamese=tags['vietnamese'], set__tags__has_soybeans=tags['has_soybeans'], set__tags__has_eggs=tags['has_eggs'], set__tags__jain=tags['jain'], set__tags__has_wheat=tags['has_wheat'], set__tags__has_treenuts=tags['has_treenuts'], set__tags__has_peanuts=tags['has_peanuts'], set__tags__lactose_free=tags['lactose_free'],
@@ -34,11 +34,11 @@ class ZatiqFoodItemsMongoDBClient(object):
         if self.check_valid_api_token(api_token) == True:
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             old_image_url = Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id)[0].image
-            image_url = post("http://167.99.177.29:5000/update/", data={'imagedata': image, 'imagepath': old_image_url}).json()['response']
+            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image, 'imagepath': old_image_url})
             if 'Error' in image_url:
                 return("Invalid image provided")
             try:
-                Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image_url, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
+                Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id).update_one(upsert=False, item_name=item_name, image=image_url.text, image_aspect_ratio=image['image_aspect_ratio'], overview=overview, is_beverage=tags['is_beverage'], item_price=item_price, calories=calories,
                 set__tags__indian=tags['indian'], set__tags__greek=tags['greek'], set__tags__chinese=tags['chinese'], set__tags__japanese=tags['japanese'], set__tags__korean=tags['korean'], set__tags__sushi=tags['sushi'], set__tags__dessert=tags['dessert'], set__tags__burger=tags['burger'], set__tags__pizza=tags['pizza'],
                 set__tags__fast_food=tags['fast_food'], set__tags__halal=tags['halal'], set__tags__caribbean=tags['caribbean'], set__tags__mexican=tags['mexican'], set__tags__spicy=tags['spicy'], set__tags__fine_food=tags['fine_food'], set__tags__kosher=tags['kosher'], set__tags__healthy=tags['healthy'], set__tags__vegan=tags['vegan'], set__tags__vegetarian=tags['vegetarian'],
                 set__tags__gluten_free=tags['gluten_free'], set__tags__italian=tags['italian'], set__tags__middle_eastern=tags['middle_eastern'], set__tags__snack=tags['snack'], set__tags__thai=tags['thai'], set__tags__canadian=tags['canadian'], set__tags__vietnamese=tags['vietnamese'], set__tags__has_soybeans=tags['has_soybeans'], set__tags__has_eggs=tags['has_eggs'], set__tags__jain=tags['jain'], set__tags__has_wheat=tags['has_wheat'], set__tags__has_treenuts=tags['has_treenuts'], set__tags__has_peanuts=tags['has_peanuts'], set__tags__lactose_free=tags['lactose_free'],
@@ -61,7 +61,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" %(e))
                 
-            delete_image = post("http://167.99.177.29:5000/delete/", data={'imagepath': local_image_path}).json()['response']
+            delete_image = post("http://167.99.177.29:5000/delete/", json={'imagepath': local_image_path})
             if 'Error' in delete_image:
                 with open('./food_delete_failed.txt', 'a') as file:
                     file.write('(food_id:{}, restaurant_id:{})\n'.format(food_item_id, restaurant_id))

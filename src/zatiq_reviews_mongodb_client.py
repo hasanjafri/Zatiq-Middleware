@@ -3,6 +3,7 @@ from zatiq_reviews import Zatiq_Reviews
 from zatiq_users import Zatiq_Users
 from zatiq_businesses import Zatiq_Businesses
 from zatiq_food_items import Zatiq_Food_Items
+from requests import post
 
 class ZatiqReviewsMongoDBClient(object):
     def check_valid_api_token(self, api_token):
@@ -49,13 +50,13 @@ class ZatiqReviewsMongoDBClient(object):
             return("You must select a rating out of 5 stars")
 
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
             reviewer_id = self.get_reviewer_id_by_api_token(api_token)
             if reviewer_id != None:  
                 try:
-                    Zatiq_Reviews(restaurant_id=restaurant_id, reviewer_id=reviewer_id, food_item_id=food_item_id, text=text, rating=rating, image=image_url, image_aspect_ratio=image_aspect_ratio).save()
+                    Zatiq_Reviews(restaurant_id=restaurant_id, reviewer_id=reviewer_id, food_item_id=food_item_id, text=text, rating=rating, image=image_url.text, image_aspect_ratio=image_aspect_ratio).save()
                 except Exception as e:
                     return("Error \n %s" % (e))
                 return("Review added")

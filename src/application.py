@@ -112,14 +112,14 @@ def add_review_as_user():
         if 'image' in jsonData:
             image = jsonData['image']['base64']
             image_aspect_ratio = jsonData['image']['image_aspect_ratio']
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
         else:
             image = None
             image_aspect_ratio = None
             
-        add_review = zatiq_reviews.add_review(restaurant_id, food_item_id, text, image_url, rating, image_aspect_ratio, api_token)
+        add_review = zatiq_reviews.add_review(restaurant_id, food_item_id, text, image_url.text, rating, image_aspect_ratio, api_token)
         return(jsonify(response=add_review))
 
 @application.route('/user/reviews/all/', methods=['POST'])

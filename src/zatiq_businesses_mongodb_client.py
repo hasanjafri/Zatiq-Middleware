@@ -85,13 +85,13 @@ class ZatiqBusinessesMongoDBClient(object):
     
     def upload_menu_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
                 try:
-                    new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image_url, image_aspect_ratio=image_aspect_ratio)
+                    new_menu_photo = Zatiq_Menus(restaurant_id=restaurant, image=image_url.text, image_aspect_ratio=image_aspect_ratio)
                     new_menu_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
@@ -109,7 +109,7 @@ class ZatiqBusinessesMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
 
-            delete_image = post("http://167.99.177.29:5000/delete/", data={'imagepath': local_image_path}).json()['response']
+            delete_image = post("http://167.99.177.29:5000/delete/", json={'imagepath': local_image_path})
             if 'Error' in delete_image:
                 with open('./menu_delete_failed.txt', 'a') as file:
                     file.write('(menu_item_id:{}, restaurant_id:{})\n'.format(image_id, restaurant_id))
@@ -136,13 +136,13 @@ class ZatiqBusinessesMongoDBClient(object):
 
     def upload_interior_photo(self, image, image_aspect_ratio, api_token):
         if self.check_valid_api_token(api_token) == True:
-            image_url = post("http://167.99.177.29:5000/upload/", data={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
             restaurant = self.get_restaurant_id_by_api_token(api_token)
             if restaurant != None:
                 try:
-                    new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image_url, image_aspect_ratio=image_aspect_ratio)
+                    new_interior_photo = Zatiq_Interiors(restaurant_id=restaurant, image=image_url.text, image_aspect_ratio=image_aspect_ratio)
                     new_interior_photo.save()
                 except Exception as e:
                     return("Error \n %s" % (e))
@@ -160,7 +160,7 @@ class ZatiqBusinessesMongoDBClient(object):
             except Exception as e:
                 return("Error \n %s" % (e))
 
-            delete_image = post("http://167.99.177.29:5000/delete/", data={'imagepath': local_image_path}).json()['response']
+            delete_image = post("http://167.99.177.29:5000/delete/", json={'imagepath': local_image_path})
             if 'Error' in delete_image:
                 with open('./interior_delete_failed.txt', 'a') as file:
                     file.write('(interior_item_id:{}, restaurant_id:{})\n'.format(image_id, restaurant_id))
@@ -218,12 +218,12 @@ class ZatiqBusinessesMongoDBClient(object):
     def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
         if self.check_valid_api_token(api_token) == True:
             old_image_url = Zatiq_Businesses.objects(zatiq_token=api_token)[0].image
-            image_url = post("http://167.99.177.29:5000/update/", data={'imagedata': image, 'imagepath': old_image_url}).json()['response']
+            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image, 'imagepath': old_image_url})
             if 'Error' in image_url:
                 return("Invalid image provided")
             try:
                 Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
-                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image_url, set__image_aspect_ratio=image_aspect_ratio,
+                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image_url.text, set__image_aspect_ratio=image_aspect_ratio,
                 set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
                 set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
                 set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
