@@ -299,11 +299,11 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             encrypted_password = self.encrypt_password(business_password)
             api_token = self.generate_zatiq_api_token()
-            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image}).json()['response']
+            image_url = post("http://167.99.177.29:5000/upload/", json={'imagedata': image})
             if 'Error' in image_url:
                 return("Invalid image provided")
             register_business = Zatiq_Businesses.objects(business_email=business_email).update_one(upsert=True,
-             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number, set__image=image_url, set__image_aspect_ratio=image_aspect_ratio,
+             set__business_password=encrypted_password, set__zatiq_token=api_token, set__business_name=business_name, set__address=address, set__website=website, set__number=number, set__image=image_url.text, set__image_aspect_ratio=image_aspect_ratio,
              set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
              set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
              set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
