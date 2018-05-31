@@ -1,5 +1,4 @@
 from mongoengine import *
-import logging
 import secrets
 from requests import post
 from simplecrypt import encrypt, decrypt
@@ -131,7 +130,6 @@ class ZatiqBusinessesMongoDBClient(object):
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
             photo_info = {'image_id': image_id, 'image': {'base64': 'http://167.99.177.29:5000/image/'+base64, 'image_aspect_ratio': image_aspect_ratio}}
-            logging.debug(photo_info)
             photos_list.append(photo_info)
         return(photos_list)
 
