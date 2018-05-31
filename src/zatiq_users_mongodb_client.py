@@ -271,7 +271,7 @@ class ZatiqUsersMongoDBClient(object):
         photos_list = []
         for photo in range(len(photos)):
             image_id = str(photos[photo].id)
-            base64 = 'http://167.99.177.29:5000/image/'+photos[photo].image
+            base64 = str("http://167.99.177.29:5000/image/"+photos[photo].image)
             image_aspect_ratio = photos[photo].image_aspect_ratio
             photo_info = {'image_id': image_id, 'image': {
                 'base64': base64, 'image_aspect_ratio': image_aspect_ratio}}
@@ -329,7 +329,7 @@ class ZatiqUsersMongoDBClient(object):
             hours = self.generate_business_hours(restaurants[restaurant].hours)
             number = restaurants[restaurant].number
             features = {'delivery': restaurants[restaurant].delivery, 'takeout': restaurants[restaurant].takeout, 'reservation': restaurants[restaurant].reservation, 'patio': restaurants[restaurant].patio, 'wheelchair_accessible': restaurants[restaurant].wheelchair_accessible, 'parking': restaurants[restaurant].parking, 'buffet': restaurants[restaurant].buffet, 'family_friendly': restaurants[restaurant].family_friendly, 'pescetarian_friendly': restaurants[restaurant].pescetarian_friendly, 'wifi': restaurants[restaurant].wifi}
-            image = {'base64': 'http://167.99.177.29:5000/image/'+restaurants[restaurant].image, 'image_aspect_ratio': restaurants[restaurant].image_aspect_ratio}
+            image = {'base64': str("http://167.99.177.29:5000/image/"+restaurants[restaurant].image), 'image_aspect_ratio': restaurants[restaurant].image_aspect_ratio}
             address = restaurants[restaurant].address
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             restaurant_list.append(restaurant_info)

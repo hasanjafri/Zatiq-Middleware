@@ -199,7 +199,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             hours = self.generate_business_hours(zatiq_business[0].hours)
             number = zatiq_business[0].number
             features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
-            image = {'base64': 'http://167.99.177.29:5000/image/'+zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
+            image = {'base64': str("http://167.99.177.29:5000/image/"+zatiq_business[0].image), 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
             
             address = zatiq_business[0].address
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
@@ -239,7 +239,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             restaurant_info = self.get_restaurant_info(restaurant_id)
             item_name = food_items[food_item].item_name
             overview = food_items[food_item].overview
-            image = 'http://167.99.177.29:5000/image/'+food_items[food_item].image
+            image = str("http://167.99.177.29:5000/image/"+food_items[food_item].image)
             item_price = food_items[food_item].item_price
             is_beverage = food_items[food_item].is_beverage
             meal_types = self.generate_meals_dict(food_items[food_item].meal_type)
