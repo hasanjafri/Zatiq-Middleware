@@ -131,6 +131,7 @@ class ZatiqBusinessesMongoDBClient(object):
             base64 = photos[photo].image
             image_aspect_ratio = photos[photo].image_aspect_ratio
             photo_info = {'image_id': image_id, 'image': {'base64': 'http://167.99.177.29:5000/image/'+base64, 'image_aspect_ratio': image_aspect_ratio}}
+            logging.debug(photo_info)
             photos_list.append(photo_info)
         return(photos_list)
 
@@ -276,7 +277,6 @@ class ZatiqBusinessesMongoDBClient(object):
                 business_name = check_business_login[0].business_name
                 image = 'http://167.99.177.29:5000/image/'+check_business_login[0].image
                 image_aspect_ratio = check_business_login[0].image_aspect_ratio
-                logging.warning(business_name, new_api_token, image, image_aspect_ratio)
                 return([business_name, new_api_token, image, image_aspect_ratio])
             else:
                 return(['Incorrect Password!'])

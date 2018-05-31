@@ -4,11 +4,14 @@ from zatiq_businesses_mongodb_client import ZatiqBusinessesMongoDBClient
 from zatiq_reviews_mongodb_client import ZatiqReviewsMongoDBClient
 from zatiq_food_items_mongodb_client import ZatiqFoodItemsMongoDBClient
 from requests import post
+import logging
 from mongoengine import *
 
 application = Flask(__name__)
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
 #connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s', filename='./app.log', filemode='w')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
 cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',

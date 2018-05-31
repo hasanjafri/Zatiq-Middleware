@@ -200,6 +200,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             number = zatiq_business[0].number
             features = {'delivery': zatiq_business[0].delivery, 'takeout': zatiq_business[0].takeout, 'reservation': zatiq_business[0].reservation, 'patio': zatiq_business[0].patio, 'wheelchair_accessible': zatiq_business[0].wheelchair_accessible, 'parking': zatiq_business[0].parking, 'buffet': zatiq_business[0].buffet, 'family_friendly': zatiq_business[0].family_friendly, 'pescetarian_friendly': zatiq_business[0].pescetarian_friendly, 'wifi': zatiq_business[0].wifi}
             image = {'base64': 'http://167.99.177.29:5000/image/'+zatiq_business[0].image, 'image_aspect_ratio': zatiq_business[0].image_aspect_ratio}
+            
             address = zatiq_business[0].address
             restaurant_info = {'restaurant_id': str(restaurant_id), 'email': email, 'name': name, 'website': website, 'hours': hours, 'number': number, 'features': features, 'image': image, 'address': address}
             return(restaurant_info)
