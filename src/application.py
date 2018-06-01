@@ -216,7 +216,7 @@ def get_menus_for_restaurant():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
-        logging.debug(menu_photos)
+        logger.debug(menu_photos)
         return(jsonify(menu_photos=menu_photos))
 
 @application.route('/restaurant/interior/all/', methods=['POST'])
@@ -226,7 +226,7 @@ def get_interiors_for_restaurant():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         interior_photos = zatiq_businesses.get_interior_photos_by_restaurant(api_token)
-        logging.debug(interior_photos)
+        logger.debug(interior_photos)
         return(jsonify(interior_photos=interior_photos))
 
 @application.route('/food/id/', methods=['POST'])
@@ -250,7 +250,7 @@ def get_food_items_by_restaurant_id():
         else:
             restaurant_id = None
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, restaurant_id)
-        logging.debug(food_items)
+        logger.debug(food_items)
         return(jsonify(food_items=food_items))
 
 @application.route('/business/edit/food/', methods=['POST'])
