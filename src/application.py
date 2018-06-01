@@ -1,4 +1,6 @@
 from flask import Flask, request, make_response, jsonify
+import logging
+from logging.handlers import RotatingFileHandler
 from zatiq_users_mongodb_client import ZatiqUsersMongoDBClient
 from zatiq_businesses_mongodb_client import ZatiqBusinessesMongoDBClient
 from zatiq_reviews_mongodb_client import ZatiqReviewsMongoDBClient
@@ -6,7 +8,14 @@ from zatiq_food_items_mongodb_client import ZatiqFoodItemsMongoDBClient
 from requests import post
 from mongoengine import *
 
+logger = logging.getLogger(__name__)
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+logger.setLevel(logging.DEBUG)
+handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, backupCount=5)
+handler.setFormatter(formatter)
+
 application = Flask(__name__)
+application.logger.addHandler(handler)
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
 #connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
@@ -207,6 +216,7 @@ def get_menus_for_restaurant():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
+        logging.debug(menu_photos)
         return(jsonify(menu_photos=menu_photos))
 
 @application.route('/restaurant/interior/all/', methods=['POST'])
@@ -216,6 +226,7 @@ def get_interiors_for_restaurant():
         jsonData = request.get_json()
         api_token = jsonData['api_token']
         interior_photos = zatiq_businesses.get_interior_photos_by_restaurant(api_token)
+        logging.debug(interior_photos)
         return(jsonify(interior_photos=interior_photos))
 
 @application.route('/food/id/', methods=['POST'])
@@ -239,6 +250,7 @@ def get_food_items_by_restaurant_id():
         else:
             restaurant_id = None
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, restaurant_id)
+        logging.debug(food_items)
         return(jsonify(food_items=food_items))
 
 @application.route('/business/edit/food/', methods=['POST'])
