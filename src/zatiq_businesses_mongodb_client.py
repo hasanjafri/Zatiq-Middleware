@@ -56,10 +56,10 @@ class ZatiqBusinessesMongoDBClient(object):
             restaurant_id = reviews[review].restaurant_id.id
             food_item_id = reviews[review].food_item_id.id
             text = reviews[review].text
-            image = {'base64': reviews[review].image, 'image_aspect_ratio': reviews[review].image_aspect_ratio}
+            image = {'base64': str("http://167.99.177.29:5000/image/"+reviews[review].image), 'image_aspect_ratio': reviews[review].image_aspect_ratio}
             rating = reviews[review].rating
             date_created = reviews[review].date_created
-            review_info = {'restaurant_id': str(restaurant_id), 'food_item_id': str(food_item_id), 'text': text, 'image': str("http://167.99.177.29:5000/image/"+image), 'rating': rating, 'date_created': date_created}
+            review_info = {'restaurant_id': str(restaurant_id), 'food_item_id': str(food_item_id), 'text': text, 'image': image, 'rating': rating, 'date_created': date_created}
             reviews_list.append(review_info)
         return(reviews_list)
 
