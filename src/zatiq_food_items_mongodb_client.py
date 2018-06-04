@@ -233,7 +233,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             try:
                 Zatiq_Food_Items.objects(id=food_items[food_item].id).modify(inc__views=1)
             except Exception as e:
-                printface("Error \n %s" % (e))
+                print("Error \n %s" % (e))
             food_item_id = food_items[food_item].id
             restaurant_id = food_items[food_item].restaurant_id.id
             restaurant_info = self.get_restaurant_info(restaurant_id)
