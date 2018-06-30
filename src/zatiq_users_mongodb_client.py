@@ -239,33 +239,21 @@ class ZatiqUsersMongoDBClient(object):
         else:
             return('Could not authenticate')
 
-    def get_menu_pictures(self, api_token, restaurant_id):
-        if not api_token:
-            return('Could not authenticate')
+    def get_menu_pictures(self, restaurant_id):
+        try:
+            menu_pictures = Zatiq_Menus.objects(restaurant_id=restaurant_id)
+        except Exception as e:
+            return("Error \n %s" % (e))
+        result = self.generate_photos_dict(menu_pictures)
+        return(result)
 
-        if self.check_valid_api_token(api_token) == True:
-            try:
-                menu_pictures = Zatiq_Menus.objects(restaurant_id=restaurant_id)
-            except Exception as e:
-                return("Error \n %s" % (e))
-            result = self.generate_photos_dict(menu_pictures)
-            return(result)
-        else:
-            return('Could not authenticate')
-
-    def get_interior_pictures(self, api_token, restaurant_id):
-        if not api_token:
-            return('Could not authenticate')
-
-        if self.check_valid_api_token(api_token) == True:
-            try:
-                interior_pictures = Zatiq_Interiors.objects(restaurant_id=restaurant_id)
-            except Exception as e:
-                return("Error \n %s" % (e))
-            result = self.generate_photos_dict(interior_pictures)
-            return(result)
-        else:
-            return('Could not authenticate')
+    def get_interior_pictures(self, restaurant_id):
+        try:
+            interior_pictures = Zatiq_Interiors.objects(restaurant_id=restaurant_id)
+        except Exception as e:
+            return("Error \n %s" % (e))
+        result = self.generate_photos_dict(interior_pictures)
+        return(result)
 
     def generate_photos_dict(self, photos):
         photos_list = []

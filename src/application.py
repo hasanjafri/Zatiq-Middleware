@@ -346,9 +346,8 @@ def get_restaurant_menu():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
-        api_token = jsonData['api_token']
         restaurant_id = jsonData['restaurant_id']
-        response = zatiq_users.get_menu_pictures(api_token, restaurant_id)
+        response = zatiq_users.get_menu_pictures(restaurant_id)
         return(jsonify(response=response))
 
 @application.route('/user/interior/all/', methods=['POST'])
@@ -356,9 +355,8 @@ def get_restaurant_interior():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
-        api_token = jsonData['api_token']
         restaurant_id = jsonData['restaurant_id']
-        response = zatiq_users.get_interior_pictures(api_token, restaurant_id)
+        response = zatiq_users.get_interior_pictures(restaurant_id)
         return(jsonify(response=response))
 
 @application.route('/find/restaurant/name/', methods=['POST'])
