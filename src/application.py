@@ -5,6 +5,7 @@ from zatiq_users_mongodb_client import ZatiqUsersMongoDBClient
 from zatiq_businesses_mongodb_client import ZatiqBusinessesMongoDBClient
 from zatiq_reviews_mongodb_client import ZatiqReviewsMongoDBClient
 from zatiq_food_items_mongodb_client import ZatiqFoodItemsMongoDBClient
+from zatiq_guests_client import ZatiqGuestsClient
 from requests import post
 from mongoengine import *
 
@@ -310,6 +311,18 @@ def search_food_items_by_cuisine_type(cuisine_type):
         elif cuisine_type in buttons:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_button(api_token, cuisine_type)
+            return(jsonify(food_items=response))
+        else:
+            return('Could not find that category')
+
+@application.route('/guest/<tag>/', methods=['GET'])
+def get_guest_items(tag):
+    if request.method == 'GET':
+        zatiq_guests = ZatiqGuestsClient()
+        tag = tag.replace(' ', '_').lower()
+
+        if tag in buttons:
+            response = zatiq_guests.get_guest_food_by_button(tag)
             return(jsonify(food_items=response))
         else:
             return('Could not find that category')

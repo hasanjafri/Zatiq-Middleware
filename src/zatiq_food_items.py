@@ -17,7 +17,6 @@ class Zatiq_Food_Items(Document):
    item_price = DecimalField(precision=2, rounding='ROUND_HALF_UP', default=0.00)
    discount_price = DecimalField(precision=2, rounding='ROUND_HALF_UP', default=0.00)
    average_review = StringField(default='0.00')
-   bouffet_item = BooleanField(default=False)
    date_created = DateTimeField(default=datetime.datetime.utcnow)
    views = IntField(default=1)
 
