@@ -5,7 +5,7 @@ import random
 
 class ZatiqGuestsClient(object):
     def get_guest_food_by_button(self, button):
-        if button == 'promotion':
+        if button == 'promotions':
             try:
                 food_items = Zatiq_Food_Items.objects.order_by('discount_price')
             except Exception as e:
