@@ -82,18 +82,17 @@ class ZatiqFoodItemsMongoDBClient(object):
             return(None)
 
     def get_food_items_by_restaurant_id(self, api_token, restaurant_id):
-        if self.check_valid_api_token(api_token) == True:
-            if restaurant_id == None:
-                restaurant_id = self.get_restaurant_id_by_api_token(api_token)
-            try:
-                foods_by_restaurant = Zatiq_Food_Items.objects(restaurant_id=restaurant_id)
-            except Exception as e:
-                return("Error \n %s" % (e))
-            if len(foods_by_restaurant) > 0:
-                food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
-                return(food_items_dict)
-            else:
-                return([])
+        if restaurant_id == None:
+            restaurant_id = self.get_restaurant_id_by_api_token(api_token)
+        try:
+            foods_by_restaurant = Zatiq_Food_Items.objects(restaurant_id=restaurant_id)
+        except Exception as e:
+            return("Error \n %s" % (e))
+        if len(foods_by_restaurant) > 0:
+            food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
+            return(food_items_dict)
+        else:
+            return([])
 
     def find_food_grid(self, api_token):
         if not api_token:
