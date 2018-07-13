@@ -287,8 +287,8 @@ class ZatiqFoodItemsMongoDBClient(object):
             return("Error \n %s" % (e))
 
         if len(zatiq_user) > 0:
-            for preference in zatiq_user[0].preferences.keys():
-                if zatiq_user[0].preferences[preference] == True:
+            for preference in zatiq_user[0].preferences:
+                if preference == True:
                     preferences_list.append(str(preference))
             return(preferences_list)
         else:
