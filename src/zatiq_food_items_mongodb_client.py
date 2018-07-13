@@ -290,6 +290,7 @@ class ZatiqFoodItemsMongoDBClient(object):
             for preference in zatiq_user[0].preferences:
                 if preference == True:
                     preferences_list.append(str(preference))
+            print(preferences_list)
             return(preferences_list)
         else:
             return([])
