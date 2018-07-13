@@ -106,12 +106,16 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
 
             if len(zatiq_food_items) > 0:
-                #if self.check_user(api_token) == 'user':
-                    #user_preferences = self.get_user_preferences(api_token)
-                    #filtered_food = self.filter_food(zatiq_food_items, user_preferences)
-                if len(zatiq_food_items) > 25:
-                    food_items_dict = self.generate_food_items_dict(zatiq_food_items[0:25])
-                    return(food_items_dict)
+                if self.check_user(api_token) == 'user':
+                    user_preferences = self.get_user_preferences(api_token)
+                    filtered_food = self.filter_food(zatiq_food_items, user_preferences)
+
+                    if len(filtered_food) > 25:
+                        food_items_dict = self.generate_food_items_dict(filtered_food[0:25])
+                        return(food_items_dict)
+                    else:
+                        food_items_dict = self.generate_food_items_dict(filtered_food)
+                        return(food_items_dict)
                 else:
                     food_items_dict = self.generate_food_items_dict(zatiq_food_items)
                     return(food_items_dict)
@@ -121,18 +125,17 @@ class ZatiqFoodItemsMongoDBClient(object):
             return('Could not authenticate')
 
     def filter_food(self, food_items, preferences):
-        filtered_items = food_items
+        filtered_items = []
+        for food_item in food_items:
+           if self.check_food_item(food_item, preferences) == True:
+               filtered_items.append(food_item)
+        return(filtered_items)
+
+    def check_food_item(self, food_item, preferences):
         for preference in preferences:
-            for food_item in range(len(filtered_items)):
-                pass
-
-        if 'vegan' in preferences:
-            filtered_items = []
-            for food_item in range(len(food_items)):
-                if food_items[food_item].tags.vegan == True:
-                    filtered_items.append(food_items[food_item])
-                    pass
-
+            if food_item.tags[preference] == False:
+                return(False)
+        return(True)
 
     def find_food_grid_by_name(self, api_token, name):
         if not api_token:
@@ -311,8 +314,18 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
         
             if len(food_items) > 0:
-                food_items_dict = self.generate_food_items_dict(food_items)
-                return(food_items_dict)
+                if self.check_user(api_token) == 'user':
+                    user_preferences = self.get_user_preferences(api_token)
+                    filtered_food = self.filter_food(food_items, user_preferences)
+
+                    if len(filtered_food) > 0:
+                        food_items_dict = self.generate_food_items_dict(filtered_food)
+                        return(food_items_dict)
+                    else:
+                        return([])
+                else:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)
             else:
                 return([])
         else:
@@ -329,8 +342,18 @@ class ZatiqFoodItemsMongoDBClient(object):
                 return("Error \n %s" % (e))
 
             if len(food_items) > 0:
-                food_items_dict = self.generate_food_items_dict(food_items)
-                return(food_items_dict)
+                if self.check_user(api_token) == 'user':
+                    user_preferences = self.get_user_preferences(api_token)
+                    filtered_food = self.filter_food(food_items, user_preferences)
+
+                    if len(filtered_food) > 0:
+                        food_items_dict = self.generate_food_items_dict(filtered_food)
+                        return(food_items_dict)
+                    else:
+                        return([])
+                else:
+                    food_items_dict = self.generate_food_items_dict(food_items)
+                    return(food_items_dict)
             else:
                 return([])
         else:
@@ -348,8 +371,18 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
-                    food_items_dict = self.generate_food_items_dict(food_items)
-                    return(food_items_dict)
+                    if self.check_user(api_token) == 'user':
+                        user_preferences = self.get_user_preferences(api_token)
+                        filtered_food = self.filter_food(food_items, user_preferences)
+
+                        if len(filtered_food) > 0:
+                            food_items_dict = self.generate_food_items_dict(filtered_food)
+                            return(food_items_dict)
+                        else:
+                            return([])
+                    else:
+                        food_items_dict = self.generate_food_items_dict(food_items)
+                        return(food_items_dict)
                 else:
                     return([])
 
@@ -360,8 +393,18 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
-                    food_items_dict = self.generate_food_items_dict(food_items)
-                    return(food_items_dict)
+                    if self.check_user(api_token) == 'user':
+                        user_preferences = self.get_user_preferences(api_token)
+                        filtered_food = self.filter_food(food_items, user_preferences)
+
+                        if len(filtered_food) > 0:
+                            food_items_dict = self.generate_food_items_dict(filtered_food)
+                            return(food_items_dict)
+                        else:
+                            return([])
+                    else:
+                        food_items_dict = self.generate_food_items_dict(food_items)
+                        return(food_items_dict)
                 else:
                     return([])
 
@@ -372,8 +415,18 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e)) 
 
                 if len(food_items) > 0:
-                    food_items_dict = self.generate_food_items_dict(food_items)
-                    return(food_items_dict)
+                    if self.check_user(api_token) == 'user':
+                        user_preferences = self.get_user_preferences(api_token)
+                        filtered_food = self.filter_food(food_items, user_preferences)
+
+                        if len(filtered_food) > 0:
+                            food_items_dict = self.generate_food_items_dict(filtered_food)
+                            return(food_items_dict)
+                        else:
+                            return([])
+                    else:
+                        food_items_dict = self.generate_food_items_dict(food_items)
+                        return(food_items_dict)
                 else:
                     return([])
 
@@ -384,11 +437,20 @@ class ZatiqFoodItemsMongoDBClient(object):
                     return("Error \n %s" % (e))
 
                 if len(food_items) > 0:
-                    food_items_dict = self.generate_food_items_dict(food_items)
-                    return(food_items_dict)  
+                    if self.check_user(api_token) == 'user':
+                        user_preferences = self.get_user_preferences(api_token)
+                        filtered_food = self.filter_food(food_items, user_preferences)
+
+                        if len(filtered_food) > 0:
+                            food_items_dict = self.generate_food_items_dict(filtered_food)
+                            return(food_items_dict)
+                        else:
+                            return([])
+                    else:
+                        food_items_dict = self.generate_food_items_dict(food_items)
+                        return(food_items_dict)
                 else:
                     return([])
-
             else:
                 return('Category not found')
         else:
