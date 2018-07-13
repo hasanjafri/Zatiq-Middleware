@@ -137,32 +137,32 @@ class ZatiqFoodItemsMongoDBClient(object):
             elif preference == 'milk_allergy':
                 continue
             elif preference == 'fish_allergy':
-                for seafood_type in food_item.seafood:
-                    if food_item.seafood[seafood_type] == True:
+                for seafood_type in food_item.tags.seafood:
+                    if food_item.tags.seafood[seafood_type] == True:
                         return(False)
             elif preference == 'crustacean_allergy':
                 crustaceans = ['crab', 'lobster', 'shrimp']
                 for crustacean_type in crustaceans:
-                    if food_item.seafood[crustacean_type] == True:
+                    if food_item.tags.seafood[crustacean_type] == True:
                         return(False)
             elif preference == 'pescatarian':
-                for meat_type in food_item.meat:
-                    if food_item.meat[meat_type] == True:
+                for meat_type in food_item.tags.meat:
+                    if food_item.tags.meat[meat_type] == True:
                         return(False)
             elif preference == 'has_eggs':
-                if food_item.has_eggs == True:
+                if food_item.tags['has_eggs'] == True:
                     return(False)
             elif preference == 'has_peanuts':
-                if food_item.has_peanuts == True:
+                if food_item.tags['has_peanuts'] == True:
                     return(False)
             elif preference == 'has_treenuts':
-                if food_item.has_treenuts == True:
+                if food_item.tags['has_treenuts'] == True:
                     return(False)
             elif preference == 'has_soybeans':
-                if food_item.has_soybeans == True:
+                if food_item.tags['has_soybeans'] == True:
                     return(False)
             elif preference == 'has_wheat':
-                if food_item.has_wheat == True:
+                if food_item.tags['has_wheat'] == True:
                     return(False)
             else:
                 if food_item.tags[preference] == False:
