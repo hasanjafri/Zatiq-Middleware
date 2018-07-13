@@ -115,9 +115,9 @@ class ZatiqUsersMongoDBClient(object):
 
     def generate_preferences_dict(self, preferences):
         preferences_dict = {'halal': preferences.halal, 'spicy': preferences.spicy, 'kosher': preferences.kosher, 'healthy': preferences.healthy,
-            'vegan': preferences.vegan, 'vegetarian': preferences.vegetarian, 'gluten_free': preferences.gluten_free, 'lactose_intolerant': preferences.lactose_intolerant,
-            'milk_allergy': preferences.milk_allergy, 'eggs_allergy': preferences.eggs_allergy, 'fish_allergy': preferences.fish_allergy, 'crustacean_allergy': preferences.crustacean_allergy, 'wheat_allergy': preferences.wheat_allergy, 'soybeans_allergy': preferences.soybeans_allergy,
-            'treenuts_allergy': preferences.treenuts_allergy, 'peanuts_allergy': preferences.peanuts_allergy, 'jain': preferences.jain, 'omnivore': preferences.omnivore, 'pescatarian': preferences.pescatarian}
+            'vegan': preferences.vegan, 'vegetarian': preferences.vegetarian, 'gluten_free': preferences.gluten_free, 'lactose_intolerant': preferences.lactose_free,
+            'milk_allergy': preferences.milk_allergy, 'eggs_allergy': preferences.has_eggs, 'fish_allergy': preferences.fish_allergy, 'crustacean_allergy': preferences.crustacean_allergy, 'wheat_allergy': preferences.has_wheat, 'soybeans_allergy': preferences.has_soybeans,
+            'treenuts_allergy': preferences.has_treenuts, 'peanuts_allergy': preferences.has_peanuts, 'jain': preferences.jain, 'omnivore': preferences.omnivore, 'pescatarian': preferences.pescatarian}
         return(preferences_dict)
     
     def user_login(self, authToken, userEmail, method):
@@ -155,8 +155,8 @@ class ZatiqUsersMongoDBClient(object):
                 if self.check_user_exists(user_id, user_email, method, authToken) == False:
                     user_register = Zatiq_Users.objects(auth_token=authToken).update_one(upsert=True, set__user_email=user_email, set__user_name=user_name, set__google_id=user_id, set__zatiq_token=api_token,
                         set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
-                        set__preferences__gluten_free=False, set__preferences__lactose_intolerant=False, set__preferences__milk_allergy=False, set__preferences__eggs_allergy=False,
-                        set__preferences__fish_allergy=False, set__preferences__crustacean_allergy=False, set__preferences__wheat_allergy=False, set__preferences__soybeans_allergy=False, set__preferences__pescatarian=False, set__preferences__peanuts_allergy=False, set__preferences__treenuts_allergy=False,
+                        set__preferences__gluten_free=False, set__preferences__lactose_free=False, set__preferences__milk_allergy=False, set__preferences__has_eggs=False,
+                        set__preferences__fish_allergy=False, set__preferences__crustacean_allergy=False, set__preferences__has_wheat=False, set__preferences__has_soybeans=False, set__preferences__pescatarian=False, set__preferences__has_peanuts=False, set__preferences__has_treenuts=False,
                         set__preferences__jain=False, set__preferences__omnivore=False)
                     return(self.user_login(authToken, user_email, method))
                 else:
@@ -166,8 +166,8 @@ class ZatiqUsersMongoDBClient(object):
                 if self.check_user_exists(user_id, user_email, method, authToken) == False:
                     user_register = Zatiq_Users.objects(auth_token=authToken).update_one(upsert=True, set__user_email=user_email, set__user_name=user_name, set__facebook_id=user_id, set__zatiq_token=api_token,
                         set__preferences__halal=False, set__preferences__spicy=True, set__preferences__kosher=False, set__preferences__healthy=False, set__preferences__vegan=False, set__preferences__vegetarian=False,
-                        set__preferences__gluten_free=False, set__preferences__lactose_intolerant=False, set__preferences__milk_allergy=False, set__preferences__eggs_allergy=False,
-                        set__preferences__fish_allergy=False, set__preferences__crustacean_allergy=False, set__preferences__wheat_allergy=False, set__preferences__soybeans_allergy=False, set__preferences__pescatarian=False, set__preferences__peanuts_allergy=False, set__preferences__treenuts_allergy=False,
+                        set__preferences__gluten_free=False, set__preferences__lactose_free=False, set__preferences__milk_allergy=False, set__preferences__has_eggs=False,
+                        set__preferences__fish_allergy=False, set__preferences__crustacean_allergy=False, set__preferences__has_wheat=False, set__preferences__has_soybeans=False, set__preferences__pescatarian=False, set__preferences__has_peanuts=False, set__preferences__has_treenuts=False,
                         set__preferences__jain=False, set__preferences__omnivore=False)
                     return(self.user_login(authToken, user_email, method))
                 else:
@@ -202,9 +202,9 @@ class ZatiqUsersMongoDBClient(object):
                     Zatiq_Users.objects(zatiq_token=api_token).update_one(upsert=False,
                         set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
                         set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'],
-                        set__preferences__lactose_intolerant=preferences['lactose_intolerant'], set__preferences__milk_allergy=preferences['milk_allergy'], set__preferences__eggs_allergy=preferences['eggs_allergy'],
-                        set__preferences__fish_allergy=preferences['fish_allergy'], set__preferences__crustacean_allergy=preferences['crustacean_allergy'], set__preferences__wheat_allergy=preferences['wheat_allergy'], set__preferences__soybeans_allergy=preferences['soybeans_allergy'],
-                        set__preferences__jain=preferences['jain'], set__preferences__omnivore=preferences['omnivore'], set__preferences__pescatarian=preferences['pescatarian'], set__preferences__peanuts_allergy=preferences['peanuts_allergy'], set__preferences__treenuts_allergy=preferences['treenuts_allergy'])
+                        set__preferences__lactose_free=preferences['lactose_intolerant'], set__preferences__milk_allergy=preferences['milk_allergy'], set__preferences__has_eggs=preferences['eggs_allergy'],
+                        set__preferences__fish_allergy=preferences['fish_allergy'], set__preferences__crustacean_allergy=preferences['crustacean_allergy'], set__preferences__has_wheat=preferences['wheat_allergy'], set__preferences__has_soybeans=preferences['soybeans_allergy'],
+                        set__preferences__jain=preferences['jain'], set__preferences__omnivore=preferences['omnivore'], set__preferences__pescatarian=preferences['pescatarian'], set__preferences__has_peanuts=preferences['peanuts_allergy'], set__preferences__has_treenuts=preferences['treenuts_allergy'])
                 except Exception as e:
                     return("Error \n %s" % (e))
                 try:
@@ -221,9 +221,9 @@ class ZatiqUsersMongoDBClient(object):
                     Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
                         set__preferences__halal=preferences['halal'], set__preferences__spicy=preferences['spicy'], set__preferences__kosher=preferences['kosher'], set__preferences__healthy=preferences['healthy'],
                         set__preferences__vegan=preferences['vegan'], set__preferences__vegetarian=preferences['vegetarian'], set__preferences__gluten_free=preferences['gluten_free'],
-                        set__preferences__lactose_intolerant=preferences['lactose_intolerant'], set__preferences__milk_allergy=preferences['milk_allergy'], set__preferences__eggs_allergy=preferences['eggs_allergy'],
-                        set__preferences__fish_allergy=preferences['fish_allergy'], set__preferences__crustacean_allergy=preferences['crustacean_allergy'], set__preferences__wheat_allergy=preferences['wheat_allergy'], set__preferences__soybeans_allergy=preferences['soybeans_allergy'],
-                        set__preferences__jain=preferences['jain'], set__preferences__omnivore=preferences['omnivore'], set__preferences__pescatarian=preferences['pescatarian'], set__preferences__peanuts_allergy=preferences['peanuts_allergy'], set__preferences__treenuts_allergy=preferences['treenuts_allergy'])
+                        set__preferences__lactose_free=preferences['lactose_intolerant'], set__preferences__milk_allergy=preferences['milk_allergy'], set__preferences__has_eggs=preferences['eggs_allergy'],
+                        set__preferences__fish_allergy=preferences['fish_allergy'], set__preferences__crustacean_allergy=preferences['crustacean_allergy'], set__preferences__has_wheat=preferences['wheat_allergy'], set__preferences__has_soybeans=preferences['soybeans_allergy'],
+                        set__preferences__jain=preferences['jain'], set__preferences__omnivore=preferences['omnivore'], set__preferences__pescatarian=preferences['pescatarian'], set__preferences__has_peanuts=preferences['peanuts_allergy'], set__preferences__has_treenuts=preferences['treenuts_allergy'])
                 except Exception as e:
                     return("Error \n %s" % (e))
                 try:

@@ -132,8 +132,26 @@ class ZatiqFoodItemsMongoDBClient(object):
 
     def check_food_item(self, food_item, preferences):
         for preference in preferences:
-            if food_item.tags[preference] == False:
-                return(False)
+            if preference == 'omnivore':
+                continue
+            elif preference == 'milk_allergy':
+                continue
+            elif preference == 'fish_allergy':
+                for seafood_type in preferences.seafood:
+                    if preferences.seafood[seafood_type] == True:
+                        return(False)
+            elif preference == 'crustacean_allergy':
+                crustaceans = ['crab', 'lobster', 'shrimp']
+                for crustacean_type in crustaceans:
+                    if preferences.seafood[crustacean_type] == True:
+                        return(False)
+            elif preference == 'pescatarian':
+                for meat_type in preferences.meat:
+                    if preferences.meat[meat_type] == True:
+                        return(False)
+            else:
+                if food_item.tags[preference] == False:
+                    return(False)
         return(True)
 
     def find_food_grid_by_name(self, api_token, name):
