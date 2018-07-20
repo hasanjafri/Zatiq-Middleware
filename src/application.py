@@ -63,7 +63,7 @@ def add_zatiq_deal():
 
         if file and allowed_file(file.filename):
             b64_img = base64.b64decode(file.read())
-            res = zatiq_deals_client.save_image_to_db(b64_img.decode(), food_item_id)
+            res = zatiq_deals_client.save_image_to_db(b64_img, food_item_id)
             if isinstance(res, dict):
                 response = res
             else:
