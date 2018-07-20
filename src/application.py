@@ -75,6 +75,15 @@ def add_zatiq_deal():
 def hello_world():
     return('Hello World!')
 
+@application.route('/deals/', methods=['POST'])
+def get_all_zatiq_deals():
+    if request.method == 'POST':
+        zatiq_deals = ZatiqDealsMongoDBClient()
+        jsonData = request.get_json()
+        api_token = jsonData['api_token']
+        response = zatiq_deals.get_all_deals(api_token)
+        return(jsonify(deals=response))
+
 @application.route('/user/login/', methods=['POST'])
 def login_as_user():
     if request.method == 'POST':
