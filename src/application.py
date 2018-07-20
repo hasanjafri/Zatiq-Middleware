@@ -1,11 +1,16 @@
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, render_template
+from flask_httpauth import HTTPBasicAuth
 import logging
+import os
+import base64
 from logging.handlers import RotatingFileHandler
+from config import admin_username, admin_password
 from zatiq_users_mongodb_client import ZatiqUsersMongoDBClient
 from zatiq_businesses_mongodb_client import ZatiqBusinessesMongoDBClient
 from zatiq_reviews_mongodb_client import ZatiqReviewsMongoDBClient
 from zatiq_food_items_mongodb_client import ZatiqFoodItemsMongoDBClient
 from zatiq_guests_client import ZatiqGuestsClient
+from zatiq_deal_items_mongodb_client import ZatiqDealsMongoDBClient
 from requests import post
 from mongoengine import *
 
@@ -16,6 +21,7 @@ handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, 
 handler.setFormatter(formatter)
 
 application = Flask(__name__)
+auth = HTTPBasicAuth()
 application.logger.addHandler(handler)
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
 # connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
@@ -25,6 +31,45 @@ cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fi
     'indian', 'italian', 'japanese', 'korean', 'kosher', 'mexican', 'middle_eastern', 'pizza', 'quick_bite', 'spicy', 'sushi', 'thai',
     'vegan', 'vegetarian', 'vietnamese']
 buttons = ['top_picks', 'surprise_me', 'newest', 'promotions']
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in set(['png'])
+
+@auth.get_password
+def get_pw(username):
+    if username == admin_username:
+        return admin_password
+    return None
+
+@application.route('/admin/add/deals/', methods=['GET', 'POST'])
+@auth.login_required
+def add_zatiq_deal():
+    zatiq_deals_client = ZatiqDealsMongoDBClient()
+    error = None
+    response = None
+    food_items_names_dict = zatiq_deals_client.get_list_of_food_items()
+    if request.method == 'POST':
+        if 'imagedata' not in request.files:
+            error = "No image in request.files"
+        if 'food' not in request.form:
+            error = "No food item selected to link this deal to"
+
+        file = request.files['imagedata']
+        food_item_id = request.form.get('food')
+
+        if file.filename == '':
+            error = "No image file was selected"
+
+        if file and allowed_file(file.filename):
+            b64_img = base64.b64encode(file.read())
+            res = zatiq_deals_client.save_image_to_db(b64_img, food_item_id)
+            if isinstance(res, dict):
+                response = res
+            else:
+                error = res
+            
+    return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
 
 @application.route('/')
 def hello_world():
