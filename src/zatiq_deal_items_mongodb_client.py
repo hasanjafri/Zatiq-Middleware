@@ -14,7 +14,7 @@ class ZatiqDealsMongoDBClient(object):
             return "Error! Invalid image provided"
 
         try:
-            add_zatiq_deal = Zatiq_Deal_Items(food_item_id=food_item_id, image=image_url).save()
+            add_zatiq_deal = Zatiq_Deal_Items(food_item_id=food_item_id, image=image_url.text).save()
         except Exception as e:
             return("Error \n %s" % (e))
         return {"status": "Zatiq Promotion Added"}
