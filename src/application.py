@@ -62,8 +62,8 @@ def add_zatiq_deal():
             error = "No image file was selected"
 
         if file and allowed_file(file.filename):
-            b64_str = file.read()
-            res = zatiq_deals_client.save_image_to_db(b64_str, food_item_id)
+            b64_img = base64.b64encode(file.read())
+            res = zatiq_deals_client.save_image_to_db(b64_img.decode('ascii'), food_item_id)
             if isinstance(res, dict):
                 response = res
             else:
