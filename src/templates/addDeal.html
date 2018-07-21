@@ -9,7 +9,6 @@
             <h1>Add New Zatiq Deal</h1>
             <br>
             <form method="post" enctype="multipart/form-data">
-                <input type="file" name="imagedata"/>
                 <select name="food">
                     {% for n, k in food_items.items() %}
                         <option value="{{ k }}">{{ n }}</option>
