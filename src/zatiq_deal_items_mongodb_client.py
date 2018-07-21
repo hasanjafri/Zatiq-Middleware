@@ -113,7 +113,7 @@ class ZatiqDealsMongoDBClient(object):
         if len(zatiq_deals) > 0:
             deals_dict = {}
             for deal in range(len(zatiq_deals)):
-                deals_dict[str(zatiq_deals[deal].item_name)] = str(zatiq_deals[deal].id)
+                deals_dict[str(zatiq_deals[deal].item_name)+" ("+str(zatiq_deals[deal].restaurant_name)+")"] = str(zatiq_deals[deal].id)
             return deals_dict
         else:
             return {}
