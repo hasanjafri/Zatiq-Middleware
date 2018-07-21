@@ -73,10 +73,22 @@ class ZatiqDealsMongoDBClient(object):
             return("Error \n %s" % (e))
 
         if len(food_items) > 0:
+            restaurant_names = self.get_all_restaurant_names(food_items)
             for food_item_name in range(len(food_items)):
-                food_items_names_dict[str(food_items[food_item_name].item_name)] = str(food_items[food_item_name].id)
+                food_items_names_dict[str(food_items[food_item_name].item_name)+" ("+str(restaurant_names[food_item_name])+")"] = str(food_items[food_item_name].id)
         
         return food_items_names_dict
+
+    def get_all_restaurant_names(self, food_items):
+        restaurant_names_list = []
+        for food_item in range(len(food_items)):
+            try:
+                restaurant_name = Zatiq_Businesses.objects(id=food_items[food_item].restaurant_id.id)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            restaurant_names_list.append(restaurant_name[0].business_name)
+        return restaurant_names_list
 
     def get_all_deals(self):
         try:
