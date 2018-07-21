@@ -83,7 +83,7 @@ class ZatiqDealsMongoDBClient(object):
     def generate_deals_dict(self, zatiq_deals):
         deals_list = []
         for deal in range(len(zatiq_deals)):
-            food_item_id = zatiq_deals[deal].food_item_id
+            food_item_id = zatiq_deals[deal].food_item_id.id
             image = zatiq_deals[deal].image
             image_aspect_ratio = zatiq_deals[deal].image_aspect_ratio
             item_name = zatiq_deals[deal].item_name
