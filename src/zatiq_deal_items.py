@@ -8,3 +8,6 @@ class Zatiq_Deal_Items(Document):
     image_aspect_ratio = StringField(required=True)
     item_name = StringField(required=True)
     item_price = DecimalField(precision=2, rounding='ROUND_HALF_UP', default=0.00)
+    restaurant_image = StringField(required=True)
+    restaurant_image_aspect_ratio = StringField(required=True)
+    restaurant_name = StringField(required=True)

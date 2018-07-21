@@ -18,7 +18,8 @@ class ZatiqDealsMongoDBClient(object):
         linked_food_info = self.get_linked_food_item_info(food_item_id)
         if len(linked_food_info) > 0:
             try:
-                add_zatiq_deal = Zatiq_Deal_Items(food_item_id=food_item_id, image=linked_food_info[0], image_aspect_ratio=linked_food_info[1], item_name=linked_food_info[2], item_price=linked_food_info[3]).save()
+                add_zatiq_deal = Zatiq_Deal_Items(food_item_id=food_item_id, image=linked_food_info[0], image_aspect_ratio=linked_food_info[1], item_name=linked_food_info[2], item_price=linked_food_info[3],
+                                    restaurant_image=linked_food_info[4], restaurant_image_aspect_ratio=linked_food_info[5], restaurant_name=linked_food_info[6]).save()
             except Exception as e:
                 return("Error \n %s" % (e))
             return {"status": "Zatiq Promotion Added"}
@@ -34,7 +35,16 @@ class ZatiqDealsMongoDBClient(object):
             image_aspect_ratio = food_item_info[0].image_aspect_ratio
             item_name = food_item_info[0].item_name
             item_price = food_item_info[0].item_price
-            return [image, image_aspect_ratio, item_name, item_price]
+            try:
+                restaurant_info = Zatiq_Businesses.objects(id=food_item_info[0].restaurant_id.id)
+            except Exception as e:
+                return("Error \n %s" % (e))
+
+            restaurant_image = restaurant_info[0].image
+            restaurant_image_aspect_ratio = restaurant_info[0].image_aspect_ratio
+            restaurant_name = restaurant_info[0].business_name
+
+            return [image, image_aspect_ratio, item_name, item_price, restaurant_image, restaurant_image_aspect_ratio, restaurant_name]
         else:
             return []
 
@@ -88,7 +98,9 @@ class ZatiqDealsMongoDBClient(object):
             image_aspect_ratio = zatiq_deals[deal].image_aspect_ratio
             item_name = zatiq_deals[deal].item_name
             item_price = zatiq_deals[deal].item_price
-            deal_info = {'image': "http://167.99.177.29:5000/image/"+str(image), 'food_item_id': str(food_item_id), 'item_name': str(item_name), 'item_price': str(item_price), 'image_aspect_ratio': str(image_aspect_ratio)}
+            restaurant_image = zatiq_deals[deal].restaurant_image
+            restaurant_image_aspect_ratio = zatiq_deals[deal].restaurant_image_aspect_ratio
+            deal_info = {'image': "http://167.99.177.29:5000/image/"+str(image), 'food_item_id': str(food_item_id), 'item_name': str(item_name), 'item_price': str(item_price), 'image_aspect_ratio': str(image_aspect_ratio), 'restaurant_image': str(restaurant_image), 'restaurant_image_aspect_ratio': str(restaurant_image_aspect_ratio)}
             deals_list.append(deal_info)
         return(deals_list)
 
