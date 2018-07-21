@@ -68,20 +68,17 @@ class ZatiqDealsMongoDBClient(object):
         
         return food_items_names_dict
 
-    def get_all_deals(self, api_token):
-        if self.check_valid_api_token(api_token) == True:
-            try:
-                zatiq_deals = Zatiq_Deal_Items.objects()
-            except Exception as e:
-                return("Error \n %s" % (e))
+    def get_all_deals(self):
+        try:
+            zatiq_deals = Zatiq_Deal_Items.objects()
+        except Exception as e:
+            return("Error \n %s" % (e))
 
-            if len(zatiq_deals) > 0:
-                deals_response = self.generate_deals_dict(zatiq_deals)
-                return(deals_response)
-            else:
-                return([])
+        if len(zatiq_deals) > 0:
+            deals_response = self.generate_deals_dict(zatiq_deals)
+            return(deals_response)
         else:
-            return("Could not authenticate")
+            return([])
 
     def generate_deals_dict(self, zatiq_deals):
         deals_list = []
@@ -108,20 +105,3 @@ class ZatiqDealsMongoDBClient(object):
             return deals_dict
         else:
             return {}
-
-    def check_valid_api_token(self, api_token):
-        try:
-            valid_token = Zatiq_Users.objects(zatiq_token=api_token)
-        except Exception as e:
-            return("Error \n %s" % (e))
-        if len(valid_token) > 0:
-            return(True)
-        else:
-            try:
-                valid_token = Zatiq_Businesses.objects(zatiq_token=api_token)
-            except Exception as e:
-                return("Error \n %s" % (e))
-            if len(valid_token) > 0:
-                return(True)
-            else:
-                return(False)

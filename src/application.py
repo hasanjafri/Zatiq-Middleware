@@ -95,13 +95,11 @@ def delete_zatiq_deal():
 def hello_world():
     return('Hello World!')
 
-@application.route('/deals/', methods=['POST'])
+@application.route('/deals/', methods=['GET'])
 def get_all_zatiq_deals():
     if request.method == 'POST':
         zatiq_deals = ZatiqDealsMongoDBClient()
-        jsonData = request.get_json()
-        api_token = jsonData['api_token']
-        response = zatiq_deals.get_all_deals(api_token)
+        response = zatiq_deals.get_all_deals()
         return(jsonify(deals=response))
 
 @application.route('/user/login/', methods=['POST'])
