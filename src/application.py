@@ -97,7 +97,7 @@ def hello_world():
 
 @application.route('/deals/', methods=['GET'])
 def get_all_zatiq_deals():
-    if request.method == 'POST':
+    if request.method == 'GET':
         zatiq_deals = ZatiqDealsMongoDBClient()
         response = zatiq_deals.get_all_deals()
         return(jsonify(deals=response))
