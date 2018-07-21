@@ -79,10 +79,10 @@ def delete_zatiq_deal():
     response = None
     removable_items = zatiq_deals_client.get_organized_remove_deals()
     if request.method == 'POST':
-        if 'food' not in request.form:
+        if 'deal' not in request.form:
             error = "No food_item_id in request"
 
-        food_item_id = request.form.get('food')
+        food_item_id = request.form.get('deal')
         res = zatiq_deals_client.delete_deal_from_db(food_item_id)
         if isinstance(res, dict):
             response = res
