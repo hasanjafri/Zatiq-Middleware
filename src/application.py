@@ -50,26 +50,46 @@ def add_zatiq_deal():
     response = None
     food_items_names_dict = zatiq_deals_client.get_list_of_food_items()
     if request.method == 'POST':
-        if 'imagedata' not in request.files:
-            error = "No image in request.files"
+        # if 'imagedata' not in request.files:
+        #     error = "No image in request.files"
         if 'food' not in request.form:
             error = "No food item selected to link this deal to"
 
-        file = request.files['imagedata']
+        # file = request.files['imagedata']
         food_item_id = request.form.get('food')
 
-        if file.filename == '':
-            error = "No image file was selected"
+        # if file.filename == '':
+        #     error = "No image file was selected"
 
-        if file and allowed_file(file.filename):
-            b64_img = base64.b64encode(file.read())
-            res = zatiq_deals_client.save_image_to_db(b64_img.decode('ascii'), food_item_id)
-            if isinstance(res, dict):
-                response = res
-            else:
-                error = res
+        # if file and allowed_file(file.filename):
+        # b64_img = base64.b64encode(file.read())
+        res = zatiq_deals_client.save_deal_to_db(food_item_id)
+        if isinstance(res, dict):
+            response = res
+        else:
+            error = res
             
     return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
+
+@application.route('/admin/delete/deals/', methods=['GET', 'POST'])
+@auth.login_required
+def delete_zatiq_deal():
+    zatiq_deals_client = ZatiqDealsMongoDBClient()
+    error = None
+    response = None
+    removable_items = zatiq_deals_client.get_organized_remove_deals()
+    if request.method == 'POST':
+        if 'food' not in request.form:
+            error = "No food_item_id in request"
+
+        food_item_id = request.form.get('food')
+        res = zatiq_deals_client.delete_deal_from_db(food_item_id)
+        if isinstance(res, dict):
+            response = res
+        else:
+            error = res
+
+    return render_template('removeDeal.html', error=error, response=response, food_items=removable_items)
 
 @application.route('/')
 def hello_world():

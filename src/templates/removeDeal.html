@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title> Zatiq Admin - Remove Zatiq Deals Page </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Remove Zatiq Deal</h1>
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                <select name="deal">
+                    {% for n, k in food_items.items() %}
+                        <option value="{{ k }}">{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+            {% if error %}
+                <p class="error"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
+            {% if response %}
+                <p class="error"><strong>Response:</strong> {{ response }}</p>
+            {% endif %}
+        </div>
+    </body>
+</html>
