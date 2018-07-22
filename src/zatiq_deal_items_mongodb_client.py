@@ -112,7 +112,7 @@ class ZatiqDealsMongoDBClient(object):
             item_price = zatiq_deals[deal].item_price
             restaurant_image = zatiq_deals[deal].restaurant_image
             restaurant_image_aspect_ratio = zatiq_deals[deal].restaurant_image_aspect_ratio
-            deal_info = {'image': "http://167.99.177.29:5000/image/"+str(image), 'food_item_id': str(food_item_id), 'item_name': str(item_name), 'item_price': str(item_price), 'image_aspect_ratio': str(image_aspect_ratio), 'restaurant_image': str(restaurant_image), 'restaurant_image_aspect_ratio': str(restaurant_image_aspect_ratio)}
+            deal_info = {'image': "http://167.99.177.29:5000/image/"+str(image), 'food_item_id': str(food_item_id), 'item_name': str(item_name), 'item_price': str(item_price), 'image_aspect_ratio': str(image_aspect_ratio), 'restaurant_image': "http://167.99.177.29:5000/image/"+str(restaurant_image), 'restaurant_image_aspect_ratio': str(restaurant_image_aspect_ratio)}
             deals_list.append(deal_info)
         return(deals_list)
 
