@@ -208,17 +208,16 @@ class ZatiqFoodItemsMongoDBClient(object):
             else:
                 return(False)
 
-    def get_food_by_id(self, api_token, food_item_id):
-        if self.check_valid_api_token(api_token) == True:
-            try:
-                food_item = Zatiq_Food_Items.objects(id=food_item_id)
-            except Exception as e:
-                return("Error \n %s" %(e))
-            if len(food_item) > 0:
-                food_item_dict = self.generate_food_items_dict(food_item)
-                return(food_item_dict)
-            else:
-                return('No food item found with that id')
+    def get_food_by_id(self, food_item_id):
+        try:
+            food_item = Zatiq_Food_Items.objects(id=food_item_id)
+        except Exception as e:
+            return("Error \n %s" %(e))
+        if len(food_item) > 0:
+            food_item_dict = self.generate_food_items_dict(food_item)
+            return(food_item_dict)
+        else:
+            return('No food item found with that id')
 
     def get_restaurant_info(self, restaurant_id):
         try:

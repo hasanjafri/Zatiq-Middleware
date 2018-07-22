@@ -305,7 +305,6 @@ def get_food_item_by_id():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
-        api_token = jsonData['api_token']
         food_item_id = jsonData['food_item_id']
         food_item = zatiq_food_items.get_food_by_id(api_token, food_item_id)
         return(jsonify(food_item=food_item))
