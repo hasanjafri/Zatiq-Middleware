@@ -1,5 +1,4 @@
 from flask import Flask, request, make_response, jsonify, render_template
-from flask_httpauth import HTTPBasicAuth
 import logging
 import os
 import base64
@@ -21,7 +20,6 @@ handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, 
 handler.setFormatter(formatter)
 
 application = Flask(__name__)
-auth = HTTPBasicAuth()
 application.logger.addHandler(handler)
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
 # connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
@@ -32,18 +30,7 @@ cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fi
     'vegan', 'vegetarian', 'vietnamese']
 buttons = ['top_picks', 'surprise_me', 'newest', 'promotions']
 
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in set(['png'])
-
-@auth.get_password
-def get_pw(username):
-    if username == admin_username:
-        return admin_password
-    return None
-
 @application.route('/admin/add/deals/', methods=['GET', 'POST'])
-@auth.login_required
 def add_zatiq_deal():
     zatiq_deals_client = ZatiqDealsMongoDBClient()
     error = None
@@ -54,25 +41,34 @@ def add_zatiq_deal():
         #     error = "No image in request.files"
         if 'food' not in request.form:
             error = "No food item selected to link this deal to"
+        if 'username' not in request.form:
+            error = "Please enter the admin username (Get it from the dev team)"
+        if 'password' not in request.form:
+            error = "Please enter the admin password"
 
-        # file = request.files['imagedata']
-        food_item_id = request.form.get('food')
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        # if file.filename == '':
-        #     error = "No image file was selected"
+        if username == admin_username and password == admin_password:   
+            # file = request.files['imagedata']
+            food_item_id = request.form.get('food')
 
-        # if file and allowed_file(file.filename):
-        # b64_img = base64.b64encode(file.read())
-        res = zatiq_deals_client.save_deal_to_db(food_item_id)
-        if isinstance(res, dict):
-            response = res
+            # if file.filename == '':
+            #     error = "No image file was selected"
+
+            # if file and allowed_file(file.filename):
+            # b64_img = base64.b64encode(file.read())
+            res = zatiq_deals_client.save_deal_to_db(food_item_id)
+            if isinstance(res, dict):
+                response = res
+            else:
+                error = res
         else:
-            error = res
+            error = "Invalid admin credentials!"
             
     return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
 
 @application.route('/admin/delete/deals/', methods=['GET', 'POST'])
-@auth.login_required
 def delete_zatiq_deal():
     zatiq_deals_client = ZatiqDealsMongoDBClient()
     error = None
@@ -81,13 +77,23 @@ def delete_zatiq_deal():
     if request.method == 'POST':
         if 'deal' not in request.form:
             error = "No food_item_id in request"
+        if 'username' not in request.form:
+            error = "Please enter the admin username (Get it from the dev team)"
+        if 'password' not in request.form:
+            error = "Please enter the admin password"
 
-        food_item_id = request.form.get('deal')
-        res = zatiq_deals_client.delete_deal_from_db(food_item_id)
-        if isinstance(res, dict):
-            response = res
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == admin_username and password == admin_password:
+            food_item_id = request.form.get('deal')
+            res = zatiq_deals_client.delete_deal_from_db(food_item_id)
+            if isinstance(res, dict):
+                response = res
+            else:
+                error = res
         else:
-            error = res
+            error = "Invalid admin credentials!"
 
     return render_template('removeDeal.html', error=error, response=response, food_items=removable_items)
 
@@ -306,7 +312,7 @@ def get_food_item_by_id():
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
         jsonData = request.get_json()
         food_item_id = jsonData['food_item_id']
-        food_item = zatiq_food_items.get_food_by_id(api_token, food_item_id)
+        food_item = zatiq_food_items.get_food_by_id(food_item_id)
         return(jsonify(food_item=food_item))
 
 @application.route('/food/restaurantid/', methods=['POST'])
