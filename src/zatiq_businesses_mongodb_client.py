@@ -233,14 +233,11 @@ class ZatiqBusinessesMongoDBClient(object):
                 set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelchair_accessible'], set__parking=features['parking'], set__buffet=features['buffet'], set__family_friendly=features['family_friendly'], set__pescetarian_friendly=features['pescetarian_friendly'], set__wifi=features['wifi'])
             except Exception as e:
                 return("Error \n %s" % (e))
-            zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
-            if len(zatiq_business) > 0:
-                new_name = zatiq_business[0].business_name
-                new_image = "http://167.99.177.29:5000/image/"+str(zatiq_business[0].image)
-                new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
-                api_token = zatiq_business[0].zatiq_token
-            else:
-                return('An error occurred')
+
+            new_name = name
+            new_image = "http://167.99.177.29:5000/image/"+str(image_url.text)
+            new_image_aspect_ratio = image_aspect_ratio
+            api_token = api_token
             return([new_name, new_image, new_image_aspect_ratio, api_token])
         else:
             return('Could not authenticate')
