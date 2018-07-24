@@ -152,7 +152,7 @@ def edit_business_profile():
         image = jsonData['image']['base64']
         image_aspect_ratio = jsonData['image']['image_aspect_ratio']
         features = jsonData['features']
-        if 'http' in image:
+        if len(image) < 100:
             response = zatiq_businesses.update_business_profile_without_image(api_token, hours, name, address, website, number, image_aspect_ratio, features)
         else:
             response = zatiq_businesses.update_business_profile_with_image(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
@@ -351,7 +351,7 @@ def edit_food_item():
         calories = jsonData['calories']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
-        if 'http' in image:
+        if len(image) < 100:
             response = zatiq_food_items.update_food_item_without_image(api_token, food_item_id, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
         else:
             response = zatiq_food_items.update_food_item_with_image(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
