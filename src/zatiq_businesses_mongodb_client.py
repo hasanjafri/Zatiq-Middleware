@@ -217,7 +217,7 @@ class ZatiqBusinessesMongoDBClient(object):
     def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
         if self.check_valid_api_token(api_token) == True:
             old_image_url = Zatiq_Businesses.objects(zatiq_token=api_token)[0].image
-            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image, 'imagepath': old_image_url})
+            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image, 'imagepath': str(old_image_url)})
             if 'Error' in image_url:
                 return("Invalid image provided")
             try:

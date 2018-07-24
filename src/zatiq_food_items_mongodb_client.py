@@ -34,7 +34,7 @@ class ZatiqFoodItemsMongoDBClient(object):
         if self.check_valid_api_token(api_token) == True:
             restaurant_id = self.get_restaurant_id_by_api_token(api_token)
             old_image_url = Zatiq_Food_Items.objects(id=food_item_id, restaurant_id=restaurant_id)[0].image
-            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image['base64'], 'imagepath': old_image_url})
+            image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image['base64'], 'imagepath': str(old_image_url)})
             if 'Error' in image_url:
                 return("Invalid image provided")
             try:
