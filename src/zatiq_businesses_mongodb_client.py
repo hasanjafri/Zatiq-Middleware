@@ -214,7 +214,7 @@ class ZatiqBusinessesMongoDBClient(object):
         else:
             return('Could not authenticate')
 
-    def update_business_profile(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
+    def update_business_profile_with_image(self, api_token, hours, name, address, website, number, image, image_aspect_ratio, features):
         if self.check_valid_api_token(api_token) == True:
             old_image_url = Zatiq_Businesses.objects(zatiq_token=api_token)[0].image
             image_url = post("http://167.99.177.29:5000/update/", json={'imagedata': image, 'imagepath': old_image_url})
@@ -223,6 +223,33 @@ class ZatiqBusinessesMongoDBClient(object):
             try:
                 Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
                 set__business_name=name, set__address=address, set__website=website, set__number=number, set__image=image_url.text, set__image_aspect_ratio=image_aspect_ratio,
+                set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
+                set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
+                set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],
+                set__hours__thursday_start=hours['start']['thursday'], set__hours__thursday_end=hours['end']['thursday'],
+                set__hours__friday_start=hours['start']['friday'], set__hours__friday_end=hours['end']['friday'],
+                set__hours__saturday_start=hours['start']['saturday'], set__hours__saturday_end=hours['end']['saturday'],
+                set__hours__sunday_start=hours['start']['sunday'], set__hours__sunday_end=hours['end']['sunday'], set__delivery=features['delivery'],
+                set__takeout=features['takeout'], set__reservation=features['reservation'], set__patio=features['patio'], set__wheelchair_accessible=features['wheelchair_accessible'], set__parking=features['parking'], set__buffet=features['buffet'], set__family_friendly=features['family_friendly'], set__pescetarian_friendly=features['pescetarian_friendly'], set__wifi=features['wifi'])
+            except Exception as e:
+                return("Error \n %s" % (e))
+            zatiq_business = Zatiq_Businesses.objects(zatiq_token=api_token)
+            if len(zatiq_business) > 0:
+                new_name = zatiq_business[0].business_name
+                new_image = "http://167.99.177.29:5000/image/"+str(zatiq_business[0].image)
+                new_image_aspect_ratio = zatiq_business[0].image_aspect_ratio
+                api_token = zatiq_business[0].zatiq_token
+            else:
+                return('An error occurred')
+            return([new_name, new_image, new_image_aspect_ratio, api_token])
+        else:
+            return('Could not authenticate')
+
+    def update_business_profile_without_image(self, api_token, hours, name, address, website, number, image_aspect_ratio, features):
+        if self.check_valid_api_token(api_token) == True:
+            try:
+                Zatiq_Businesses.objects(zatiq_token=api_token).update_one(upsert=False,
+                set__business_name=name, set__address=address, set__website=website, set__number=number, set__image_aspect_ratio=image_aspect_ratio,
                 set__hours__monday_start=hours['start']['monday'], set__hours__monday_end=hours['end']['monday'],
                 set__hours__tuesday_start=hours['start']['tuesday'], set__hours__tuesday_end=hours['end']['tuesday'],
                 set__hours__wednesday_start=hours['start']['wednesday'], set__hours__wednesday_end=hours['end']['wednesday'],

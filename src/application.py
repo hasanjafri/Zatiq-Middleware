@@ -146,7 +146,10 @@ def edit_business_profile():
         image = jsonData['image']['base64']
         image_aspect_ratio = jsonData['image']['image_aspect_ratio']
         features = jsonData['features']
-        response = zatiq_businesses.update_business_profile(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
+        if 'http' in image:
+            response = zatiq_businesses.update_business_profile(api_token, hours, name, address, website, number, image_aspect_ratio, features)
+        else:
+            response = zatiq_businesses.update_business_profile(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], image=response[1], image_aspect_ratio=response[2], api_token=response[3]))  
 
 @application.route('/business/login/', methods=['POST'])
@@ -341,7 +344,10 @@ def edit_food_item():
         calories = jsonData['calories']
         meal_type = jsonData['meal_type']
         item_price = jsonData['item_price']
-        response = zatiq_food_items.update_food_item(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
+        if 'http' in image:
+            response = zatiq_food_items.update_food_item_without_image(api_token, food_item_id, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
+        else:
+            response = zatiq_food_items.update_food_item_with_image(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
         return(jsonify(response=response[0], food_item_id=response[1]))
 
 @application.route('/user/preferences/', methods=['POST'])
