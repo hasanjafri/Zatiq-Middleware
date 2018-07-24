@@ -342,6 +342,7 @@ def edit_food_item():
         food_item_id = jsonData['food_item_id']
         api_token = jsonData['api_token']
         image = jsonData['image']
+        logging.debug(image)
         overview = jsonData['overview']
         item_name = jsonData['item_name']
         tags = jsonData['tags']
