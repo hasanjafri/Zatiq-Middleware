@@ -110,7 +110,7 @@ class ZatiqFoodItemsMongoDBClient(object):
         except Exception as e:
             return("Error \n %s" % (e))
         if len(foods_by_restaurant) > 0:
-            food_items_dict = self.generate_food_items_dict(foods_by_restaurant)
+            food_items_dict = self.generate_food_items_dict_full(foods_by_restaurant)
             return(food_items_dict)
         else:
             return([])
@@ -131,13 +131,13 @@ class ZatiqFoodItemsMongoDBClient(object):
                     filtered_food = self.filter_food(zatiq_food_items, user_preferences)
 
                     if len(filtered_food) > 25:
-                        food_items_dict = self.generate_food_items_dict(filtered_food[0:25])
+                        food_items_dict = self.generate_food_items_dict_full(filtered_food[0:25])
                         return(food_items_dict)
                     else:
-                        food_items_dict = self.generate_food_items_dict(filtered_food)
+                        food_items_dict = self.generate_food_items_dict_full(filtered_food)
                         return(food_items_dict)
                 else:
-                    food_items_dict = self.generate_food_items_dict(zatiq_food_items)
+                    food_items_dict = self.generate_food_items_dict_full(zatiq_food_items)
                     return(food_items_dict)
             else:
                 return([])
@@ -202,10 +202,10 @@ class ZatiqFoodItemsMongoDBClient(object):
 
             if len(zatiq_food_items) > 0:
                 if len(zatiq_food_items) > 25:
-                    food_items_dict = self.generate_food_items_dict(zatiq_food_items[0:25])
+                    food_items_dict = self.generate_food_items_dict_full(zatiq_food_items[0:25])
                     return(food_items_dict)
                 else:
-                    food_items_dict = self.generate_food_items_dict(zatiq_food_items)
+                    food_items_dict = self.generate_food_items_dict_full(zatiq_food_items)
                     return(food_items_dict)
             else:
                 return([])
@@ -307,6 +307,31 @@ class ZatiqFoodItemsMongoDBClient(object):
             food_items_list.append(food_item_info)
             if len(food_items_list) > 5:
                 food_items_list = random.sample(food_items_list, 5)
+        return(food_items_list)
+
+    def generate_food_items_dict_full(self, food_items):
+        food_items_list = []
+        for food_item in range(len(food_items)):
+            try:
+                Zatiq_Food_Items.objects(id=food_items[food_item].id).modify(inc__views=1)
+            except Exception as e:
+                print("Error \n %s" % (e))
+            food_item_id = food_items[food_item].id
+            restaurant_id = food_items[food_item].restaurant_id.id
+            restaurant_info = self.get_restaurant_info(restaurant_id)
+            item_name = food_items[food_item].item_name
+            overview = food_items[food_item].overview
+            image = "http://167.99.177.29:5000/image/"+str(food_items[food_item].image)
+            item_price = food_items[food_item].item_price
+            is_beverage = food_items[food_item].is_beverage
+            meal_types = self.generate_meals_dict(food_items[food_item].meal_type)
+            image_aspect_ratio = food_items[food_item].image_aspect_ratio
+            tags = self.generate_tags_dict(food_items[food_item].tags, is_beverage)
+            meats = self.generate_meats_dict(food_items[food_item].tags.meat)
+            seafoods = self.generate_seafoods_dict(food_items[food_item].tags.seafood)
+            calories = food_items[food_item].calories
+            food_item_info = {'food_item_id': str(food_item_id), 'restaurant_id': str(restaurant_id), 'restaurant_info': restaurant_info, 'item_name': item_name, 'meal_type': meal_types, 'item_price': str(item_price), 'overview': overview, 'image': {'base64': image, 'image_aspect_ratio': image_aspect_ratio}, 'tags': tags, 'meat': meats, 'seafood': seafoods, 'calories': calories}
+            food_items_list.append(food_item_info)
         return(food_items_list)
 
     def generate_tags_dict(self, tags, is_beverage):
