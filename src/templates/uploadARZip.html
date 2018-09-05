@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title> Zatiq Admin - Upload an AR Model Zip </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="{{url_for('static', filename='bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Upload new AR_Model Zip File</h1>
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                <input type="text" placeholder="ADMIN_USERNAME" name="username" value="{{ request.form.username }}">
+                <input type="text" placeholder="ADMIN_PASSWORD" name="password" value="{{ request.form.password }}">
+                <input type="file" name="file">
+                <input class="btn btn-default" type="submit" value="Upload" >
+            </form>
+            {% if error %}
+                <p class="error"><strong>Error:</strong> {{ error }} </p>
+            {% endif %}
+            {% if response %}
+                <p class="error"><strong>Response:</strong> {{ response }}</p>
+            {% endif %}
+        </div>
+    <body>
+</html>

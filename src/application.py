@@ -12,6 +12,7 @@ from zatiq_guests_client import ZatiqGuestsClient
 from zatiq_deal_items_mongodb_client import ZatiqDealsMongoDBClient
 from requests import post
 from mongoengine import *
+import requests
 
 logger = logging.getLogger(__name__)
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
@@ -29,6 +30,12 @@ cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fi
     'indian', 'italian', 'japanese', 'korean', 'kosher', 'mexican', 'middle_eastern', 'pizza', 'quick_bite', 'spicy', 'sushi', 'thai',
     'vegan', 'vegetarian', 'vietnamese']
 buttons = ['top_picks', 'surprise_me', 'newest', 'promotions']
+
+ALLOWED_EXTENSIONS = set(['zip'])
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @application.route('/admin/add/deals/', methods=['GET', 'POST'])
 def add_zatiq_deal():
@@ -67,6 +74,38 @@ def add_zatiq_deal():
             error = "Invalid admin credentials!"
             
     return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
+
+@application('/admin/upload/AR/', methods=['GET', 'POST'])
+def upload_ar_model():
+    error = None
+    response = None
+    if request.method == 'POST':
+        if 'username' not in request.form:
+            error = "Please enter the admin username (Get it from the dev team)"
+        if 'password' not in request.form:
+            error = "Please enter the admin password"
+        if 'file' not in request.files:
+            error = "Error! No zip file attached to upload"
+
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        file = request.files['file']
+        if file.filename == '':
+            error = "Error! No zip file was selected!"
+
+        if username == admin_username and password == admin_password:
+            if file and allowed_file(file.filename):
+                files = {'ar_model_zip': open(file, 'rb')}
+                res = requests.post("http://localhost:8000/upload/", files=files)
+                if res.status_code == 200:
+                    response = res
+                else:
+                    error = res
+        else:
+            error = "Invalid admin credentials!"
+
+    return render_template('uploadARZip.html', error=error, response=response)
 
 @application.route('/admin/delete/deals/', methods=['GET', 'POST'])
 def delete_zatiq_deal():
