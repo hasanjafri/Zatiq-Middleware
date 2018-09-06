@@ -22,6 +22,7 @@ handler.setFormatter(formatter)
 
 application = Flask(__name__)
 application.logger.addHandler(handler)
+application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
 # connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
