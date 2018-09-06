@@ -90,13 +90,13 @@ def upload_ar_model():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        file = request.files['file']
-        if file.filename == '':
+        files_zip = request.files['file']
+        if files_zip.filename == '':
             error = "Error! No zip file was selected!"
 
         if username == admin_username and password == admin_password:
-            if file and allowed_file(file.filename):
-                files = {'ar_model_zip': open(file, 'rb')}
+            if files_zip and allowed_file(files_zip.filename):
+                files = {'ar_model_zip': files_zip}
                 res = requests.post("http://138.197.147.82:8000/upload/", files=files)
                 if res.status_code == 200:
                     response = res
