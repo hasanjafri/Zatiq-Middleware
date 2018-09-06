@@ -97,7 +97,7 @@ def upload_ar_model():
         if username == admin_username and password == admin_password:
             if file and allowed_file(file.filename):
                 files = {'ar_model_zip': open(file, 'rb')}
-                res = requests.post("http://localhost:8000/upload/", files=files)
+                res = requests.post("http://138.197.147.82:8000/upload/", files=files)
                 if res.status_code == 200:
                     response = res
                 else:
