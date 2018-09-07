@@ -8,7 +8,7 @@
         <div class="container">
             <h1>Upload new AR_Model Zip File</h1>
             <br>
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" action="http://138.197.147.82:8000/upload/" enctype="multipart/form-data">
                 <input type="text" placeholder="ADMIN_USERNAME" name="username" value="{{ request.form.username }}">
                 <input type="text" placeholder="ADMIN_PASSWORD" name="password" value="{{ request.form.password }}">
                 <input type="file" name="file">

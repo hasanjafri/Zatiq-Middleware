@@ -76,37 +76,37 @@ def add_zatiq_deal():
             
     return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
 
-@application.route('/admin/upload/AR/', methods=['GET', 'POST'])
+@application.route('/admin/upload/AR/', methods=['GET'])
 def upload_ar_model():
-    error = None
-    response = None
-    if request.method == 'POST':
-        if 'username' not in request.form:
-            error = "Please enter the admin username (Get it from the dev team)"
-        if 'password' not in request.form:
-            error = "Please enter the admin password"
-        if 'file' not in request.files:
-            error = "Error! No zip file attached to upload"
+    # error = None
+    # response = None
+    # if request.method == 'POST':
+    #     if 'username' not in request.form:
+    #         error = "Please enter the admin username (Get it from the dev team)"
+    #     if 'password' not in request.form:
+    #         error = "Please enter the admin password"
+    #     if 'file' not in request.files:
+    #         error = "Error! No zip file attached to upload"
 
-        username = request.form.get('username')
-        password = request.form.get('password')
+    #     username = request.form.get('username')
+    #     password = request.form.get('password')
 
-        files_zip = request.files['file']
-        if files_zip.filename == '':
-            error = "Error! No zip file was selected!"
+    #     files_zip = request.files['file']
+    #     if files_zip.filename == '':
+    #         error = "Error! No zip file was selected!"
 
-        if username == admin_username and password == admin_password:
-            if files_zip and allowed_file(files_zip.filename):
-                files = {'ar_model_zip': files_zip.read()}
-                res = requests.post("http://138.197.147.82:8000/upload/", files=files)
-                if res.status_code == 200:
-                    response = res
-                else:
-                    error = res
-        else:
-            error = "Invalid admin credentials!"
+    #     if username == admin_username and password == admin_password:
+    #         if files_zip and allowed_file(files_zip.filename):
+    #             files = {'ar_model_zip': files_zip.read()}
+    #             res = requests.post("http://138.197.147.82:8000/upload/", files=files)
+    #             if res.status_code == 200:
+    #                 response = res
+    #             else:
+    #                 error = res
+    #     else:
+    #         error = "Invalid admin credentials!"
 
-    return render_template('uploadARZip.html', error=error, response=response)
+    return render_template('uploadARZip.html')
 
 @application.route('/admin/delete/deals/', methods=['GET', 'POST'])
 def delete_zatiq_deal():
