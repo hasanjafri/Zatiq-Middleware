@@ -22,7 +22,7 @@ handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, 
 handler.setFormatter(formatter)
 
 application = Flask(__name__)
-CORS(application)
+CORS(application, resources={r"/*": {"origins": "*"}})
 application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
@@ -420,7 +420,6 @@ def delete_food_item():
         return(jsonify(response=response))
 
 @application.route('/search/<cuisine_type>/', methods=['POST'])
-@cross_origin()
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
