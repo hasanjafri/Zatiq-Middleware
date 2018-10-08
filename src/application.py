@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, jsonify, render_template
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import logging
 import os
 import base64
@@ -420,6 +420,7 @@ def delete_food_item():
         return(jsonify(response=response))
 
 @application.route('/search/<cuisine_type>/', methods=['POST'])
+@cross_origin()
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
