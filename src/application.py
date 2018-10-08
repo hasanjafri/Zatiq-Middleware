@@ -419,7 +419,7 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/search/<cuisine_type>/', methods=['POST'])
+@application.route('/search/<cuisine_type>/', methods=['POST', 'OPTIONS'])
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
@@ -429,21 +429,15 @@ def search_food_items_by_cuisine_type(cuisine_type):
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type)
-            res = jsonify(food_items=response)
-            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
-            return res
+            return(jsonify(food_items=response))
         elif cuisine_type in cuisine_types:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type)
-            res = jsonify(food_items=response)
-            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
-            return res
+            return(jsonify(food_items=response))
         elif cuisine_type in buttons:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_button(api_token, cuisine_type)
-            res = jsonify(food_items=response)
-            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
-            return res
+            return(jsonify(food_items=response))
         else:
             return('Could not find that category')
 
