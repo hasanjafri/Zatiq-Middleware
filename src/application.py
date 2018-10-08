@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, jsonify, render_template
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import logging
 import os
 import base64
@@ -23,6 +23,7 @@ handler.setFormatter(formatter)
 
 application = Flask(__name__)
 CORS(application)
+application.config['CORS_HEADERS'] = 'Content-Type'
 application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
@@ -420,6 +421,7 @@ def delete_food_item():
         return(jsonify(response=response))
 
 @application.route('/search/<cuisine_type>/', methods=['POST', 'OPTIONS'])
+@cross_origin()
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
