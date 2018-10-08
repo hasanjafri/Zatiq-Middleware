@@ -1,4 +1,5 @@
 from flask import Flask, request, make_response, jsonify, render_template
+from flask_cors import CORS
 import logging
 import os
 import base64
@@ -21,6 +22,7 @@ handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, 
 handler.setFormatter(formatter)
 
 application = Flask(__name__)
+CORS(application)
 application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
