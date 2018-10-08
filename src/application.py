@@ -26,7 +26,7 @@ getLogger('flask_cors').level = logging.DEBUG
 
 application = Flask(__name__)
 CORS(application, resources=r"/*")
-application.config['CORS_HEADERS'] = 'Content-Type'
+application.config['CORS_HEADERS'] = 'application/json'
 application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
@@ -428,7 +428,10 @@ def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
-        api_token = jsonData['api_token']
+        if 'api_token' not in jsonData:
+            return "Error! No api_token in request.body"
+        else:
+            api_token = jsonData['api_token']
         cuisine_type = cuisine_type.replace(' ', '_').lower()
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
