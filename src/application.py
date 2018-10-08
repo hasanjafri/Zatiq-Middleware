@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, jsonify, render_template
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import logging
 import os
 import base64
@@ -22,7 +22,7 @@ handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, 
 handler.setFormatter(formatter)
 
 application = Flask(__name__)
-CORS(application, resources={r"/*": {"origins": "*"}})
+CORS(application)
 application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
@@ -429,15 +429,21 @@ def search_food_items_by_cuisine_type(cuisine_type):
         if cuisine_type in timely_meals:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_time_of_day(api_token, cuisine_type)
-            return(jsonify(food_items=response))
+            res = jsonify(food_items=response)
+            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
+            return res
         elif cuisine_type in cuisine_types:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_cuisine_type(api_token, cuisine_type)
-            return(jsonify(food_items=response))
+            res = jsonify(food_items=response)
+            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
+            return res
         elif cuisine_type in buttons:
             zatiq_food_items = ZatiqFoodItemsMongoDBClient()
             response = zatiq_food_items.get_food_items_by_button(api_token, cuisine_type)
-            return(jsonify(food_items=response))
+            res = jsonify(food_items=response)
+            res.headers.add('Access-Control-Allow-Origin', 'localhost:3000')
+            return res
         else:
             return('Could not find that category')
 
