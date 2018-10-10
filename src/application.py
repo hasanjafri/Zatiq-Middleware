@@ -25,8 +25,9 @@ import requests
 application = Flask(__name__)
 # application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
+application.config['CORS_HEADERS'] = 'Content-Type'
 # connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
-CORS(application, resources={r"/search/*": {"origins": "*"}})
+CORS(application)
 connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
@@ -420,7 +421,7 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/search/<cuisine_type>/', methods=['POST'])
+@application.route('/search/<cuisine_type>/', methods=['POST', 'OPTIONS'])
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
