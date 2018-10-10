@@ -25,9 +25,9 @@ import requests
 application = Flask(__name__)
 # application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
-application.config['CORS_HEADERS'] = 'Content-Type'
+application.config['CORS_HEADERS'] = ['Content-Type', 'Authorization']
 # connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
-CORS(application)
+CORS(application, resources={r"/api/*": {"origins": "*"}})
 connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
@@ -37,6 +37,11 @@ cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fi
 buttons = ['top_picks', 'surprise_me', 'newest', 'promotions']
 
 ALLOWED_EXTENSIONS = set(['zip'])
+
+@application.route('/api/post', methods=['POST'])
+def test_post_cors():
+    data = request.get_json()
+    return jsonify(data=data)
 
 def allowed_file(filename):
     return '.' in filename and \
