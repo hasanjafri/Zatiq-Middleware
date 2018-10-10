@@ -16,21 +16,21 @@ from requests import post
 from mongoengine import *
 import requests
 
-logger = logging.getLogger(__name__)
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-logger.setLevel(logging.DEBUG)
-handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, backupCount=5)
-handler.setFormatter(formatter)
+# logger = logging.getLogger(__name__)
+# formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+# logger.setLevel(logging.DEBUG)
+# handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, backupCount=5)
+# handler.setFormatter(formatter)
 
 getLogger('flask_cors').level = logging.DEBUG
 
 application = Flask(__name__)
-CORS(application, resources=r"/*")
+CORS(application)
 application.config['CORS_HEADERS'] = 'application/json'
-application.logger.addHandler(handler)
+# application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
-connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
-# connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
+# connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
+connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
 cuisine_types = ['canadian', 'caribbean', 'chinese', 'dessert', 'fast_food', 'fine_food', 'gluten_free', 'greek', 'halal', 'healthy',
