@@ -1,5 +1,4 @@
 from flask import Flask, request, make_response, jsonify, render_template
-from flask_cors import CORS
 import logging
 import os
 import base64
@@ -14,6 +13,7 @@ from zatiq_guests_client import ZatiqGuestsClient
 from zatiq_deal_items_mongodb_client import ZatiqDealsMongoDBClient
 from requests import post
 from mongoengine import *
+from helpers import crossdomain
 import requests
 
 # logger = logging.getLogger(__name__)
@@ -22,11 +22,7 @@ import requests
 # handler = RotatingFileHandler('/opt/python/log/application.log', maxBytes=1024, backupCount=5)
 # handler.setFormatter(formatter)
 
-getLogger('flask_cors').level = logging.DEBUG
-
 application = Flask(__name__)
-CORS(application)
-application.config['CORS_HEADERS'] = 'application/json'
 # application.logger.addHandler(handler)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 # connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
@@ -424,6 +420,7 @@ def delete_food_item():
         return(jsonify(response=response))
 
 @application.route('/search/<cuisine_type>/', methods=['POST'])
+@crossdomain(origin='*')
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
         zatiq_food_items = ZatiqUsersMongoDBClient()
