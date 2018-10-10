@@ -419,7 +419,7 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/search/<cuisine_type>/', methods=['POST'])
+@application.route('/search/<cuisine_type>/', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def search_food_items_by_cuisine_type(cuisine_type):
     if request.method == 'POST':
