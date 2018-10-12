@@ -426,7 +426,7 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/api/search/<cuisine_type>', methods=['POST', 'OPTIONS'])
+@application.route('/api/<cuisine_type>', methods=['POST'])
 def search_food_items_by_cuisine_type(cuisine_type):
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
