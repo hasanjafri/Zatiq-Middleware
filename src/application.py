@@ -27,7 +27,7 @@ application = Flask(__name__)
 application.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 application.config['CORS_HEADERS'] = ['Content-Type', 'Authorization']
 # connect('zatiq_database', host='165.227.43.65', username='zatiqadmin', password='zatiqserver')
-CORS(application, resources={r"/api/*": {"origins": "*"}})
+CORS(application, resources={r"/*/*/*": {"origins": "*"}})
 connect('zatiq_database', username='zatiqadmin', password='zatiqserver')
 
 timely_meals = ['breakfast', 'brunch', 'lunch', 'dinner']
@@ -47,7 +47,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@application.route('/admin/add/deals/', methods=['GET', 'POST'])
+@application.route('/admin/add/deals', methods=['GET', 'POST'])
 def add_zatiq_deal():
     zatiq_deals_client = ZatiqDealsMongoDBClient()
     error = None
@@ -85,7 +85,7 @@ def add_zatiq_deal():
             
     return render_template('addDeal.html', error=error, response=response, food_items=food_items_names_dict)
 
-@application.route('/admin/upload/AR/', methods=['GET'])
+@application.route('/admin/upload/AR', methods=['GET'])
 def upload_ar_model():
     # error = None
     # response = None
@@ -117,7 +117,7 @@ def upload_ar_model():
 
     return render_template('uploadARZip.html')
 
-@application.route('/admin/delete/deals/', methods=['GET', 'POST'])
+@application.route('/admin/delete/deals', methods=['GET', 'POST'])
 def delete_zatiq_deal():
     zatiq_deals_client = ZatiqDealsMongoDBClient()
     error = None
@@ -150,14 +150,14 @@ def delete_zatiq_deal():
 def hello_world():
     return('Hello World!')
 
-@application.route('/deals/', methods=['GET'])
+@application.route('/deals', methods=['GET'])
 def get_all_zatiq_deals():
     if request.method == 'GET':
         zatiq_deals = ZatiqDealsMongoDBClient()
         response = zatiq_deals.get_all_deals()
         return(jsonify(deals=response))
 
-@application.route('/user/login/', methods=['POST'])
+@application.route('/user/login', methods=['POST'])
 def login_as_user():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -169,7 +169,7 @@ def login_as_user():
         response = zatiq_users.user_register(user_auth_token, login_method, user_email)
         return(jsonify(user_name=response[0], user_email=response[1], api_token=response[2]))
 
-@application.route('/business/register/', methods=['POST'])
+@application.route('/business/register', methods=['POST'])
 def register_as_business():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -187,7 +187,7 @@ def register_as_business():
         response = zatiq_businesses.business_register(business_email, business_password, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], api_token=response[1], image=response[2], image_aspect_ratio=response[3]))
 
-@application.route('/business/profile/edit/', methods=['POST'])
+@application.route('/business/profile/edit', methods=['POST'])
 def edit_business_profile():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -207,7 +207,7 @@ def edit_business_profile():
             response = zatiq_businesses.update_business_profile_with_image(api_token, hours, name, address, website, number, image, image_aspect_ratio, features)
         return(jsonify(name=response[0], image=response[1], image_aspect_ratio=response[2], api_token=response[3]))  
 
-@application.route('/business/login/', methods=['POST'])
+@application.route('/business/login', methods=['POST'])
 def login_as_business():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -220,7 +220,7 @@ def login_as_business():
         else:
             return(jsonify(response=response[0]), 401)
 
-@application.route('/business/logout/', methods=['POST'])
+@application.route('/business/logout', methods=['POST'])
 def logout_as_business():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -229,7 +229,7 @@ def logout_as_business():
         response = zatiq_businesses.business_logout(api_token)
         return(jsonify(response=response))
 
-@application.route('/business/profile/', methods=['POST'])
+@application.route('/business/profile', methods=['POST'])
 def get_business_profile():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -238,7 +238,7 @@ def get_business_profile():
         response = zatiq_businesses.get_business_profile(api_token)
         return(jsonify(response=response))
 
-@application.route('/user/review/add/', methods=['POST'])
+@application.route('/user/review/add', methods=['POST'])
 def add_review_as_user():
     if request.method == 'POST':
         zatiq_reviews = ZatiqReviewsMongoDBClient()
@@ -262,7 +262,7 @@ def add_review_as_user():
         add_review = zatiq_reviews.add_review(restaurant_id, food_item_id, text, image_url.text, rating, image_aspect_ratio, api_token)
         return(jsonify(response=add_review))
 
-@application.route('/user/reviews/all/', methods=['POST'])
+@application.route('/user/reviews/all', methods=['POST'])
 def get_all_reviews_by_user():
     if request.method == 'POST':
         zatiq_reviews = ZatiqReviewsMongoDBClient()
@@ -271,7 +271,7 @@ def get_all_reviews_by_user():
         self_reviews = zatiq_reviews.get_all_reviews_by_reviewer_id(api_token)
         return(jsonify(reviews=self_reviews))
 
-@application.route('/business/reviews/all/', methods=['POST'])
+@application.route('/business/reviews/all', methods=['POST'])
 def get_all_reviews_for_business():
     if request.method == 'POST':
         zatiq_business_reviews = ZatiqBusinessesMongoDBClient()
@@ -280,7 +280,7 @@ def get_all_reviews_for_business():
         business_reviews = zatiq_business_reviews.get_all_reviews(api_token)
         return(jsonify(reviews=business_reviews))
 
-@application.route('/business/add/food/', methods=['POST'])
+@application.route('/business/add/food', methods=['POST'])
 def add_food_item_as_business():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -298,7 +298,7 @@ def add_food_item_as_business():
         response = zatiq_food_items.add_food_item(image, overview, item_name, api_token, meal_type, tags, item_price, meat, seafood, calories)
         return(jsonify(response=response))
 
-@application.route('/restaurant/menu/add/', methods=['POST'])
+@application.route('/restaurant/menu/add', methods=['POST'])
 def add_menu_photo():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -309,7 +309,7 @@ def add_menu_photo():
         add_menu = zatiq_businesses.upload_menu_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
 
-@application.route('/restaurant/menu/delete/', methods=['POST'])
+@application.route('/restaurant/menu/delete', methods=['POST'])
 def delete_menu_photo():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -319,7 +319,7 @@ def delete_menu_photo():
         delete_menu = zatiq_businesses.delete_menu_photo(image_id, api_token)
         return(jsonify(response=delete_menu))
 
-@application.route('/restaurant/interior/add/', methods=['POST'])
+@application.route('/restaurant/interior/add', methods=['POST'])
 def add_interior_photo():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -330,7 +330,7 @@ def add_interior_photo():
         add_menu = zatiq_businesses.upload_interior_photo(image, image_aspect_ratio, api_token)
         return(jsonify(response=add_menu))
 
-@application.route('/restaurant/interior/delete/', methods=['POST'])
+@application.route('/restaurant/interior/delete', methods=['POST'])
 def delete_interior_photo():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -340,7 +340,7 @@ def delete_interior_photo():
         delete_interior = zatiq_businesses.delete_interior_photo(image_id, api_token)
         return(jsonify(response=delete_interior))
 
-@application.route('/restaurant/menu/all/', methods=['POST'])
+@application.route('/restaurant/menu/all', methods=['POST'])
 def get_menus_for_restaurant():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -349,7 +349,7 @@ def get_menus_for_restaurant():
         menu_photos = zatiq_businesses.get_menu_photos_by_restaurant(api_token)
         return(jsonify(menu_photos=menu_photos))
 
-@application.route('/restaurant/interior/all/', methods=['POST'])
+@application.route('/restaurant/interior/all', methods=['POST'])
 def get_interiors_for_restaurant():
     if request.method == 'POST':
         zatiq_businesses = ZatiqBusinessesMongoDBClient()
@@ -358,7 +358,7 @@ def get_interiors_for_restaurant():
         interior_photos = zatiq_businesses.get_interior_photos_by_restaurant(api_token)
         return(jsonify(interior_photos=interior_photos))
 
-@application.route('/food/id/', methods=['POST'])
+@application.route('/food/id', methods=['POST'])
 def get_food_item_by_id():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -367,7 +367,7 @@ def get_food_item_by_id():
         food_item = zatiq_food_items.get_food_by_id(food_item_id)
         return(jsonify(food_item=food_item))
 
-@application.route('/food/restaurantid/', methods=['POST'])
+@application.route('/food/restaurantid', methods=['POST'])
 def get_food_items_by_restaurant_id():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -383,7 +383,7 @@ def get_food_items_by_restaurant_id():
         food_items = zatiq_food_items.get_food_items_by_restaurant_id(api_token, restaurant_id)
         return(jsonify(food_items=food_items))
 
-@application.route('/business/edit/food/', methods=['POST'])
+@application.route('/business/edit/food', methods=['POST'])
 def edit_food_item():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -406,7 +406,7 @@ def edit_food_item():
             response = zatiq_food_items.update_food_item_with_image(api_token, food_item_id, image, overview, item_name, meal_type, tags, item_price, meat, seafood, calories)
         return(jsonify(response=response[0], food_item_id=response[1]))
 
-@application.route('/user/preferences/', methods=['POST'])
+@application.route('/user/preferences', methods=['POST'])
 def update_user_preferences():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -416,7 +416,7 @@ def update_user_preferences():
         response = zatiq_users.update_user_preferences(api_token, user_preferences)
         return(jsonify(user_email=response[0], auth_token=response[1], user_name=response[2], preferences=response[3]))
 
-@application.route('/business/delete/food/', methods=['POST'])
+@application.route('/business/delete/food', methods=['POST'])
 def delete_food_item():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -426,7 +426,7 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/api/<cuisine_type>', methods=['POST'])
+@application.route('/search/<cuisine_type>', methods=['POST'])
 def search_food_items_by_cuisine_type(cuisine_type):
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
@@ -451,7 +451,7 @@ def search_food_items_by_cuisine_type(cuisine_type):
         else:
             return {"error":"Error! Could not find that category"}
 
-@application.route('/guest/<tag>/', methods=['GET'])
+@application.route('/guest/<tag>', methods=['GET'])
 def get_guest_items(tag):
     if request.method == 'GET':
         zatiq_guests = ZatiqGuestsClient()
@@ -463,7 +463,7 @@ def get_guest_items(tag):
         else:
             return('Could not find that category')
 
-@application.route('/user/profile/', methods=['POST'])
+@application.route('/user/profile', methods=['POST'])
 def get_user_profile():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -477,7 +477,7 @@ def get_user_profile():
         else:
             return(jsonify(response=response))
 
-@application.route('/user/menu/all/', methods=['POST'])
+@application.route('/user/menu/all', methods=['POST'])
 def get_restaurant_menu():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -486,7 +486,7 @@ def get_restaurant_menu():
         response = zatiq_users.get_menu_pictures(restaurant_id)
         return(jsonify(response=response))
 
-@application.route('/user/interior/all/', methods=['POST'])
+@application.route('/user/interior/all', methods=['POST'])
 def get_restaurant_interior():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -495,7 +495,7 @@ def get_restaurant_interior():
         response = zatiq_users.get_interior_pictures(restaurant_id)
         return(jsonify(response=response))
 
-@application.route('/find/restaurant/name/', methods=['POST'])
+@application.route('/find/restaurant/name', methods=['POST'])
 def get_restaurant_by_name():
     if request.method == 'POST':
         zatiq_users = ZatiqUsersMongoDBClient()
@@ -505,7 +505,7 @@ def get_restaurant_by_name():
         response = zatiq_users.get_restaurant_by_name(api_token, text)
         return(jsonify(response=response))
 
-@application.route('/food/grid/', methods=['POST'])
+@application.route('/food/grid', methods=['POST'])
 def get_food_grid():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -514,7 +514,7 @@ def get_food_grid():
         response = zatiq_food_items.find_food_grid(api_token)
         return(jsonify(food_items=response))
 
-@application.route('/food/grid/name/', methods=['POST'])
+@application.route('/food/grid/name', methods=['POST'])
 def get_food_grid_by_name():
     if request.method == 'POST':
         zatiq_food_items = ZatiqFoodItemsMongoDBClient()
@@ -524,7 +524,7 @@ def get_food_grid_by_name():
         response = zatiq_food_items.find_food_grid_by_name(api_token, text)
         return(jsonify(response=response))
 
-@application.route('/restaurants/nearby/', methods=['POST'])
+@application.route('/restaurants/nearby', methods=['POST'])
 def get_nearby_restaurants():
     if request.method == 'POST':
         zatiq_restaurants = ZatiqUsersMongoDBClient()
