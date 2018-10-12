@@ -426,12 +426,12 @@ def delete_food_item():
         response = zatiq_food_items.delete_food_item(api_token, food_item_id)
         return(jsonify(response=response))
 
-@application.route('/api/search/<cuisine_type>/', methods=['POST'])
+@application.route('/api/search/<cuisine_type>', methods=['POST'])
 def search_food_items_by_cuisine_type(cuisine_type):
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
         if 'api_token' not in jsonData:
-            return "Error! No api_token in request.body"
+            return {"error":"Error! No api_token in request.body"}
         else:
             api_token = jsonData['api_token']
         cuisine_type = cuisine_type.replace(' ', '_').lower()
@@ -448,7 +448,7 @@ def search_food_items_by_cuisine_type(cuisine_type):
             response = zatiq_food_items.get_food_items_by_button(api_token, cuisine_type)
             return(jsonify(food_items=response))
         else:
-            return('Could not find that category')
+            return {"error":"Error! Could not find that category"}
 
 @application.route('/guest/<tag>/', methods=['GET'])
 def get_guest_items(tag):
