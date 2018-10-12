@@ -430,6 +430,7 @@ def delete_food_item():
 def search_food_items_by_cuisine_type(cuisine_type):
         zatiq_food_items = ZatiqUsersMongoDBClient()
         jsonData = request.get_json()
+        print(jsonData)
         if 'api_token' not in jsonData:
             return {"error":"Error! No api_token in request.body"}
         else:
